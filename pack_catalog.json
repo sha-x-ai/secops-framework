@@ -4,7 +4,7 @@
       "id": "SocFrameworkMicrosoftDefender",
       "display_name": "SOC Microsoft Defender for Endpoint Integration Enhancement",
       "category": "End Point",
-      "version": "1.2.6",
+      "version": "1.2.7",
       "path": "Packs/SocFrameworkMicrosoftDefender",
       "visible": true,
       "xsoar_config": "https://raw.githubusercontent.com/Palo-Cortex/secops-framework/refs/heads/main/Packs/SocFrameworkMicrosoftDefender/xsoar_config.json"
@@ -31,7 +31,7 @@
       "id": "SocFrameworkProofPointTap",
       "display_name": "SOC Proofpoint TAP Integration Enhancement for Cortex XSIAM2",
       "category": "Forensics & Malware Analysis",
-      "version": "1.4.0",
+      "version": "1.4.1",
       "path": "Packs/SocFrameworkProofPointTap",
       "visible": true,
       "xsoar_config": "https://raw.githubusercontent.com/Palo-Cortex/secops-framework/refs/heads/main/Packs/SocFrameworkProofPointTap/xsoar_config.json"
