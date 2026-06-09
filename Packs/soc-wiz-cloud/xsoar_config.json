@@ -2,7 +2,7 @@
   "custom_packs": [
     {
       "id": "soc-wiz-cloud.zip",
-      "url": "https://github.com/Palo-Cortex/secops-framework/releases/download/soc-wiz-cloud-v1.0.2/soc-wiz-cloud-v1.0.2.zip",
+      "url": "https://github.com/Palo-Cortex/secops-framework/releases/download/soc-wiz-cloud-v1.0.3/soc-wiz-cloud-v1.0.3.zip",
       "system": "yes"
     }
   ]
