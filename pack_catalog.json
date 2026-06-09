@@ -184,9 +184,9 @@
     },
     {
       "id": "soc-wiz-cloud",
-      "display_name": "soc wiz cloud",
+      "display_name": "SOC Wiz Cloud",
       "category": "Cloud",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "path": "Packs/soc-wiz-cloud",
       "docs_path": "docs/soc-wiz-cloud",
       "visible": true,
