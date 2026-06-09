@@ -171,6 +171,16 @@
       "visible": true,
       "xsoar_config": "https://raw.githubusercontent.com/Palo-Cortex/secops-framework/refs/heads/main/Packs/soc-optimization-unified/xsoar_config.json",
       "tier": "foundation"
+    },
+    {
+      "id": "soc-sentinel-one",
+      "display_name": "soc sentinel one",
+      "category": "Endpoint",
+      "version": "1.0.1",
+      "path": "Packs/soc-sentinel-one",
+      "docs_path": "docs/soc-sentinel-one",
+      "visible": false,
+      "xsoar_config": "https://raw.githubusercontent.com/Palo-Cortex/secops-framework/refs/heads/main/Packs/soc-sentinel-one/xsoar_config.json"
     }
   ]
 }
