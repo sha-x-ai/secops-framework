@@ -1,0 +1,6 @@
+_time	finding_id	finding_name	severity	issue_type	asset_id_primary	target_ipv4_raw	_insert_time
+Jun 20 2026 12:17:45	871401	cPanel Web Host Manager at 8.146.235.119:35104	medium	cPanelWebHostManager	0714dea92eea3f0ffe17b82d2fd116da4305bbd485d929f31a7fe7c68a7026e6		Jun 20 2026 12:18:31
+Jun 20 2026 12:47:44	871510	Kubernetes at 8.146.235.119:21993	medium	Kubernetes	e6b4a6652d456d9f700912f2ff133ef5f030277ee987392dfc23cba5f214646d		Jun 20 2026 12:47:57
+Jun 20 2026 13:17:45	871643	Ivanti Connect Secure (Formerly Pulse Secure Pulse Connect Secure VPN) (22.0) at 101.200.158.109:28599	low	PulseSecurePulseConnectSecureVPN	c16de410d7ade67897af3425cdadf8b96962ca08f4b6a4ad69ff0533685ec7f4		Jun 20 2026 13:17:46
+Jun 20 2026 13:57:44	871854	LangChain at 8.130.54.67:9433	medium	LangChain	257810b7c6c9f645d6e37d332656a32e2de08c8b4eecfb818c33a48a640e8967		Jun 20 2026 13:58:50
+Jun 20 2026 14:02:45	871870	Ivanti Connect Secure (Formerly Pulse Secure Pulse Connect Secure VPN) (22.0) at 8.130.54.67:40509	low	PulseSecurePulseConnectSecureVPN	b913e75702db511400f9470e5d343917c4556072f8d5dd09404eb57b54c8043e		Jun 20 2026 14:03:05
