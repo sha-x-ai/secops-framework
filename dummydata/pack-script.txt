@@ -1,0 +1,132 @@
+
+Vad Vadwlas
+Jun 22nd 2026 12:05:31
+!SOCFWPackManager action=apply pack_id=soc-framework-posture include_hidden=true pre_config_done=True
+
+DBot
+Jun 22nd 2026 12:07:30
+Command:
+ 
+!SOCFWPackManager action="apply" pack_id="soc-framework-posture" include_hidden="true" dry_run="False" install_marketplace="True" skip_verify="True" skip_validation="False" apply_configure="True" overwrite_lookup="False" configure_jobs="True" configure_integrations="True" configure_lookups="True" retry_count="5" retry_sleep_seconds="15" execution_timeout="1200" install_timeout="3600" post_install_poll_seconds="1800" post_install_poll_interval_seconds="60" continue_on_install_timeout="False" fail_on_marketplace_errors="False" debug="False" limit="50" offset="0" sort_by="id" sort_dir="asc" visible_only="True" fields="id,display_name,version,visible,path" show_total="True" include_doc_content="False" doc_content_max_chars="6000" doc_content_max_lines="200" pre_config_done="True" pre_config_gate="True" force="False"
+(Scripts)
+SOCFWPackManager — start
+Starting apply for soc-framework-posture
+catalog_url=https://raw.githubusercontent.com/Palo-Cortex/secops-framework/refs/heads/main/pack_catalog.json
+include_hidden=True
+dry_run=False
+install_marketplace=True
+apply_configure=True (jobs=True, integrations=True, lookups=True)
+overwrite_lookup=False
+retries=5, retry_sleep_seconds=15
+using=(default)
+execution_timeout=1200
+install_timeout=3600
+skip_verify=True
+skip_validation=False
+post_install_poll_seconds=1800
+post_install_poll_interval_seconds=60
+continue_on_install_timeout=False
+fail_on_marketplace_errors=False
+include_doc_content=False (max_chars=6000, max_lines=200)
+pre_config_gate=True
+pre_config_done=True
+debug=False
+Jun 22nd 2026 12:07:30
+Command:
+ 
+!SOCFWPackManager action="apply" pack_id="soc-framework-posture" include_hidden="true" dry_run="False" install_marketplace="True" skip_verify="True" skip_validation="False" apply_configure="True" overwrite_lookup="False" configure_jobs="True" configure_integrations="True" configure_lookups="True" retry_count="5" retry_sleep_seconds="15" execution_timeout="1200" install_timeout="3600" post_install_poll_seconds="1800" post_install_poll_interval_seconds="60" continue_on_install_timeout="False" fail_on_marketplace_errors="False" debug="False" limit="50" offset="0" sort_by="id" sort_dir="asc" visible_only="True" fields="id,display_name,version,visible,path" show_total="True" include_doc_content="False" doc_content_max_chars="6000" doc_content_max_lines="200" pre_config_done="True" pre_config_gate="True" force="False"
+(Scripts)
+SOCFWPackManager — manifest.summary
+Manifest resolved.
+marketplace_packs: 5
+custom ZIP URLs: 1
+xsoar_config_url: https://raw.githubusercontent.com/Palo-Cortex/secops-framework/refs/heads/main/Packs/soc-framework-posture/xsoar_config.json
+Jun 22nd 2026 12:07:30
+Command:
+ 
+!SOCFWPackManager action="apply" pack_id="soc-framework-posture" include_hidden="true" dry_run="False" install_marketplace="True" skip_verify="True" skip_validation="False" apply_configure="True" overwrite_lookup="False" configure_jobs="True" configure_integrations="True" configure_lookups="True" retry_count="5" retry_sleep_seconds="15" execution_timeout="1200" install_timeout="3600" post_install_poll_seconds="1800" post_install_poll_interval_seconds="60" continue_on_install_timeout="False" fail_on_marketplace_errors="False" debug="False" limit="50" offset="0" sort_by="id" sort_dir="asc" visible_only="True" fields="id,display_name,version,visible,path" show_total="True" include_doc_content="False" doc_content_max_chars="6000" doc_content_max_lines="200" pre_config_done="True" pre_config_gate="True" force="False"
+(Scripts)
+SOCFWPackManager — packs.custom.from_config
+Using custom_packs from xsoar_config.json:
+soc-framework-posture.zip -> https://github.com/Palo-Cortex/secops-framework/releases/download/soc-framework-posture-v1.0.1/soc-framework-posture-v1.0.1.zip
+Jun 22nd 2026 12:07:31
+Command:
+ 
+!SOCFWPackManager action="apply" pack_id="soc-framework-posture" include_hidden="true" dry_run="False" install_marketplace="True" skip_verify="True" skip_validation="False" apply_configure="True" overwrite_lookup="False" configure_jobs="True" configure_integrations="True" configure_lookups="True" retry_count="5" retry_sleep_seconds="15" execution_timeout="1200" install_timeout="3600" post_install_poll_seconds="1800" post_install_poll_interval_seconds="60" continue_on_install_timeout="False" fail_on_marketplace_errors="False" debug="False" limit="50" offset="0" sort_by="id" sort_dir="asc" visible_only="True" fields="id,display_name,version,visible,path" show_total="True" include_doc_content="False" doc_content_max_chars="6000" doc_content_max_lines="200" pre_config_done="True" pre_config_gate="True" force="False"
+(Scripts)
+SOCFWPackManager — packs.custom
+Installing: *soc-framework-posture-v1.0.1.zip*
+https://github.com/Palo-Cortex/secops-framework/releases/download/soc-framework-posture-v1.0.1/soc-framework-posture-v1.0.1.zip
+Jun 22nd 2026 12:07:31
+Command:
+ 
+!SOCFWPackManager action="apply" pack_id="soc-framework-posture" include_hidden="true" dry_run="False" install_marketplace="True" skip_verify="True" skip_validation="False" apply_configure="True" overwrite_lookup="False" configure_jobs="True" configure_integrations="True" configure_lookups="True" retry_count="5" retry_sleep_seconds="15" execution_timeout="1200" install_timeout="3600" post_install_poll_seconds="1800" post_install_poll_interval_seconds="60" continue_on_install_timeout="False" fail_on_marketplace_errors="False" debug="False" limit="50" offset="0" sort_by="id" sort_dir="asc" visible_only="True" fields="id,display_name,version,visible,path" show_total="True" include_doc_content="False" doc_content_max_chars="6000" doc_content_max_lines="200" pre_config_done="True" pre_config_gate="True" force="False"
+(Scripts)
+SOCFWPackManager — packs.custom.result
+Pack *soc-framework-posture-v1.0.1.zip* installed.
+Jun 22nd 2026 12:07:31
+Command:
+ 
+!SOCFWPackManager action="apply" pack_id="soc-framework-posture" include_hidden="true" dry_run="False" install_marketplace="True" skip_verify="True" skip_validation="False" apply_configure="True" overwrite_lookup="False" configure_jobs="True" configure_integrations="True" configure_lookups="True" retry_count="5" retry_sleep_seconds="15" execution_timeout="1200" install_timeout="3600" post_install_poll_seconds="1800" post_install_poll_interval_seconds="60" continue_on_install_timeout="False" fail_on_marketplace_errors="False" debug="False" limit="50" offset="0" sort_by="id" sort_dir="asc" visible_only="True" fields="id,display_name,version,visible,path" show_total="True" include_doc_content="False" doc_content_max_chars="6000" doc_content_max_lines="200" pre_config_done="True" pre_config_gate="True" force="False"
+(Scripts)
+SOCFWPackManager — configure.jobs
+Configuring jobs… (0 job(s))
+Jun 22nd 2026 12:07:31
+Command:
+ 
+!SOCFWPackManager action="apply" pack_id="soc-framework-posture" include_hidden="true" dry_run="False" install_marketplace="True" skip_verify="True" skip_validation="False" apply_configure="True" overwrite_lookup="False" configure_jobs="True" configure_integrations="True" configure_lookups="True" retry_count="5" retry_sleep_seconds="15" execution_timeout="1200" install_timeout="3600" post_install_poll_seconds="1800" post_install_poll_interval_seconds="60" continue_on_install_timeout="False" fail_on_marketplace_errors="False" debug="False" limit="50" offset="0" sort_by="id" sort_dir="asc" visible_only="True" fields="id,display_name,version,visible,path" show_total="True" include_doc_content="False" doc_content_max_chars="6000" doc_content_max_lines="200" pre_config_done="True" pre_config_gate="True" force="False"
+(Scripts)
+SOCFWPackManager — configure.jobs.summary
+Jobs summary:
+attempted: 0
+ok (verified/skip): 0
+failed: 0
+notes: (none)
+Jun 22nd 2026 12:07:31
+Command:
+ 
+!SOCFWPackManager action="apply" pack_id="soc-framework-posture" include_hidden="true" dry_run="False" install_marketplace="True" skip_verify="True" skip_validation="False" apply_configure="True" overwrite_lookup="False" configure_jobs="True" configure_integrations="True" configure_lookups="True" retry_count="5" retry_sleep_seconds="15" execution_timeout="1200" install_timeout="3600" post_install_poll_seconds="1800" post_install_poll_interval_seconds="60" continue_on_install_timeout="False" fail_on_marketplace_errors="False" debug="False" limit="50" offset="0" sort_by="id" sort_dir="asc" visible_only="True" fields="id,display_name,version,visible,path" show_total="True" include_doc_content="False" doc_content_max_chars="6000" doc_content_max_lines="200" pre_config_done="True" pre_config_gate="True" force="False"
+(Scripts)
+SOCFWPackManager — configure.lookups
+Configuring lookup datasets… (0 dataset(s))
+Jun 22nd 2026 12:07:32
+Command:
+ 
+!SOCFWPackManager action="apply" pack_id="soc-framework-posture" include_hidden="true" dry_run="False" install_marketplace="True" skip_verify="True" skip_validation="False" apply_configure="True" overwrite_lookup="False" configure_jobs="True" configure_integrations="True" configure_lookups="True" retry_count="5" retry_sleep_seconds="15" execution_timeout="1200" install_timeout="3600" post_install_poll_seconds="1800" post_install_poll_interval_seconds="60" continue_on_install_timeout="False" fail_on_marketplace_errors="False" debug="False" limit="50" offset="0" sort_by="id" sort_dir="asc" visible_only="True" fields="id,display_name,version,visible,path" show_total="True" include_doc_content="False" doc_content_max_chars="6000" doc_content_max_lines="200" pre_config_done="True" pre_config_gate="True" force="False"
+(Scripts)
+SOCFWPackManager — configure.lookups.summary
+Lookups summary:
+attempted: 0
+ok: 0
+failed: 0
+Jun 22nd 2026 12:07:32
+Command:
+ 
+!SOCFWPackManager action="apply" pack_id="soc-framework-posture" include_hidden="true" dry_run="False" install_marketplace="True" skip_verify="True" skip_validation="False" apply_configure="True" overwrite_lookup="False" configure_jobs="True" configure_integrations="True" configure_lookups="True" retry_count="5" retry_sleep_seconds="15" execution_timeout="1200" install_timeout="3600" post_install_poll_seconds="1800" post_install_poll_interval_seconds="60" continue_on_install_timeout="False" fail_on_marketplace_errors="False" debug="False" limit="50" offset="0" sort_by="id" sort_dir="asc" visible_only="True" fields="id,display_name,version,visible,path" show_total="True" include_doc_content="False" doc_content_max_chars="6000" doc_content_max_lines="200" pre_config_done="True" pre_config_gate="True" force="False"
+(Scripts)
+SOCFWPackManager — done
+Done.
+Jun 22nd 2026 12:07:32
+Command:
+ 
+!SOCFWPackManager action="apply" pack_id="soc-framework-posture" include_hidden="true" dry_run="False" install_marketplace="True" skip_verify="True" skip_validation="False" apply_configure="True" overwrite_lookup="False" configure_jobs="True" configure_integrations="True" configure_lookups="True" retry_count="5" retry_sleep_seconds="15" execution_timeout="1200" install_timeout="3600" post_install_poll_seconds="1800" post_install_poll_interval_seconds="60" continue_on_install_timeout="False" fail_on_marketplace_errors="False" debug="False" limit="50" offset="0" sort_by="id" sort_dir="asc" visible_only="True" fields="id,display_name,version,visible,path" show_total="True" include_doc_content="False" doc_content_max_chars="6000" doc_content_max_lines="200" pre_config_done="True" pre_config_gate="True" force="False"
+(Scripts)
+root:{} 2 items
+catalog_url:https://raw.githubusercontent.com/Palo-Cortex/secops-framework/refs/heads/main/pack_catalog.json
+xsoar_config_url:https://raw.githubusercontent.com/Palo-Cortex/secops-framework/refs/heads/main/Packs/soc-framework-posture/xsoar_config.json
+View full JSON in a new tab.
+1 Benign
+Actions
+Jun 22nd 2026 12:07:32
+Command:
+ 
+!SOCFWPackManager action="apply" pack_id="soc-framework-posture" include_hidden="true" dry_run="False" install_marketplace="True" skip_verify="True" skip_validation="False" apply_configure="True" overwrite_lookup="False" configure_jobs="True" configure_integrations="True" configure_lookups="True" retry_count="5" retry_sleep_seconds="15" execution_timeout="1200" install_timeout="3600" post_install_poll_seconds="1800" post_install_poll_interval_seconds="60" continue_on_install_timeout="False" fail_on_marketplace_errors="False" debug="False" limit="50" offset="0" sort_by="id" sort_dir="asc" visible_only="True" fields="id,display_name,version,visible,path" show_total="True" include_doc_content="False" doc_content_max_chars="6000" doc_content_max_lines="200" pre_config_done="True" pre_config_gate="True" force="False"
+(Scripts)
+SOCFWPackManager — docs.post
+✅ POST-INSTALL / POST-CONFIG MANUAL STEPS
+These docs usually contain manual follow-ups and validation steps AFTER completion.
+Links
+SOC Framework Posture Lifecycle - Manual Steps
+
+Type `:` to use Emojis
+Agentix
