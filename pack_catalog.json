@@ -4,7 +4,7 @@
       "id": "SocFrameworkMicrosoftDefender",
       "display_name": "SOC Microsoft Defender for Endpoint Integration Enhancement",
       "category": "End Point",
-      "version": "1.2.8",
+      "version": "1.2.9",
       "path": "Packs/SocFrameworkMicrosoftDefender",
       "docs_path": "docs/SocFrameworkMicrosoftDefender",
       "visible": true,
@@ -34,7 +34,7 @@
       "id": "SocFrameworkProofPointTap",
       "display_name": "SOC Proofpoint TAP Integration Enhancement for Cortex XSIAM2",
       "category": "Forensics & Malware Analysis",
-      "version": "1.4.4",
+      "version": "1.5.2",
       "path": "Packs/SocFrameworkProofPointTap",
       "docs_path": "docs/SocFrameworkProofPointTap",
       "visible": true,
@@ -122,6 +122,16 @@
       "tier": "foundation"
     },
     {
+      "id": "soc-framework-posture",
+      "display_name": "SOC Framework Posture Lifecycle",
+      "category": "Utilities",
+      "version": "1.0.1",
+      "path": "Packs/soc-framework-posture",
+      "docs_path": "docs/soc-framework-posture",
+      "visible": false,
+      "xsoar_config": "https://raw.githubusercontent.com/Palo-Cortex/secops-framework/refs/heads/main/Packs/soc-framework-posture/xsoar_config.json"
+    },
+    {
       "id": "soc-framework-pov-test",
       "display_name": "SOC Framework PoV Test",
       "category": "Utilities",
@@ -155,12 +165,32 @@
       "id": "soc-optimization-unified",
       "display_name": "SOC Framework Unified",
       "category": "Use Case",
-      "version": "3.10.3",
+      "version": "3.10.12",
       "path": "Packs/soc-optimization-unified",
       "docs_path": "docs/soc-optimization-unified",
       "visible": true,
       "xsoar_config": "https://raw.githubusercontent.com/Palo-Cortex/secops-framework/refs/heads/main/Packs/soc-optimization-unified/xsoar_config.json",
       "tier": "foundation"
+    },
+    {
+      "id": "soc-sentinel-one",
+      "display_name": "SOC Sentinel One",
+      "category": "Endpoint",
+      "version": "1.0.5",
+      "path": "Packs/soc-sentinel-one",
+      "docs_path": "docs/soc-sentinel-one",
+      "visible": true,
+      "xsoar_config": "https://raw.githubusercontent.com/Palo-Cortex/secops-framework/refs/heads/main/Packs/soc-sentinel-one/xsoar_config.json"
+    },
+    {
+      "id": "soc-wiz-cloud",
+      "display_name": "SOC Wiz Cloud",
+      "category": "Cloud",
+      "version": "1.0.5",
+      "path": "Packs/soc-wiz-cloud",
+      "docs_path": "docs/soc-wiz-cloud",
+      "visible": true,
+      "xsoar_config": "https://raw.githubusercontent.com/Palo-Cortex/secops-framework/refs/heads/main/Packs/soc-wiz-cloud/xsoar_config.json"
     }
   ]
 }

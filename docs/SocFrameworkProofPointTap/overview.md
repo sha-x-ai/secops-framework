@@ -5,7 +5,7 @@
 | Field | Value |
 |---|---|
 | ID | `SocFrameworkProofPointTap` |
-| Version | `1.4.4` |
+| Version | `1.5.2` |
 | Category | Forensics & Malware Analysis |
 | Pack Path | `Packs/SocFrameworkProofPointTap` |
 | Manifest | [`Packs/SocFrameworkProofPointTap/xsoar_config.json`](https://github.com/Palo-Cortex/secops-framework/blob/main/Packs/SocFrameworkProofPointTap/xsoar_config.json) |
@@ -30,7 +30,7 @@ Additional custom packs the installer pulls in alongside this pack.
 
 | Pack | System | Source |
 |---|---|---|
-| `SocFrameworkProofPointTap.zip` | `yes` | [release](https://github.com/Palo-Cortex/secops-framework/releases/download/SocFrameworkProofPointTap-v1.4.4/SocFrameworkProofPointTap-v1.4.4.zip) |
+| `SocFrameworkProofPointTap.zip` | `yes` | [release](https://github.com/Palo-Cortex/secops-framework/releases/download/SocFrameworkProofPointTap-v1.5.2/SocFrameworkProofPointTap-v1.5.2.zip) |
 
 ## Marketplace Dependencies
 
@@ -39,11 +39,3 @@ Marketplace packs the installer ensures are present on the tenant.
 | ID | Name | Version |
 |---|---|---|
 | `ProofpointTAP` | Proofpoint TAP | `latest` |
-
-## Integration Instances
-
-Integration brand instances the installer configures. Credentials and propagation labels are always tenant-specific — only the scaffolding ships in the pack.
-
-| Instance Name | Brand | Category | Enabled |
-|---|---|---|---|
-| `Proofpoint TAP v2` | `Proofpoint TAP v2` | Email | false |

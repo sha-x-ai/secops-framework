@@ -1,0 +1,11 @@
+[MODEL: dataset=wiz_generic_alert_raw]
+filter _alert_data != null
+| alter
+    xdm.event.type = type,
+    xdm.alert.name = json_extract_scalar(sourcerule, "$.name"),
+    xdm.alert.description = json_extract_scalar(sourcerule, "$.description"),
+    xdm.alert.severity = severity,
+    xdm.alert.category = type,
+    xdm.alert.original_alert_id = json_extract_scalar(sourcerule, "$.id"),
+    xdm.observer.vendor = "Wiz",
+    xdm.observer.product = "Wiz Cloud";
