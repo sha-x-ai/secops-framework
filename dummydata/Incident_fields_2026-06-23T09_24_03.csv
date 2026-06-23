@@ -1,0 +1,1486 @@
+Field Name	Type	System	Content Pack
+Abnormal Security Abuse Campaign Attack Type	Short Text	Yes	Abnormal Security
+Abnormal Security Abuse Campaign First Reported	Short Text	Yes	Abnormal Security
+Abnormal Security Abuse Campaign From Address	Short Text	Yes	Abnormal Security
+Abnormal Security Abuse Campaign From Name	Short Text	Yes	Abnormal Security
+Abnormal Security Abuse Campaign ID	Short Text	Yes	Abnormal Security
+Abnormal Security Abuse Campaign Judgement Status	Short Text	Yes	Abnormal Security
+Abnormal Security Abuse Campaign Last Reported	Short Text	Yes	Abnormal Security
+Abnormal Security Abuse Campaign Message ID	Short Text	Yes	Abnormal Security
+Abnormal Security Abuse Campaign Overall Status	Short Text	Yes	Abnormal Security
+Abnormal Security Abuse Campaign Recipient Address	Short Text	Yes	Abnormal Security
+Abnormal Security Abuse Campaign Recipient Name	Short Text	Yes	Abnormal Security
+Abnormal Security Abuse Campaign Subject	Short Text	Yes	Abnormal Security
+Abnormal Security Affected Employee	Short Text	Yes	Abnormal Security
+Abnormal Security Analysis	Short Text	Yes	Abnormal Security
+Abnormal Security Attachment Count	Number	Yes	Abnormal Security
+Abnormal Security Attachment Names	Multi Select	Yes	Abnormal Security
+Abnormal Security Attacked Party	Short Text	Yes	Abnormal Security
+Abnormal Security Attack Strategy	Short Text	Yes	Abnormal Security
+Abnormal Security Attack Type	Short Text	Yes	Abnormal Security
+Abnormal Security Attack Vector	Short Text	Yes	Abnormal Security
+Abnormal Security Auto Remediated	Short Text	Yes	Abnormal Security
+Abnormal Security Campaign ID	Short Text	Yes	Abnormal Security
+Abnormal Security Case GenAI Summary	Long Text	Yes	Abnormal Security
+Abnormal Security Case ID	Short Text	Yes	Abnormal Security
+Abnormal Security Case Status	Short Text	Yes	Abnormal Security
+Abnormal Security CC Emails	Multi Select	Yes	Abnormal Security
+Abnormal Security Customer Visible Time	Short Text	Yes	Abnormal Security
+Abnormal Security First Observed Time	Short Text	Yes	Abnormal Security
+Abnormal Security First Reported	Short Text	Yes	Abnormal Security
+Abnormal Security From Address	Short Text	Yes	Abnormal Security
+Abnormal Security From Name	Short Text	Yes	Abnormal Security
+Abnormal Security Impersonated Party	Short Text	Yes	Abnormal Security
+Abnormal Security Internet Message ID	Short Text	Yes	Abnormal Security
+Abnormal Security Is Read	Short Text	Yes	Abnormal Security
+Abnormal Security Judgement Status	Short Text	Yes	Abnormal Security
+Abnormal Security Last Reported	Short Text	Yes	Abnormal Security
+Abnormal Security Message ID	Short Text	Yes	Abnormal Security
+Abnormal Security Overall Status	Short Text	Yes	Abnormal Security
+Abnormal Security Portal URL	Long Text	Yes	Abnormal Security
+Abnormal Security Post Remediated	Short Text	Yes	Abnormal Security
+Abnormal Security Received Time	Short Text	Yes	Abnormal Security
+Abnormal Security Recipient Address	Short Text	Yes	Abnormal Security
+Abnormal Security Recipient Name	Short Text	Yes	Abnormal Security
+Abnormal Security Remediation Status	Short Text	Yes	Abnormal Security
+Abnormal Security Remediation Timestamp	Short Text	Yes	Abnormal Security
+Abnormal Security Reply To Emails	Multi Select	Yes	Abnormal Security
+Abnormal Security Return Path	Short Text	Yes	Abnormal Security
+Abnormal Security Sender Domain	Short Text	Yes	Abnormal Security
+Abnormal Security Sender IP Address	Short Text	Yes	Abnormal Security
+Abnormal Security Sent Time	Short Text	Yes	Abnormal Security
+Abnormal Security Severity	Short Text	Yes	Abnormal Security
+Abnormal Security Severity Level	Short Text	Yes	Abnormal Security
+Abnormal Security Subject	Short Text	Yes	Abnormal Security
+Abnormal Security Summary Insights	Multi Select	Yes	Abnormal Security
+Abnormal Security Threat ID	Short Text	Yes	Abnormal Security
+Abnormal Security Threat IDs	Multi Select	Yes	Abnormal Security
+Abnormal Security To Addresses	Multi Select	Yes	Abnormal Security
+Abnormal Security Url Count	Number	Yes	Abnormal Security
+Account ID	Short Text	Yes	Common Types
+Account information breached	Short Text	Yes	Common Scripts
+Account Member Of	Multi Select	Yes	Common Types
+Account Status	Short Text	Yes	Common Types
+Acquisition Hire	Short Text	Yes	Common Types
+Action	Single Select	Yes	Core Alert Fields
+Action Process Instance ID	Multi Select	Yes	Core Alert Fields
+Actor Process Instance ID	Multi Select	Yes	Core Alert Fields
+Additional Data	Multi Select	Yes	Common Types
+Additional Email Addresses	Multi Select	Yes	Common Types
+Additional Indicators	Short Text	Yes	Common Types
+Affected data	Multi Select	Yes	Common Scripts
+Affected Data Type	Short Text	Yes	Common Scripts
+Affected Individuals Contact Information	Grid	Yes	Common Scripts
+Agent Id	Short Text	Yes	Core Alert Fields
+Agent OS Sub Type	Short Text	Yes	Core Alert Fields
+Agent_resolution_context	Long Text	No	
+Agents ID	Multi Select	Yes	Common Types
+Agent Version	Multi Select	Yes	Common Types
+AI Summary and Remediation	Markdown	No	
+Alert Acknowledgement	Short Text	Yes	Common Types
+Alert Action	Short Text	Yes	Common Types
+Alert Malicious	Short Text	Yes	Common Types
+Alert Rules	Markdown	Yes	Common Types
+Alert Search Results	Grid	Yes	Core Alert Fields
+Alert tags	Short Text	Yes	Common Types
+Alert Type ID	Short Text	Yes	Common Types
+Analysis Report	Multi Select	Yes	Malware Core
+Anti-Spyware Profile Name	Short Text	Yes	MITRE ATT&CK - Courses of Action
+Anti-Spyware Profile Status	Short Text	Yes	MITRE ATT&CK - Courses of Action
+Anti-Spyware Rules	Short Text	Yes	MITRE ATT&CK - Courses of Action
+Anti-Virus Profile Name	Short Text	Yes	MITRE ATT&CK - Courses of Action
+Anti-Virus Profile Status	Short Text	Yes	MITRE ATT&CK - Courses of Action
+Anti-Virus Rules	Short Text	Yes	MITRE ATT&CK - Courses of Action
+App Category	Multi Select	Yes	Core Alert Fields
+app channel name	Short Text	Yes	Common Types
+App-ID	Multi Select	Yes	Core Alert Fields
+Application Path	Short Text	Yes	Common Types
+App message	Long Text	Yes	Common Types
+appname	Short Text	No	
+Approval Status	Short Text	Yes	Common Types
+Approver	Short Text	Yes	Common Types
+Approximate number of affected data subjects	Short Text	Yes	Common Scripts
+App Subcategory	Multi Select	Yes	Core Alert Fields
+App Technology	Multi Select	Yes	Core Alert Fields
+Argus Attachment ID	Number	Yes	mnemonic MDR
+Argus Case HTML	HTML	Yes	mnemonic MDR
+Argus Case ID	Number	Yes	mnemonic MDR
+Argus Case Link	URL	Yes	mnemonic MDR
+Argus Case Service	Short Text	Yes	mnemonic MDR
+Argus Case Status	Short Text	Yes	mnemonic MDR
+Argus Case Type	Short Text	Yes	mnemonic MDR
+Argus Comment ID	Number	Yes	mnemonic MDR
+Argus Customer ID	Number	Yes	mnemonic MDR
+Argus Event ID	Number	Yes	mnemonic MDR
+Argus Event Type	Short Text	Yes	mnemonic MDR
+Argus Tag ID	Number	Yes	mnemonic MDR
+ASN	Short Text	Yes	Common Types
+ASN Name	Short Text	Yes	Common Types
+Asset ID	Short Text	Yes	Common Types
+Asset Name	Short Text	Yes	Common Types
+Asset Table	Markdown	Yes	Asset
+Assigned User	Short Text	Yes	Common Types
+Assignment Group	Short Text	Yes	Common Types
+Attachments	Internal	Yes	
+Attachment Count	Number	Yes	Phishing
+Attachment Extension	Short Text	Yes	Phishing
+Attachment Hash	Short Text	Yes	Phishing
+Attachment ID	Short Text	Yes	Phishing
+Attachment Name	Short Text	Yes	Phishing
+Attachment size	Short Text	Yes	Phishing
+Attachment type	Short Text	Yes	Phishing
+Attack Mode	Short Text	Yes	Common Types
+Attorney General Notification	Single Select	Yes	Common Scripts
+Audit Logs	Short Text	Yes	Common Types
+AzureDevOps  Project ID	Short Text	Yes	AzureDevOps
+AzureDevOps  Project Name	Short Text	Yes	AzureDevOps
+AzureDevOps  Pull Request ID	Short Text	Yes	AzureDevOps
+AzureDevOps  RepositoryID	Short Text	Yes	AzureDevOps
+AzureDevOps  Repository Name	Short Text	Yes	AzureDevOps
+AzureDevOps  Status	Single Select	Yes	AzureDevOps
+Best Practices Description	Markdown	Yes	MITRE ATT&CK - Courses of Action
+Birthday	Short Text	Yes	Common Types
+Blocked Action	Short Text	Yes	Common Types
+Block Indicators Status	Short Text	Yes	Common Types
+BPA Failed Checks - Anti-Spyware	Markdown	Yes	MITRE ATT&CK - Courses of Action
+BPA Failed Checks - Anti-Virus	Markdown	Yes	MITRE ATT&CK - Courses of Action
+BPA Failed Checks - File Blocking	Markdown	Yes	MITRE ATT&CK - Courses of Action
+BPA Failed Checks - URL Filtering	Markdown	Yes	MITRE ATT&CK - Courses of Action
+BPA Failed Checks - Vulnerability Protection	Markdown	Yes	MITRE ATT&CK - Courses of Action
+BPA Failed Checks - WildFire	Markdown	Yes	MITRE ATT&CK - Courses of Action
+BPA Passed Checks - Anti-Spyware	Markdown	Yes	MITRE ATT&CK - Courses of Action
+BPA Passed Checks - Anti-Virus	Markdown	Yes	MITRE ATT&CK - Courses of Action
+BPA Passed Checks - File Blocking	Markdown	Yes	MITRE ATT&CK - Courses of Action
+BPA Passed Checks - URL Filtering	Markdown	Yes	MITRE ATT&CK - Courses of Action
+BPA Passed Checks - Vulnerability Protection	Markdown	Yes	MITRE ATT&CK - Courses of Action
+BPA Passed Checks - WildFire	Markdown	Yes	MITRE ATT&CK - Courses of Action
+Branch Name	Short Text	Yes	XSOAR CI/CD
+Breach Confirmation	Single Select	Yes	Common Scripts
+Bugtraq	Short Text	Yes	Common Types
+Caller	Short Text	Yes	Common Types
+Campaign Name	Markdown	Yes	Common Types
+Category Count	Number	Yes	Common Types
+Category	Short Text	Yes	Core Alert Fields
+CGO CMD	Multi Select	Yes	Core Alert Fields
+CGO MD5	Multi Select	Yes	Core Alert Fields
+CGO name	Multi Select	Yes	Core Alert Fields
+CGO path	Multi Select	Yes	Core Alert Fields
+CGO SHA256	Multi Select	Yes	Core Alert Fields
+CGO signature	Multi Select	Yes	Core Alert Fields
+CGO signer	Multi Select	Yes	Core Alert Fields
+Changed	Short Text	Yes	Common Types
+CICD Azure DevOps target ref	Short Text	Yes	XSOAR CI/CD
+CI/CD Branch	Short Text	Yes	XSOAR CI/CD
+CI/CD Keep Placeholders In Files	Boolean	Yes	XSOAR CI/CD
+CI/CD Pack Name	Short Text	Yes	XSOAR CI/CD
+CI/CD Pull Request Branch	Single Select	Yes	XSOAR CI/CD
+CI/CD Pull Request Comment	Long Text	Yes	XSOAR CI/CD
+CI/CD Pull Request Link	URL	Yes	XSOAR CI/CD
+CI/CD Pull Request Review	Long Text	Yes	XSOAR CI/CD
+CI/CD Pull Request Title	Short Text	Yes	XSOAR CI/CD
+CI/CD Pull Request Reviewer	Short Text	Yes	XSOAR CI/CD
+CI/CD S3 Bucket Name	Short Text	Yes	XSOAR CI/CD
+CID	Multi Select	Yes	Core Alert Fields
+CIRT Process Phase	Short Text	No	
+City	Short Text	Yes	Common Types
+Classification	Short Text	Yes	Common Types
+Clicked URLs	Grid	Yes	Phishing
+Resolution Comment	Long Text	Yes	
+Close Reason	Single Select	Yes	
+Close Time	Short Text	Yes	Common Types
+Closing Reason	Short Text	Yes	Common Types
+Closing User	Short Text	Yes	Common Types
+Close User	Short Text	Yes	
+Cloud Account ID	Multi Select	Yes	Common Types
+Cloud Identity Sub-type	Multi Select	Yes	Core Alert Fields
+Cloud Identity Type	Multi Select	Yes	Core Alert Fields
+Cloud Instance ID	Multi Select	Yes	Common Types
+Cloud Operation Type	Multi Select	Yes	Core Alert Fields
+Cloud Project	Multi Select	Yes	Core Alert Fields
+Cloud Provider	Multi Select	Yes	Core Alert Fields
+Cloud Referenced Resource	Multi Select	Yes	Core Alert Fields
+Cloud Region List	Multi Select	Yes	Common Types
+Cloud Resource List	Multi Select	Yes	Common Types
+Cloud Resource Sub-type	Multi Select	Yes	Core Alert Fields
+Cloud Resource Type	Multi Select	Yes	Core Alert Fields
+Cloud Service	Number	Yes	Common Types
+Cluster Name	Multi Select	Yes	Core Alert Fields
+Collection Remediation Products	Markdown	Yes	MITRE ATT&CK - Courses of Action
+Command and Control Remediation Products	Markdown	Yes	MITRE ATT&CK - Courses of Action
+Command Line Verdict	Short Text	Yes	Common Types
+Comment	Short Text	Yes	Common Types
+Company Address	Short Text	Yes	Common Scripts
+Company City	Short Text	Yes	Common Scripts
+Company has Insurance for the Breach	Short Text	Yes	Common Scripts
+Company Name	Short Text	Yes	Common Scripts
+Company Postal Code	Short Text	Yes	Common Scripts
+Completed Task Count	Short Text	Yes	Rapid Breach Response
+Compliance Notes	Multi Select	Yes	Common Types
+Configuration File Path	Short Text	Yes	XSOAR CI/CD
+Configuration File Source	Single Select	Yes	XSOAR CI/CD
+Consumer Reporting Agencies Notification	Single Select	Yes	Common Scripts
+Contact Address	Short Text	Yes	Common Scripts
+Contact Email address	Short Text	Yes	Common Scripts
+Contact Name	Short Text	Yes	Common Scripts
+Contact Telephone number	Short Text	Yes	Common Scripts
+Container ID	Multi Select	Yes	Core Alert Fields
+Containment SLA	Timer	Yes	Common Types
+Contains Featured Host	Multi Select	Yes	Core Alert Fields
+Contains Featured IP Address	Multi Select	Yes	Core Alert Fields
+Contains Featured User	Multi Select	Yes	Core Alert Fields
+Content Notification Email	Short Text	Yes	XSOAR Content Update Notifications
+Content Notification Slack Channel	Short Text	Yes	XSOAR Content Update Notifications
+Content Notification Slack Channel ID	Short Text	Yes	XSOAR Content Update Notifications
+Content Notification Slack Username	Short Text	Yes	XSOAR Content Update Notifications
+Content Pack Selection	Long Text	Yes	XSOAR Content Update Notifications
+Content Updates Auto Install	Boolean	Yes	XSOAR Content Update Notifications
+Content Updates Available	Markdown	Yes	XSOAR Content Update Notifications
+Coordinates	Short Text	Yes	Impossible Traveler
+Cost Center	Short Text	Yes	Common Types
+Cost Center Code	Short Text	Yes	Common Types
+Country	Multi Select	Yes	Core Alert Fields
+Country Code	Short Text	Yes	Common Types
+Country Code Number	Short Text	Yes	Common Types
+Country where business has its main establishment	Short Text	Yes	Common Scripts
+Credential Access Remediation Products	Markdown	Yes	MITRE ATT&CK - Courses of Action
+Credibility - Offense	Number	Yes	IBM QRadar
+Critical Assets	Grid	Yes	Common Types
+Custom Packs Installed	Grid	Yes	XSOAR CI/CD
+Custom Packs Source	Single Select	Yes	XSOAR CI/CD
+Custom Query Results	Markdown	Yes	Common Types
+CVE	Short Text	Yes	Common Types
+CVE ID	Short Text	Yes	Common Types
+CVE List	Short Text	Yes	PAN-OS by Palo Alto Networks
+CVE Published	Short Text	Yes	Common Types
+CVSS	Short Text	Yes	Common Types
+CVSS Availability Requirement	Multi Select	Yes	Common Types
+CVSS Collateral Damage Potential	Multi Select	Yes	Common Types
+CVSS Confidentiality Requirement	Multi Select	Yes	Common Types
+CVSS Integrity Requirement	Multi Select	Yes	Common Types
+Data Encryption Status	Multi Select	Yes	Common Scripts
+Data Theft Risk Score	Short Text	No	
+DBot Closed	Date Picker	Yes	
+DBot Created	Date Picker	Yes	
+DBOT SLA	Date Picker	Yes	
+DBOT Mirror Direction	Single Select	Yes	
+DBOT Mirror External ID	Short Text	Yes	
+DBOT Mirror Instance	Single Select	Yes	
+DBOT Mirror Last Sync	Date Picker	Yes	
+DBot Modified	Date Picker	Yes	
+DBotPrediction	Short Text	Yes	Phishing
+DBotPredictionProbability	Number	Yes	Phishing
+DBot Status	Single Select	Yes	
+DBotTextSuggestionHighlighted	Markdown	Yes	Phishing
+DBot Total Time	Date Picker	Yes	
+Defense Evasion Remediation Products	Markdown	Yes	MITRE ATT&CK - Courses of Action
+Demisto REST API Name	Short Text	Yes	XSOAR Content Update Notifications
+Demo ID	Short Text	No	
+Department	Short Text	Yes	Common Types
+Description - Asset	Multi Select	Yes	Asset
+Description - Offense	Short Text	Yes	IBM QRadar
+Destination Geolocation	Multi Select	Yes	Common Types
+Destination IPV6	Multi Select	Yes	Common Types
+Destination Networks	Multi Select	Yes	Common Types
+Destination Zone Name	Multi Select	Yes	Core Alert Fields
+Dest OS	Short Text	Yes	Common Types
+Description	Long Text	Yes	
+Detected Endpoints	Short Text	Yes	Common Types
+Detected External IPs	Short Text	Yes	Common Types
+Detected Internal Hosts	Short Text	Yes	Common Types
+Detection End Time	Date Picker	Yes	Common Types
+Detection ID	Number	Yes	Common Types
+Detection SLA	Timer	Yes	Common Types
+Detection URL	URL	Yes	Common Types
+Device External IPs	Multi Select	Yes	Common Types
+Device Hash	Short Text	Yes	Common Types
+Device Id	Short Text	Yes	Common Types
+Device Internal IPs	Multi Select	Yes	Common Types
+Device MAC Address	Multi Select	Yes	Common Types
+Device Model	Short Text	Yes	Common Types
+Device Name	Short Text	Yes	Common Types
+Device OS Name	Multi Select	Yes	Common Types
+Device OS Version	Multi Select	Yes	Common Types
+Device OU	Multi Select	Yes	Common Types
+Device Status	Short Text	Yes	Common Types
+Device Time	Multi Select	Yes	Common Types
+Discovery Remediation Products	Markdown	Yes	MITRE ATT&CK - Courses of Action
+Display Name	Short Text	Yes	Common Types
+DNS Query Name	Multi Select	Yes	Core Alert Fields
+Domain	Short Text	Yes	Core Alert Fields
+Legacy Domain Name	Multi Select	Yes	Common Types
+Domain Registrar Abuse Email	Short Text	Yes	Common Types
+Domain Squatting Result	Markdown	Yes	Common Types
+Domain Updated Date	Short Text	Yes	Common Types
+DPO E-mail Address	Short Text	Yes	Common Scripts
+DPO Notification	Single Select	Yes	Common Scripts
+Dropped Count	Internal	Yes	
+Dsts	Multi Select	Yes	Common Types
+Duration	Short Text	Yes	Common Types
+Email	Short Text	Yes	Common Types
+E-mail Address	Short Text	Yes	Common Scripts
+Email Authenticity Check	Single Select	Yes	Phishing
+Legacy Email BCC	Short Text	Yes	Phishing
+Email Body	Long Text	Yes	Phishing
+Email Body Format	Short Text	Yes	Phishing
+Email Body HTML	HTML	Yes	Phishing
+EmailCampaignCanvas	Markdown	Yes	Common Types
+EmailCampaignMutualIndicators	Markdown	Yes	Common Types
+EmailCampaignSnippets	Markdown	Yes	Common Types
+EmailCampaignSummary	Markdown	Yes	Common Types
+Legacy Email CC	Short Text	Yes	Phishing
+Email Classification	Single Select	Yes	Phishing
+Email Client Name	Short Text	Yes	Phishing
+Email Delete From Brand	Single Select	Yes	Phishing
+Email Delete Reason	Short Text	Yes	Phishing
+Email Delete Result	Short Text	Yes	Phishing
+Email Delete Type	Single Select	Yes	Phishing
+Email Headers	Grid	Yes	Phishing
+Email HTML	Long Text	Yes	Phishing
+Email HTML Image	Long Text	Yes	Phishing
+Email In Reply To	Short Text	Yes	Phishing
+Email Internal Message ID	Short Text	Yes	Phishing
+Email Keywords	Short Text	Yes	Phishing
+Email Labels	Short Text	Yes	Phishing
+Email Latest Message	Short Text	Yes	Phishing
+Legacy Email Message ID	Short Text	Yes	Phishing
+Email Queue ID	Short Text	Yes	PhishingAlerts
+Email Received	Short Text	Yes	Phishing
+Email Recipient	Multi Select	Yes	Core Alert Fields
+Email Recipients Count	Number	Yes	Phishing
+Email Reply To	Short Text	Yes	Phishing
+Legacy Email Return Path	Short Text	Yes	Phishing
+Email Sender	Multi Select	Yes	Core Alert Fields
+Email Sender IP	Short Text	Yes	Phishing
+Email Sent Successfully	Boolean	Yes	Common Types
+Email Size	Number	Yes	Phishing
+Email Source	Short Text	Yes	Phishing
+Email Source Domain	Short Text	Yes	PhishingAlerts
+Email Subject	Multi Select	Yes	Core Alert Fields
+Email To Count	Short Text	Yes	Phishing
+Email URL Clicked	Short Text	Yes	Phishing
+Employee Display Name	Short Text	Yes	Common Types
+Employee Email	Short Text	Yes	Common Types
+Employee Manager Email	Short Text	Yes	Common Types
+Endpoint Isolation Status	Short Text	Yes	Common Types
+Endpoints Details	Markdown	Yes	Common Types
+End Time	Short Text	Yes	Common Types
+Eradication Task Count	Short Text	Yes	Rapid Breach Response
+Error Code	Short Text	Yes	Common Types
+Error Message	Long Text	Yes	Common Types
+Escalation	Short Text	Yes	Common Types
+Event Action	Single Select	Yes	Common Types
+Event Descriptions	Multi Select	Yes	Common Types
+Event ID	Short Text	Yes	Common Types
+Event Names	Multi Select	Yes	Common Types
+Event Type	Multi Select	Yes	Core Alert Fields
+Exactly what happened, and at what times?	Short Text	Yes	NIST
+Excluded	Boolean	Yes	Core Alert Fields
+Executed Remediation Summary Description	Markdown	Yes	MITRE ATT&CK - Courses of Action
+Execution Remediation Products	Markdown	Yes	MITRE ATT&CK - Courses of Action
+Exfiltration Remediation Products	Markdown	Yes	MITRE ATT&CK - Courses of Action
+exported	Internal	Yes	
+Exposure Level	Short Text	Yes	Common Types
+External Category ID	Multi Select	Yes	Common Types
+External Category Name	Multi Select	Yes	Common Types
+External Confidence	Multi Select	Yes	Common Types
+External End Time	Date Picker	Yes	Common Types
+External Last Updated Time	Date Picker	Yes	Common Types
+External Link	URL	Yes	Common Types
+External Severity	Multi Select	Yes	Common Types
+External Start Time	Date Picker	Yes	Common Types
+External Status	Multi Select	Yes	Common Types
+External Sub Category ID	Multi Select	Yes	Common Types
+External Sub Category Name	Multi Select	Yes	Common Types
+External System ID	Multi Select	Yes	Common Types
+Failed Logon Events	Number	Yes	Common Types
+Failed Logon Events Timeframe	Short Text	Yes	Common Types
+Feed Based	Internal	Yes	
+File Access Date	Short Text	Yes	Common Types
+File Blocking Profile Name	Short Text	Yes	MITRE ATT&CK - Courses of Action
+File Blocking Profile Status	Short Text	Yes	MITRE ATT&CK - Courses of Action
+File Blocking Rules	Short Text	Yes	MITRE ATT&CK - Courses of Action
+File Creation Date	Short Text	Yes	Common Types
+File Hash	Short Text	Yes	Common Types
+File Macro SHA256	Multi Select	Yes	Core Alert Fields
+File MD5	Multi Select	Yes	Core Alert Fields
+File name	Multi Select	Yes	Core Alert Fields
+File path	Multi Select	Yes	Core Alert Fields
+File Relationships	Grid	Yes	Common Types
+File SHA1	Multi Select	Yes	Common Types
+File SHA256	Multi Select	Yes	Core Alert Fields
+Legacy File Size	Short Text	Yes	Common Types
+Financial information breached	Short Text	Yes	Common Scripts
+First Name	Short Text	Yes	Common Types
+First Seen	Short Text	Yes	Common Types
+Follow Up	Boolean	Yes	Common Types
+Full Name	Short Text	Yes	Common Types
+FW Name	Multi Select	Yes	Core Alert Fields
+FW Rule ID	Multi Select	Yes	Core Alert Fields
+FW Rule Name	Multi Select	Yes	Core Alert Fields
+FW Serial Number	Multi Select	Yes	Core Alert Fields
+GDPR Notify Authorities	Timer	Yes	Common Scripts
+Generic Export Indicators Service Action	Single Select	Yes	Generic Export Indicators Service
+Generic Export Indicators Service Indicators List	Long Text	Yes	Generic Export Indicators Service
+Generic Export Indicators Service Type	Single Select	Yes	Generic Export Indicators Service
+Generic Export Indicators Service Tag	Short Text	Yes	Generic Export Indicators Service
+Given Name	Short Text	Yes	Common Types
+Google Drive Activity Added Parents	Grid	Yes	Google Drive
+Google Drive Activity Added Permissions	Grid	Yes	Google Drive
+Google Drive Activity Assigned Current User	Boolean	Yes	Google Drive
+Google Drive Activity Assigned Deleted User	Boolean	Yes	Google Drive
+Google Drive Activity Assigned Person Name	Short Text	Yes	Google Drive
+Google Drive Activity Assigned Unknown User	Boolean	Yes	Google Drive
+Google Drive Activity Assignment Subtype	Short Text	Yes	Google Drive
+Google Drive Activity Copied Folder Type	Short Text	Yes	Google Drive
+Google Drive Activity Copied Item Is File	Boolean	Yes	Google Drive
+Google Drive Activity Copied Item Name	Short Text	Yes	Google Drive
+Google Drive Activity Copied Item Title	Short Text	Yes	Google Drive
+Google Drive Activity Copied Shared Drive Name	Short Text	Yes	Google Drive
+Google Drive Activity Copied Shared Drive Title	Short Text	Yes	Google Drive
+Google Drive Activity Created New	Boolean	Yes	Google Drive
+Google Drive Activity Delete Type	Short Text	Yes	Google Drive
+Google Drive Activity DLP Change Type	Short Text	Yes	Google Drive
+Google Drive Activity Identified As	Short Text	Yes	Google Drive
+Google Drive Activity Mentioned Users	Grid	Yes	Google Drive
+Google Drive Activity New Title	Short Text	Yes	Google Drive
+Google Drive Activity Old Title	Short Text	Yes	Google Drive
+Google Drive Activity Post Subtype	Short Text	Yes	Google Drive
+Google Drive Activity Reference Type	Short Text	Yes	Google Drive
+Google Drive Activity Removed Parents	Grid	Yes	Google Drive
+Google Drive Activity Removed Permissions	Grid	Yes	Google Drive
+Google Drive Activity Restore Type	Short Text	Yes	Google Drive
+Google Drive Activity Restriction Changes	Grid	Yes	Google Drive
+Google Drive Activity Suggestion Subtype	Short Text	Yes	Google Drive
+Google Drive Activity Targets	Grid	Yes	Google Drive
+Google Drive Activity Uploaded	Boolean	Yes	Google Drive
+Group ID	Short Text	Yes	Common Types
+Handled Techniques	Grid	Yes	MITRE ATT&CK - Courses of Action
+hasRole	Boolean	Yes	
+Health insurance breached	Short Text	Yes	Common Scripts
+Hello World ID	Short Text	Yes	HelloWorld
+Hello World Status	Short Text	Yes	HelloWorld
+Hello World Type	Short Text	Yes	HelloWorld
+High Risky Hosts	Multi Select	Yes	Common Types
+High Risky Users	Multi Select	Yes	Common Types
+Host FQDN	Short Text	Yes	Core Alert Fields
+Host IP	Multi Select	Yes	Core Alert Fields
+Host Mac Address	Short Text	Yes	Core Alert Fields
+Host Name	Short Text	Yes	Core Alert Fields
+Host OS	Single Select	Yes	Core Alert Fields
+Host Risk Level	Short Text	Yes	Core Alert Fields
+Host Risk Reasons	Multi Select	Yes	Core Alert Fields
+How could information sharing with other organizations have been improved?	Short Text	Yes	NIST
+How well did staff and management perform in dealing with the incident? Were the documented procedures followed? Were they adequate?	Short Text	Yes	NIST
+Hunting Task Count	Short Text	Yes	Rapid Breach Response
+Hunt Results Count	Short Text	Yes	Common Types
+ID - Asset	Multi Select	Yes	Asset
+Identity Table	Markdown	Yes	Identity
+Identity Type	Multi Select	Yes	Common Types
+ID - Offense	Number	Yes	IBM QRadar
+Image Name	Multi Select	Yes	Core Alert Fields
+impacted devices	Short Text	Yes	Microsoft 365 Defender
+impacted entities	Short Text	Yes	Microsoft 365 Defender
+Impact Remediation Products	Markdown	Yes	MITRE ATT&CK - Courses of Action
+Impossible Travel Risk Score	Short Text	No	
+Incident Link	URL	Yes	Common Types
+IncomingMirrorError	Long Text	Yes	Common Types
+Indeni Device ID	Short Text	Yes	Indeni
+Indeni Issue ID	Short Text	Yes	Indeni
+Individuals Notification	Single Select	Yes	Common Scripts
+Initial Access Remediation Products	Markdown	Yes	MITRE ATT&CK - Courses of Action
+Initiated By	Multi Select	Yes	Core Alert Fields
+Initiator CMD	Multi Select	Yes	Core Alert Fields
+Initiator MD5	Multi Select	Yes	Core Alert Fields
+Initiator path	Multi Select	Yes	Core Alert Fields
+Initiator PID	Multi Select	Yes	Core Alert Fields
+Initiator SHA256	Multi Select	Yes	Core Alert Fields
+Initiator signature	Multi Select	Yes	Core Alert Fields
+Initiator signer	Multi Select	Yes	Core Alert Fields
+Initiator TID	Multi Select	Yes	Core Alert Fields
+Internal Addresses	Short Text	Yes	Common Types
+Inventa Credit Card Number	Short Text	Yes	Inventa
+Inventa Driver License	Short Text	Yes	Inventa
+Inventa DSAR DataAssets	Grid	Yes	Inventa
+Inventa DSAR DataBases	Grid	Yes	Inventa
+Inventa DSAR DataSubject Email	Short Text	Yes	Inventa
+Inventa DSAR DataSubject ID	Short Text	Yes	Inventa
+Inventa DSAR DataSubject Name	Short Text	Yes	Inventa
+Inventa DSAR Files	Grid	Yes	Inventa
+Inventa DSAR Inventa Ticket	Short Text	Yes	Inventa
+Inventa DSAR PII Entities	Grid	Yes	Inventa
+Inventa DSAR Transactions	Grid	Yes	Inventa
+Inventa National ID	Short Text	Yes	Inventa
+Inventa Passport Number	Short Text	Yes	Inventa
+Inventa Report Reason	Short Text	Yes	Inventa
+Inventa Source	Grid	Yes	Inventa
+Inventa Tax ID	Short Text	Yes	Inventa
+Inventa Vehicle Number	Short Text	Yes	Inventa
+investigation hint	Short Text	No	
+Investigation Stage	Short Text	Yes	Common Types
+IP Address - Asset	Multi Select	Yes	Asset
+IP Blocked Status	Short Text	Yes	Common Types
+IP Reputation	Short Text	Yes	Common Types
+Is Active	Single Select	Yes	Common Types
+Isolated	Short Text	Yes	Common Types
+Is Phishing	Multi Select	Yes	Core Alert Fields
+Is the Data Subject to DPIA	Short Text	Yes	Common Scripts
+Item Owner	Short Text	Yes	Common Types
+Item Owner Email	Short Text	Yes	Common Types
+Jira Comment	Long Text	Yes	Atlassian Jira
+Jira Description	Short Text	Yes	Atlassian Jira
+Jira Due Date	Short Text	Yes	Atlassian Jira
+Jira Estimate	Short Text	Yes	Atlassian Jira
+Jira ID	Number	Yes	Atlassian Jira
+Jira Issue Key	Short Text	Yes	Atlassian Jira
+Jira Issue Type	Short Text	Yes	Atlassian Jira
+Jira Priority	Short Text	Yes	Atlassian Jira
+Jira Project	Short Text	Yes	Atlassian Jira
+Jira Reporter Email	Short Text	Yes	Atlassian Jira
+Jira Reporter Name	Short Text	Yes	Atlassian Jira
+Jira Status	Short Text	Yes	Atlassian Jira
+Jira Subtask	Long Text	Yes	Atlassian Jira
+Jira Summary	Short Text	Yes	Atlassian Jira
+Jira Transitions	Single Select	Yes	Atlassian Jira
+JiraV3 Status	Single Select	Yes	Atlassian Jira
+Job Code	Short Text	Yes	Common Types
+Job Family	Short Text	Yes	Common Types
+Job Function	Short Text	Yes	Common Types
+Jobs Created	Grid	Yes	XSOAR CI/CD
+Labels	Internal	Yes	
+LastMirroredInTime	Date Picker	Yes	Cortex XDR by Palo Alto Networks
+Last Mirrored Time Stamp	Date Picker	Yes	Common Types
+Last Modified By	Short Text	Yes	Common Types
+Last Modified On	Short Text	Yes	Common Types
+Last Name	Short Text	Yes	Common Types
+Last Seen	Short Text	Yes	Common Types
+Last Update Time	Short Text	Yes	Common Types
+Lateral Movement Remediation Products	Markdown	Yes	MITRE ATT&CK - Courses of Action
+Leadership	Short Text	Yes	Common Types
+Likely Impact	Short Text	Yes	Common Scripts
+Linked Count	Internal	Yes	
+Link To Offense	URL	Yes	IBM QRadar
+List Of Rules - Event	Multi Select	Yes	Common Types
+List of Rules - Offense	Multi Select	Yes	IBM QRadar
+Lists Created	Grid	Yes	XSOAR CI/CD
+Local IP	Multi Select	Yes	Core Alert Fields
+Local Port	Multi Select	Yes	Core Alert Fields
+Location	Short Text	Yes	Common Types
+Location - Asset	Multi Select	Yes	Asset
+Location Region	Short Text	Yes	Common Types
+Log Source	Short Text	Yes	Common Types
+Log Source Name	Multi Select	Yes	Common Types
+Log Source Type	Multi Select	Yes	Common Types
+Low Level Categories Events	Multi Select	Yes	Common Types
+Low Level Categories - Offense	Multi Select	Yes	IBM QRadar
+MAC Address - Asset	Multi Select	Yes	Asset
+Macro Source Code	Long Text	Yes	Common Types
+Magnitude - Offense	Number	Yes	IBM QRadar
+Malicious Behavior	Short Text	Yes	Malware Core
+Malicious Cause (If the cause is a malicious attack)	Multi Select	Yes	Common Scripts
+Malicious URL Clicked	Short Text	Yes	Phishing
+Malicious URL Viewed	Short Text	Yes	Phishing
+Malware Family	Short Text	Yes	Malware Core
+Malware Name	Short Text	Yes	Malware Core
+Management Notification	Single Select	Yes	Common Scripts
+Manager Email Address	Short Text	Yes	Common Types
+Manager Name	Short Text	Yes	Common Types
+Marketplace Packs Installed	Grid	Yes	XSOAR CI/CD
+Measures to Mitigate	Short Text	Yes	Common Scripts
+Media Notification	Single Select	Yes	Common Scripts
+Medical Information breached	Short Text	Yes	Common Scripts
+Microsoft 365 Defender A	Grid	Yes	Microsoft 365 Defender
+Microsoft 365 Defender Active	Short Text	Yes	Microsoft 365 Defender
+Microsoft 365 Defender Categories count	Grid	Yes	Microsoft 365 Defender
+Microsoft 365 Defender Classification	Single Select	Yes	Microsoft 365 Defender
+Microsoft 365 Defender Comments	Grid	Yes	Microsoft 365 Defender
+Microsoft 365 Defender Devices	Grid	Yes	Microsoft 365 Defender
+Microsoft 365 Defender Display Name	Short Text	Yes	Microsoft 365 Defender
+Microsoft 365 Defender First activity	Short Text	Yes	Microsoft 365 Defender
+Microsoft 365 Defender ID	Number	Yes	Microsoft 365 Defender
+Microsoft 365 Defender Last activity	Short Text	Yes	Microsoft 365 Defender
+Microsoft 365 Defender Status	Single Select	Yes	Microsoft 365 Defender
+Microsoft Defender for Endpoint Evidence Creation Time	Multi Select	Yes	Microsoft Defender for Endpoint
+Microsoft Defender for Endpoint Evidence Type	Multi Select	Yes	Microsoft Defender for Endpoint
+Microsoft Graph Security Alert Determination	Short Text	Yes	Microsoft Graph Security
+Microsoft Graph Security Alert Evidence	Markdown	Yes	Microsoft Graph Security
+Microsoft Graph Security Comment	Multi Select	Yes	Microsoft Graph Security
+Microsoft Graph Security Detector Id	Short Text	Yes	Microsoft Graph Security
+Microsoft Graph Security Id	Short Text	Yes	Microsoft Graph Security
+Microsoft Graph Security Recommended Action	Short Text	Yes	Microsoft Graph Security
+Microsoft Graph Security Service Source	Short Text	Yes	Microsoft Graph Security
+Microsoft Sentinel Alert Count	Short Text	Yes	Microsoft Sentinel
+Microsoft Sentinel Alerts	Long Text	Yes	Microsoft Sentinel
+Microsoft Sentinel Classification Comment	Short Text	Yes	Microsoft Sentinel
+Microsoft Sentinel Classification Reason	Single Select	Yes	Microsoft Sentinel
+Microsoft Sentinel Comments	Long Text	Yes	Microsoft Sentinel
+Microsoft Sentinel Entities	Long Text	Yes	Microsoft Sentinel
+Microsoft Sentinel Incident Number	Short Text	Yes	Microsoft Sentinel
+Microsoft Sentinel Owner	Grid	Yes	Microsoft Sentinel
+Microsoft Sentinel Relations	Long Text	Yes	Microsoft Sentinel
+Microsoft Sentinel Rule Id	Multi Select	Yes	Microsoft Sentinel
+Misc	Multi Select	Yes	Core Alert Fields
+Mitigation Task Count	Short Text	Yes	Rapid Breach Response
+Mitre ATT&CK Tactic	Multi Select	Yes	Core Alert Fields
+Mitre ATT&CK Technique	Multi Select	Yes	Core Alert Fields
+MITRE Tactic ID	Multi Select	Yes	Common Types
+MITRE Tactic Name	Multi Select	Yes	Common Types
+MITRE Technique ID	Multi Select	Yes	Common Types
+MITRE Technique Name	Multi Select	Yes	Common Types
+Mobile Device Model	Short Text	Yes	Common Types
+Mobile Phone	Short Text	Yes	Common Types
+Module	Multi Select	Yes	Core Alert Fields
+Name	Short Text	Yes	
+NGFW Vsys Name	Multi Select	Yes	Core Alert Fields
+NIST Stage	Short Text	Yes	NIST
+Normalized Data	Long Text	No	
+Notable Drilldown	Markdown	Yes	Splunk
+Notable - ID	Short Text	Yes	Splunk
+Notable Status	Single Select	Yes	Splunk
+Notable Urgency	Single Select	Yes	Splunk
+Number Of Events In Offense	Number	Yes	IBM QRadar
+Number Of Fetched Events	Number	Yes	IBM QRadar
+Number Of Flows	Number	Yes	IBM QRadar
+Number Of Found Related Alerts	Number	Yes	Common Types
+Number Of Log Sources	Number	Yes	Common Types
+Number of Related Incidents	Number	Yes	Common Types
+Number of similar files	Number	Yes	Common Types
+Objective	Multi Select	Yes	Common Types
+Occurred	Date Picker	Yes	
+Offense Inactive	Boolean	Yes	IBM QRadar
+Operation Name	Multi Select	Yes	Common Types
+Org Level 1	Short Text	Yes	Common Types
+Org Level 2	Short Text	Yes	Common Types
+Org Level 3	Short Text	Yes	Common Types
+Org Unit	Short Text	Yes	Common Types
+Original Alert ID	Short Text	Yes	Common Types
+Original Alert Name	Short Text	Yes	Common Types
+Original Alert Source	Short Text	Yes	Common Types
+Original Description	Short Text	Yes	Common Types
+Original Events	Multi Select	Yes	Common Types
+OS	Short Text	Yes	Common Types
+OS Parent CMD	Multi Select	Yes	Core Alert Fields
+OS Parent TID	Multi Select	Yes	Core Alert Fields
+OS Parent Name	Multi Select	Yes	Core Alert Fields
+OS Parent PID	Multi Select	Yes	Core Alert Fields
+OS Parent SHA256	Multi Select	Yes	Core Alert Fields
+OS Parent Signature	Multi Select	Yes	Core Alert Fields
+OS Parent Signer	Multi Select	Yes	Core Alert Fields
+OS Parent User Name	Multi Select	Yes	Core Alert Fields
+OS Type	Short Text	Yes	Common Types
+Other PII data breached	Short Text	Yes	Common Scripts
+OutgoingMirrorError	Long Text	Yes	Common Types
+owner	Single Select	Yes	
+Parent Process CMD	Multi Select	Yes	Common Types
+Parent Process File Path	Multi Select	Yes	Common Types
+Parent Process ID	Short Text	Yes	Malware Core
+Parent Process IDs	Multi Select	Yes	Common Types
+Parent Process MD5	Multi Select	Yes	Common Types
+Parent Process Name	Multi Select	Yes	Common Types
+Parent Process Path	Multi Select	Yes	Common Types
+Parent Process SHA256	Multi Select	Yes	Common Types
+Part of Campaign	Short Text	Yes	Common Types
+Password Changed Date	Short Text	Yes	Common Types
+Password Reset Successfully	Boolean	Yes	Common Types
+Persistence Remediation Products	Markdown	Yes	MITRE ATT&CK - Courses of Action
+Personal Email	Short Text	Yes	Common Types
+Phase	Single Select	Yes	
+Phishing BCL Score	Number	Yes	Phishing
+phishing_domain	Short Text	No	
+Phishing PCL Score	Number	Yes	Phishing
+Phishing Reporter Email Headers	Grid	Yes	Phishing
+Phishing SCL Score	Number	Yes	Phishing
+Phishing Sub-type	Multi Select	Yes	Phishing
+Phone Number	Multi Select	Yes	Common Types
+PII Data Type	Short Text	Yes	Common Scripts
+Playbook Description	Markdown	Yes	Rapid Breach Response
+Playbook	Single Select	Yes	
+Policy Actions	Multi Select	Yes	Common Types
+Policy Deleted	Short Text	Yes	Common Types
+Policy Description	Long Text	Yes	Common Types
+Policy Details	Short Text	Yes	Common Types
+Policy ID	Short Text	Yes	Common Types
+Policy Recommendation	Long Text	Yes	Common Types
+Policy Remediable	Short Text	Yes	Common Types
+Policy Severity	Short Text	Yes	Common Types
+Policy Type	Short Text	Yes	Common Types
+Policy URI	Short Text	Yes	Common Types
+Possible Cause of the Breach	Multi Select	Yes	Common Scripts
+Postal Code	Short Text	Yes	Common Scripts
+Post Nat Destination IP	Multi Select	Yes	Common Types
+Post Nat Destination Port	Multi Select	Yes	Common Types
+Post Nat Source IP	Multi Select	Yes	Common Types
+Post Nat Source Port	Multi Select	Yes	Common Types
+Pre Nat Destination Port	Multi Select	Yes	Common Types
+Pre Nat Source IP	Multi Select	Yes	Common Types
+Pre Nat Source Port	Multi Select	Yes	Common Types
+Previous Coordinates	Short Text	Yes	Impossible Traveler
+Previous Sign In Date Time	Date Picker	Yes	Impossible Traveler
+Previous Source IP	Short Text	Yes	Impossible Traveler
+Prisma Cloud Dismissal Note	Short Text	Yes	Prisma Cloud by Palo Alto Networks
+Prisma Cloud - Findings Results	Grid	Yes	Prisma Cloud by Palo Alto Networks
+Prisma Cloud - IAM Results	Grid	Yes	Prisma Cloud by Palo Alto Networks
+Prisma Cloud ID	Short Text	Yes	Prisma Cloud by Palo Alto Networks
+Prisma Cloud Reason	Short Text	Yes	Prisma Cloud by Palo Alto Networks
+Prisma Cloud Rules	Grid	Yes	Prisma Cloud by Palo Alto Networks
+Prisma Cloud Status	Short Text	Yes	Prisma Cloud by Palo Alto Networks
+Prisma Cloud Time	Short Text	Yes	Prisma Cloud by Palo Alto Networks
+Privilege Escalation Remediation Products	Markdown	Yes	MITRE ATT&CK - Courses of Action
+Process CMD	Multi Select	Yes	Common Types
+Process Creation Time	Multi Select	Yes	Common Types
+Process execution signature	Multi Select	Yes	Core Alert Fields
+Process execution signer	Multi Select	Yes	Core Alert Fields
+Process ID	Multi Select	Yes	Common Types
+Process MD5	Multi Select	Yes	Common Types
+Process Names	Multi Select	Yes	Common Types
+Process Paths	Multi Select	Yes	Common Types
+Process SHA256	Multi Select	Yes	Common Types
+Project ID	Multi Select	Yes	Common Types
+Protocol names	Multi Select	Yes	Common Types
+Quarantined	Short Text	Yes	Malware Core
+Ransomware Approximate Number Of Encrypted Endpoints	Short Text	Yes	Ransomware
+Ransomware Cryptocurrency Address	Multi Select	Yes	Ransomware
+Ransomware Cryptocurrency Address Type	Multi Select	Yes	Ransomware
+Ransomware Data Encryption Status	Short Text	Yes	Ransomware
+Ransomware Email	Multi Select	Yes	Ransomware
+Ransomware Encrypted File Owner	Short Text	Yes	Ransomware
+Ransomware Note	Long Text	Yes	Ransomware
+Ransomware Onion Address	Multi Select	Yes	Ransomware
+Ransomware Recovery Tool	Short Text	Yes	Ransomware
+Ransomware Strain	Short Text	Yes	Ransomware
+Rating	Short Text	Yes	Common Types
+Raw Event	Multi Select	Yes	Common Types
+Referenced Resource ID	Multi Select	Yes	Common Types
+Referenced Resource Name	Multi Select	Yes	Common Types
+Region	Short Text	Yes	Common Types
+Region ID	Short Text	Yes	Common Types
+Registration Email	Short Text	Yes	Common Types
+Registry data	Multi Select	Yes	Core Alert Fields
+Registry full key	Multi Select	Yes	Core Alert Fields
+Registry Hive	Multi Select	Yes	Common Types
+Registry Key	Multi Select	Yes	Common Types
+Registry Value	Multi Select	Yes	Common Types
+Registry Value Type	Multi Select	Yes	Common Types
+Related Alerts	Markdown	Yes	Common Types
+Related Campaign	Short Text	Yes	Common Types
+Related Endpoints	Short Text	Yes	Common Types
+Related Report	Short Text	Yes	Common Types
+Relevance - Offense	Number	Yes	IBM QRadar
+Remaining Task Count	Short Text	Yes	Rapid Breach Response
+Remediated Techniques	Markdown	Yes	MITRE ATT&CK - Courses of Action
+Remediation SLA	Timer	Yes	Common Types
+Remediation Task Count	Short Text	Yes	Rapid Breach Response
+Remidiation	Short Text	No	
+Reminder	Date Picker	Yes	
+Remote Agent Hostname	Multi Select	Yes	Core Alert Fields
+Remote Host	Multi Select	Yes	Core Alert Fields
+Remote IP	Multi Select	Yes	Core Alert Fields
+Remote Port	Multi Select	Yes	Core Alert Fields
+RemovedFromCampaigns	Multi Select	Yes	Common Types
+Rendered HTML	HTML	Yes	Common Types
+Reported Email CC	Short Text	Yes	Phishing
+Reported Email From	Short Text	Yes	Phishing
+Reported Email Message ID	Short Text	Yes	Phishing
+Reported Email Origin	Single Select	Yes	Phishing
+Reported Email Subject	Short Text	Yes	Phishing
+Reported Email To	Short Text	Yes	Phishing
+Reporter Email Address	Short Text	Yes	Common Types
+Report Name	Markdown	Yes	Common Types
+Resident Notification Option	Short Text	Yes	Common Scripts
+Residents Email Address	Grid	Yes	Common Scripts
+Resource API Name	Short Text	Yes	Prisma Cloud by Palo Alto Networks
+Resource Cloud Type	Short Text	Yes	Prisma Cloud by Palo Alto Networks
+Resource Name	Short Text	Yes	Common Types
+Resource Type	Short Text	Yes	Common Types
+Resource URL	Short Text	Yes	Common Types
+Retained	Internal	Yes	
+Risk Name	Short Text	Yes	Common Types
+Risk Rating	Short Text	Yes	Common Types
+Risk Score	Short Text	Yes	Common Types
+RiskyIAMUser	Boolean	No	
+RRN	Short Text	Yes	Prisma Cloud by Palo Alto Networks
+Detection Rule ID	Short Text	Yes	Core Alert Fields
+Rule Name	Short Text	Yes	Common Types
+Playbook Run Status	Internal	Yes	
+sAMAccountName	Short Text	Yes	Common Types
+Scenario	Multi Select	Yes	Common Types
+Secretary Notification	Single Select	Yes	Common Scripts
+Sector of Affected Party	Short Text	Yes	Common Scripts
+Selected Indicators	Multi Select	Yes	Common Types
+Sensor IP	Short Text	Yes	Common Types
+ServiceNow Assigned To	Short Text	Yes	ServiceNow
+ServiceNow Assignment Group	Short Text	Yes	ServiceNow
+ServiceNow Attack Vector	Short Text	Yes	ServiceNow
+ServiceNow Business Impact	Single Select	Yes	ServiceNow
+ServiceNow Caller	Short Text	Yes	ServiceNow
+ServiceNow Caller ID	Short Text	Yes	ServiceNow
+ServiceNow Closed By	Short Text	Yes	ServiceNow
+ServiceNow Closed Date	Date Picker	Yes	ServiceNow
+ServiceNow Description	Long Text	Yes	ServiceNow
+ServiceNow Due Date	Date Picker	Yes	ServiceNow
+ServiceNow Escalation	Short Text	Yes	ServiceNow
+ServiceNow Impact	Single Select	Yes	ServiceNow
+ServiceNow Notify	Single Select	Yes	ServiceNow
+ServiceNow Priority	Single Select	Yes	ServiceNow
+ServiceNow Resolution Code	Short Text	Yes	ServiceNow
+ServiceNow Resolution Notes	Short Text	Yes	ServiceNow
+ServiceNow Resolved Time	Date Picker	Yes	ServiceNow
+ServiceNow Severity	Single Select	Yes	ServiceNow
+ServiceNow SIR Category	Single Select	Yes	ServiceNow
+ServiceNow SIR State	Single Select	Yes	ServiceNow
+ServiceNow State	Single Select	Yes	ServiceNow
+ServiceNow Ticket ID	Short Text	Yes	ServiceNow
+ServiceNow Ticket Number	Short Text	Yes	ServiceNow
+ServiceNow Urgency	Single Select	Yes	ServiceNow
+Severity	Single Select	Yes	
+Severity - Offense	Number	Yes	IBM QRadar
+SHA1	Short Text	Yes	Common Types
+SHA512	Short Text	Yes	Common Types
+Signature	Short Text	Yes	Common Types
+Sign In Date Time	Date Picker	Yes	Impossible Traveler
+similarIncidents	Multi Select	Yes	Common Types
+Similar incidents Dbot	Grid	Yes	Common Types
+Size - number of employees	Short Text	Yes	Common Scripts
+Size - turnover	Short Text	Yes	Common Scripts
+SKU Name	Short Text	Yes	Common Types
+SKU TIER	Short Text	Yes	Common Types
+Email Campaign ID	Short Text	Yes	SOC Framework Unified
+Email Classification	Single Select	Yes	SOC Framework Unified
+Email Click IP	Short Text	Yes	SOC Framework Unified
+Email Click Time	Short Text	Yes	SOC Framework Unified
+Email Delivery Action	Single Select	Yes	SOC Framework Unified
+Email Direction	Single Select	Yes	SOC Framework Unified
+Email Malware Score	Number	Yes	SOC Framework Unified
+Email Phish Score	Number	Yes	SOC Framework Unified
+Email Threat ID	Short Text	Yes	SOC Framework Unified
+Email Threat Status	Single Select	Yes	SOC Framework Unified
+Email Threat Type	Single Select	Yes	SOC Framework Unified
+Email Threat URL	Short Text	Yes	SOC Framework Unified
+Identity Auth Source	Single Select	Yes	SOC Framework Unified
+Identity Client IP	Short Text	Yes	SOC Framework Unified
+Identity Country	Short Text	Yes	SOC Framework Unified
+Identity Event Type	Single Select	Yes	SOC Framework Unified
+Identity Outcome	Single Select	Yes	SOC Framework Unified
+Identity Risk Level	Single Select	Yes	SOC Framework Unified
+Identity Display Name	Short Text	Yes	SOC Framework Unified
+Identity Email	Short Text	Yes	SOC Framework Unified
+Identity Username	Short Text	Yes	SOC Framework Unified
+Detection Method	Single Select	Yes	
+Source Category	Short Text	Yes	Common Types
+Source Created By	Short Text	Yes	Common Types
+Source Create time	Short Text	Yes	Common Types
+Source External IPs	Multi Select	Yes	Common Types
+Source Geolocation	Multi Select	Yes	Common Types
+Source Id	Short Text	Yes	Common Types
+Source Instance	Short Text	Yes	
+Source Networks	Multi Select	Yes	Common Types
+Source Of Indicators	Grid	Yes	Rapid Breach Response
+Source Priority	Short Text	Yes	Common Types
+Source Status	Short Text	Yes	Common Types
+Source Updated by	Short Text	Yes	Common Types
+Source Urgency	Short Text	Yes	Common Types
+Source Zone Name	Multi Select	Yes	Core Alert Fields
+Splunk Comments	Multi Select	Yes	Splunk
+Splunk Dest Risk Object Type	Short Text	Yes	Splunk
+Splunk Dest Risk Score	Number	Yes	Splunk
+Splunk Disposition	Single Select	Yes	Splunk
+Splunk Drilldown	Markdown	Yes	Splunk
+Splunk Notes	Multi Select	Yes	Splunk
+Splunk Security Domain	Short Text	Yes	Splunk
+Splunk Sensitivity	Short Text	Yes	Splunk
+Splunk Status	Single Select	Yes	Splunk
+Splunk Urgency	Single Select	Yes	Splunk
+Src OS	Short Text	Yes	Common Types
+SSDeep	Short Text	Yes	Common Types
+Starred	Boolean	Yes	Core Alert Fields
+Start Time	Short Text	Yes	Common Types
+State	Short Text	Yes	Common Types
+State CISO Notification	Single Select	Yes	Common Scripts
+State where the breach took place	Single Select	Yes	Common Scripts
+Status - Offense	Short Text	Yes	IBM QRadar
+Status Reason	Short Text	Yes	Common Types
+Street Address	Short Text	Yes	Common Types
+String Similarity Results	Markdown	Yes	Common Types
+Sub Category	Short Text	Yes	Common Types
+Subscription Assigned By	Short Text	Yes	Prisma Cloud by Palo Alto Networks
+Subscription Created By	Short Text	Yes	Prisma Cloud by Palo Alto Networks
+Subscription Created On	Short Text	Yes	Prisma Cloud by Palo Alto Networks
+Subscription Description	Short Text	Yes	Prisma Cloud by Palo Alto Networks
+Subscription ID	Short Text	Yes	Prisma Cloud by Palo Alto Networks
+Subscription Name	Short Text	Yes	Prisma Cloud by Palo Alto Networks
+Subscription Type	Short Text	Yes	Prisma Cloud by Palo Alto Networks
+Subscription Updated By	Short Text	Yes	Prisma Cloud by Palo Alto Networks
+Subscription Updated On	Short Text	Yes	Prisma Cloud by Palo Alto Networks
+Subtype	Short Text	Yes	Common Types
+Successful Asset Enrichment	Short Text	Yes	Splunk
+Successful Drilldown Enrichment	Short Text	Yes	Splunk
+Successful Identity Enrichment	Short Text	Yes	Splunk
+Surname	Short Text	Yes	Common Types
+Suspicious Executions	Grid	Yes	Common Types
+Suspicious Executions Found	Markdown	Yes	Common Types
+Switch ID - Asset	Multi Select	Yes	Asset
+Switch Port ID - Asset	Multi Select	Yes	Asset
+System Default	Short Text	Yes	Prisma Cloud by Palo Alto Networks
+Tactic	Multi Select	Yes	Common Types
+Tactic ID	Multi Select	Yes	Common Types
+tamartestaudit	Short Text	No	
+Target	Short Text	Yes	PAN-OS by Palo Alto Networks
+Target Firewall Version	Short Text	Yes	PAN-OS by Palo Alto Networks
+target_ip	Short Text	No	
+Target process CMD	Multi Select	Yes	Core Alert Fields
+Target process name	Multi Select	Yes	Core Alert Fields
+Target process SHA256	Multi Select	Yes	Core Alert Fields
+Team name	Short Text	Yes	Common Types
+Technical Owner	Multi Select	Yes	Common Types
+Technical Owner Contact	Multi Select	Yes	Common Types
+Technical User	Multi Select	Yes	Common Types
+Technique	Multi Select	Yes	Common Types
+Technique ID	Multi Select	Yes	Common Types
+Techniques List	Long Text	Yes	MITRE ATT&CK - Courses of Action
+Techniques to Handle	Markdown	Yes	MITRE ATT&CK - Courses of Action
+Telephone no.	Short Text	Yes	Common Scripts
+Tenant Name	Short Text	Yes	Common Types
+Terminated Action	Short Text	Yes	Malware Core
+TestPBActions	Short Text	No	
+Threat Actor	Short Text	Yes	Malware Core
+Threat Family Name	Short Text	Yes	Common Types
+Threat Name	Short Text	Yes	Common Types
+Ticket Acknowledged Date	Date Picker	Yes	Common Types
+Ticket Closed Date	Date Picker	Yes	Common Types
+Ticket Number	Short Text	Yes	Common Types
+Timestamp	Date Picker	Yes	Core Alert Fields
+Time to Assignment	Timer	Yes	Common Types
+Timezone	Short Text	Yes	Common Types
+Title	Short Text	Yes	Common Types
+Total Indicator Count	Short Text	Yes	Rapid Breach Response
+Total Malicious URLs Clicks	Number	Yes	Phishing
+Total Task Count	Short Text	Yes	Rapid Breach Response
+Traffic Direction	Multi Select	Yes	Common Types
+Travel Map Link	Short Text	Yes	Impossible Traveler
+Triage SLA	Timer	Yes	Common Types
+Triggered Security Profile	Short Text	Yes	Common Types
+Type	Single Select	Yes	
+Unhandled Techniques	Grid	Yes	MITRE ATT&CK - Courses of Action
+Unique biometric data breached	Short Text	Yes	Common Scripts
+Unique identification number breached	Short Text	Yes	Common Scripts
+Unique Ports	Short Text	Yes	Common Types
+URL	Multi Select	Yes	Core Alert Fields
+URL Filtering Profile Name	Short Text	Yes	MITRE ATT&CK - Courses of Action
+URL Filtering Profile Status	Short Text	Yes	MITRE ATT&CK - Courses of Action
+URL Filtering Rules	Short Text	Yes	MITRE ATT&CK - Courses of Action
+URLs	Multi Select	Yes	Common Types
+URL SSL Verification	Grid	Yes	Common Types
+Use Case Description	Markdown	Yes	Common Types
+userAccountControl	Short Text	Yes	Common Types
+User Agent	Multi Select	Yes	Core Alert Fields
+User Anomaly Count	Short Text	Yes	Common Types
+User Block Status	Short Text	Yes	Common Types
+User Creation Time	Short Text	Yes	Common Types
+User Engagement Response	Short Text	Yes	Common Types
+User Groups	Multi Select	Yes	Common Types
+User Id	Short Text	Yes	Common Types
+User name	Multi Select	Yes	Core Alert Fields
+Username Count - Offense	Number	Yes	IBM QRadar
+User Risk Level	Short Text	Yes	Core Alert Fields
+User Risk Reasons	Multi Select	Yes	Core Alert Fields
+Users Details	Markdown	Yes	Common Types
+User SID	Multi Select	Yes	Common Types
+UUID	Short Text	Yes	Common Types
+Vendor ID	Short Text	Yes	Common Types
+Vendor Product	Short Text	Yes	Common Types
+Verdict	Short Text	Yes	Common Types
+Verification Method	Short Text	Yes	Common Types
+Verification Status	Short Text	Yes	Common Types
+victim_email	Short Text	No	
+VPC ID	Short Text	Yes	Prisma Cloud by Palo Alto Networks
+Vulnerability Category	Short Text	Yes	Common Types
+Vulnerability Protection Profile Name	Short Text	Yes	MITRE ATT&CK - Courses of Action
+Vulnerability Protection Profile Status	Short Text	Yes	MITRE ATT&CK - Courses of Action
+Vulnerability Protection Rules	Short Text	Yes	MITRE ATT&CK - Courses of Action
+Vulnerable Product	Short Text	Yes	Common Types
+Were any steps or actions taken that might have inhibited the recovery?	Short Text	Yes	NIST
+What additional tools or resources are needed to detect, analyze, and mitigate future incidents?	Short Text	Yes	NIST
+What corrective actions can prevent similar incidents in the future?	Short Text	Yes	NIST
+What information was needed sooner?	Short Text	Yes	NIST
+What precursors or indicators should be watched for in the future to detect similar incidents?	Short Text	Yes	NIST
+What would the staff and management do differently the next time a similar incident occurs?	Short Text	Yes	NIST
+Where is data hosted	Multi Select	Yes	Common Scripts
+WildFire Profile Name	Short Text	Yes	MITRE ATT&CK - Courses of Action
+WildFire Profile Status	Short Text	Yes	MITRE ATT&CK - Courses of Action
+WildFire Rules	Short Text	Yes	MITRE ATT&CK - Courses of Action
+Work Phone	Short Text	Yes	Common Types
+XDR Alert Category	Multi Select	Yes	Cortex XDR by Palo Alto Networks
+XDR Alert Count	Number	Yes	Cortex XDR by Palo Alto Networks
+XDR Alert Name	Multi Select	Yes	Cortex XDR by Palo Alto Networks
+XDR Alerts	Grid	Yes	Cortex XDR by Palo Alto Networks
+XDR Alert Search Results	Grid	Yes	Cortex XDR by Palo Alto Networks
+XDR Assigned User Email	Short Text	Yes	Cortex XDR by Palo Alto Networks
+XDR Assigned User Pretty Name	Short Text	Yes	Cortex XDR by Palo Alto Networks
+XDR Description	Short Text	Yes	Cortex XDR by Palo Alto Networks
+XDR Detection Time	Date Picker	Yes	Cortex XDR by Palo Alto Networks
+XDR device control violations	Grid	Yes	Cortex XDR by Palo Alto Networks
+XDR Disconnected endpoints	Grid	Yes	Cortex XDR by Palo Alto Networks
+XDR File Artifacts	Grid	Yes	Cortex XDR by Palo Alto Networks
+XDR File Name	Multi Select	Yes	Cortex XDR by Palo Alto Networks
+XDR File SHA256	Multi Select	Yes	Cortex XDR by Palo Alto Networks
+XDR High Severity Alert Count	Number	Yes	Cortex XDR by Palo Alto Networks
+XDR Host Count	Number	Yes	Cortex XDR by Palo Alto Networks
+XDR Incident ID	Short Text	Yes	Cortex XDR by Palo Alto Networks
+XDR Investigation results	Grid	Yes	Cortex XDR by Palo Alto Networks
+XDR Low Severity Alert Count	Number	Yes	Cortex XDR by Palo Alto Networks
+XDR manual severity	Short Text	Yes	Cortex XDR by Palo Alto Networks
+XDR Medium Severity Alert Count	Number	Yes	Cortex XDR by Palo Alto Networks
+XDR MITRE Tactics	Multi Select	Yes	Cortex XDR by Palo Alto Networks
+XDR MITRE Techniques	Multi Select	Yes	Cortex XDR by Palo Alto Networks
+XDR Modification Time	Date Picker	Yes	Cortex XDR by Palo Alto Networks
+XDR Network Artifacts	Grid	Yes	Cortex XDR by Palo Alto Networks
+XDR Notes	Short Text	Yes	Cortex XDR by Palo Alto Networks
+XDR Resolve Comment	Short Text	Yes	Cortex XDR by Palo Alto Networks
+XDR Risky Host Count	Number	Yes	Cortex XDR by Palo Alto Networks
+XDR Risky Hosts	Grid	Yes	Cortex XDR by Palo Alto Networks
+XDR Risky User Count	Number	Yes	Cortex XDR by Palo Alto Networks
+XDR Risky Users	Grid	Yes	Cortex XDR by Palo Alto Networks
+XDR Similar Incidents	Grid	Yes	Cortex XDR by Palo Alto Networks
+XDR Starred	Boolean	Yes	Cortex XDR by Palo Alto Networks
+XDR Status	Short Text	Yes	Cortex XDR by Palo Alto Networks
+XDR Status v2	Single Select	Yes	Cortex XDR by Palo Alto Networks
+XDR URL	URL	Yes	Cortex XDR by Palo Alto Networks
+XDR User Count	Number	Yes	Cortex XDR by Palo Alto Networks
+XDR Users	Multi Select	Yes	Cortex XDR by Palo Alto Networks
+XFF	Multi Select	Yes	Core Alert Fields
+Zip Code	Short Text	Yes	Common Types
+Local IPv6	Multi Select	Yes	
+Remote IPv6	Multi Select	Yes	
+Added in Content Version	Short Text	Yes	
+Agentic AI response	Multi Select	Yes	
+Agentic AI response status	Single Select	Yes	
+Host IPv6	Multi Select	Yes	
+Issue Domain	Single Select	Yes	
+Asset IDs	Multi Select	Yes	
+Assignee Email	Short Text	Yes	
+Assignee	Short Text	Yes	
+Prisma Attack Techniques	Multi Select	Yes	
+Prisma Audit IDs	Multi Select	Yes	
+Case ID	Number	Yes	
+Case IDs	Multi Select	Yes	
+Cloud Labels	Multi Select	Yes	
+Cloud Provider Account ID	Short Text	Yes	
+Cloud Service Name	Short Text	Yes	
+Container Name	Multi Select	Yes	
+Database Name	Short Text	Yes	
+Issues Detection Modules	Multi Select	Yes	
+Destination Unified Asset Inventory ID	Multi Select	Yes	
+Destination Unified Asset Inventory Version	Multi Select	Yes	
+Remaining Exception Period	Date Picker	Yes	
+Extended Description	Short Text	Yes	
+External Id	Short Text	Yes	
+External URL	Short Text	Yes	
+Original Tags	Short Text	Yes	
+Findings	Multi Select	Yes	
+Forensics Artifact Type	Multi Select	Yes	
+Image ID	Multi Select	Yes	
+Impact	Short Text	Yes	
+Ingestion Failure Duration	Number	Yes	
+Externally Detected Provider	Multi Select	Yes	
+Initial Evidence	Short Text	Yes	
+Issue Id	Short Text	Yes	
+Excepted	Boolean	Yes	
+Is rule triggered	Boolean	Yes	
+Legacy Last Modified By	Short Text	Yes	
+Legacy Last Modified On	Short Text	Yes	
+Last Seen	Short Text	Yes	
+Last Modified	Date Picker	Yes	
+Insert Time	Date Picker	Yes	
+Malicious URLs	Multi Select	Yes	
+Namespace	Multi Select	Yes	
+OS Parent MD5	Multi Select	Yes	
+Policy Remediable	Short Text	Yes	
+Account Name	Short Text	Yes	
+API Name	Short Text	Yes	
+Cidr Range	Short Text	Yes	
+Cloud Account Groups	Multi Select	Yes	
+Cloud Account Owners	Multi Select	Yes	
+Prisma Cloud Reason	Short Text	Yes	
+Prisma Cloud Status	Short Text	Yes	
+Region	Multi Select	Yes	
+Resource Name	Short Text	Yes	
+Recommendation	Short Text	Yes	
+Remediation	Short Text	Yes	
+Resolution Status Modified	Date Picker	Yes	
+Status	Single Select	Yes	
+Resolution Reason	Multi Select	Yes	
+Tags	Short Text	Yes	
+Indicator	Multi Select	Yes	
+Unified Asset Inventory ID	Short Text	Yes	
+Unified Asset Inventory Version	Short Text	Yes	
+Rule Variation ID	Short Text	Yes	
+Active Directory Container Canonical Name	Short Text	Yes	
+Active Directory Container Creation Time	Date Picker	Yes	
+Active Directory Container Dn	Short Text	Yes	
+Active Directory Container Last Changed	Date Picker	Yes	
+Active Directory Container Object Guid	Short Text	Yes	
+Active Directory Trust Attributes	Number	Yes	
+Active Directory Trust Creation Time	Date Picker	Yes	
+Active Directory Trust Direction	Single Select	Yes	
+Active Directory Trust Disallow Transivity	Boolean	Yes	
+Active Directory Trust Dn	Short Text	Yes	
+Active Directory Trust Forest Transitive	Boolean	Yes	
+Active Directory Trust Intra Forest	Boolean	Yes	
+Active Directory Trust Is Sid Filtering Forest Aware	Boolean	Yes	
+Active Directory Trust Is Sid Filtering Quarantined	Boolean	Yes	
+Active Directory Trust Last Changed	Date Picker	Yes	
+Active Directory Trust Selective Authentication	Boolean	Yes	
+Active Directory Trust Source Domain	Short Text	Yes	
+Active Directory Trust Target Domain	Short Text	Yes	
+Active Directory Trust Tgt Delegation	Boolean	Yes	
+Active Directory Trust Type	Short Text	Yes	
+Application Bundle Id	Short Text	Yes	
+Application Protocol	Multi Select	Yes	
+Appsec Deployed To Runtime	Boolean	Yes	
+Appsec Impact	Single Select	Yes	
+Auth Methods	Multi Select	Yes	
+Backlog Status	Single Select	Yes	
+Certificate Algorithm	Short Text	Yes	
+Certificate Classifications	Multi Select	Yes	
+Certificate Formatted Issuer Org	Short Text	Yes	
+Certificate Id	Short Text	Yes	
+Certificate Is Expired	Boolean	Yes	
+Certificate Issuer	Short Text	Yes	
+Certificate Issuer Details Country	Short Text	Yes	
+Certificate Issuer Details Name	Short Text	Yes	
+Certificate Issuer Details Org	Short Text	Yes	
+Certificate Issuer Details Org Unit	Short Text	Yes	
+Certificate Md5	Short Text	Yes	
+Certificate Not After	Date Picker	Yes	
+Certificate Not Before	Date Picker	Yes	
+Certificate Owner Name	Short Text	Yes	
+Certificate Owner Type	Short Text	Yes	
+Certificate Public Key Bits	Number	Yes	
+Certificate Serial	Short Text	Yes	
+Certificate Sha1	Short Text	Yes	
+Certificate Sha256	Short Text	Yes	
+Certificate Subject	Short Text	Yes	
+Certificate Subject Details Alternative Names	Multi Select	Yes	
+Certificate Subject Details Country	Short Text	Yes	
+Certificate Subject Details Org	Short Text	Yes	
+Certificate Subject Details Org Unit	Short Text	Yes	
+Certificate Template Cn	Short Text	Yes	
+Certificate Template Creation Time	Date Picker	Yes	
+Certificate Template Display Name	Short Text	Yes	
+Certificate Template Dn	Short Text	Yes	
+Certificate Template Domain Name	Short Text	Yes	
+Certificate Template Enhanced Key Usage	Multi Select	Yes	
+Certificate Template Guid	Short Text	Yes	
+Certificate Template Requester Can Specify Subject	Boolean	Yes	
+Certificate Template Requires Manager Approval	Boolean	Yes	
+Certificate Template Schema Version	Number	Yes	
+Certificate Template When Changed	Date Picker	Yes	
+Certificate Version	Short Text	Yes	
+Cloud Function Id	Short Text	Yes	
+Cloud Function Name	Short Text	Yes	
+Cloud Function Request Id	Short Text	Yes	
+Cloud Function Runtime	Short Text	Yes	
+Cloud Function Version	Short Text	Yes	
+Cloud Project	Multi Select	Yes	
+Cloud Project Id	Multi Select	Yes	
+Cloud Provider	Multi Select	Yes	
+Cloud Region	Multi Select	Yes	
+Cloudsec Policy Ids	Multi Select	Yes	
+Code Git Branch	Short Text	Yes	
+Code Git Commit Author Email	Short Text	Yes	
+Code Git Commit Author Name	Short Text	Yes	
+Code Git Commit Author Pretty Name	Short Text	Yes	
+Code Git Commit Hash	Short Text	Yes	
+Code Git Commit Time	Date Picker	Yes	
+Code Git Contributors	Multi Select	Yes	
+Code Git Provider	Short Text	Yes	
+Code Iac Framework	Single Select	Yes	
+Code Scan Source	Single Select	Yes	
+Data Data Pattern	Multi Select	Yes	
+Data Data Profile	Multi Select	Yes	
+Data Information Protection Label	Long Text	Yes	
+Disk Is Root	Boolean	Yes	
+Disk Name	Short Text	Yes	
+Disk Partition Id	Short Text	Yes	
+Disk Partition Id Type	Single Select	Yes	
+Dns Dns Question Name	Multi Select	Yes	
+Domain	Short Text	Yes	
+Domain Clean Name	Short Text	Yes	
+Domain Clean Trimmed Name	Short Text	Yes	
+Domain Dn	Short Text	Yes	
+Domain Domain Mode	Single Select	Yes	
+Domain Forest	Short Text	Yes	
+Domain Infrastructure Master	Short Text	Yes	
+Domain Name	Short Text	Yes	
+Domain Pdc Emulator	Short Text	Yes	
+Domain Rid Master	Short Text	Yes	
+Domain Security Properties Lockout Duration	Number	Yes	
+Domain Security Properties Lockout Threshold	Number	Yes	
+Domain Security Properties Max Password Age	Number	Yes	
+Domain Security Properties Min Password Length	Number	Yes	
+Domain Security Properties Password Complexity Enabled	Boolean	Yes	
+Domain Sid	Short Text	Yes	
+Email Attachment Extension	Multi Select	Yes	
+Email Attachment Filename	Multi Select	Yes	
+Email Attachment Sha256	Multi Select	Yes	
+Email Bcc	Multi Select	Yes	
+Email Bcc Names	Multi Select	Yes	
+Email Cc	Multi Select	Yes	
+Email Cc Names	Multi Select	Yes	
+Email Conversation Id	Multi Select	Yes	
+Email Creation Time	Multi Select	Yes	
+Email Detection Tags	Multi Select	Yes	
+Email From Address	Multi Select	Yes	
+Email From Name	Multi Select	Yes	
+Email Is Draft	Boolean	Yes	
+Email Mailbox Owner	Multi Select	Yes	
+Email Message Id	Multi Select	Yes	
+Email Normalized Urls	Multi Select	Yes	
+Email Recipients	Multi Select	Yes	
+Email Recipients Names	Multi Select	Yes	
+Email Return Path	Multi Select	Yes	
+Email Sender	Multi Select	Yes	
+Email Sender Name	Multi Select	Yes	
+Email Subject	Multi Select	Yes	
+Email Url Categories	Multi Select	Yes	
+Event Type	Multi Select	Yes	
+File Filename	Short Text	Yes	
+File Group Id	Number	Yes	
+File Group Name	Short Text	Yes	
+File Last Modified	Date Picker	Yes	
+File Metadata Change Time	Date Picker	Yes	
+File Owner Id	Number	Yes	
+File Owner Name	Short Text	Yes	
+File Path	Multi Select	Yes	
+File Permissions Group	Multi Select	Yes	
+File Permissions Others	Multi Select	Yes	
+File Permissions Owner	Multi Select	Yes	
+File Position End Character	Number	Yes	
+File Position End Line	Number	Yes	
+File Position Start Character	Number	Yes	
+File Position Start Line	Number	Yes	
+File Sha256	Short Text	Yes	
+File Size	Number	Yes	
+File Volume Path	Short Text	Yes	
+Finding Sources	Multi Select	Yes	
+Http Method	Single Select	Yes	
+Http Path	Short Text	Yes	
+Http Request Client Type	Short Text	Yes	
+Http Request Content Types	Multi Select	Yes	
+Http Request User Agents	Multi Select	Yes	
+Http Response Content Types	Multi Select	Yes	
+Http Response Status Code	Single Select	Yes	
+Http Version	Number	Yes	
+Identity Access Keys	Multi Select	Yes	
+Identity Access Levels	Multi Select	Yes	
+Identity Access Statistics Resources	Number	Yes	
+Identity Access Statistics Sensitive Data	Number	Yes	
+Identity Access Statistics Services	Number	Yes	
+Identity Access To Services	Multi Select	Yes	
+Identity Account Access	Multi Select	Yes	
+Identity App Registration Owners	Multi Select	Yes	
+Identity App Registrations Ids	Multi Select	Yes	
+Identity Badge Id	Short Text	Yes	
+Identity Can Impersonate	Boolean	Yes	
+Identity Clean Domain Name	Short Text	Yes	
+Identity Clean Trimmed Domain Name	Short Text	Yes	
+Identity Creation Time	Date Picker	Yes	
+Identity Dn	Short Text	Yes	
+Identity Domain	Short Text	Yes	
+Identity Email	Short Text	Yes	
+Identity Employee Id	Short Text	Yes	
+Identity First Name	Short Text	Yes	
+Identity Full Domain Name	Short Text	Yes	
+Identity Group Creation Time	Date Picker	Yes	
+Identity Group Dn	Short Text	Yes	
+Identity Group Domain Name	Short Text	Yes	
+Identity Group Group Type	Short Text	Yes	
+Identity Group Guid	Short Text	Yes	
+Identity Group Is Empty	Boolean	Yes	
+Identity Group Is Nested	Boolean	Yes	
+Identity Group Last Modified Time	Date Picker	Yes	
+Identity Group Member Of	Multi Select	Yes	
+Identity Group Number Of Groups	Number	Yes	
+Identity Group Number Of Users	Number	Yes	
+Identity Groups	Multi Select	Yes	
+Identity Group Sid	Short Text	Yes	
+Identity Guid	Short Text	Yes	
+Identity Has Admin Permissions	Boolean	Yes	
+Identity Has Mfa	Boolean	Yes	
+Identity Identifier	Short Text	Yes	
+Identity Identity Type	Single Select	Yes	
+Identity Idp Provider	Single Select	Yes	
+Identity Is Disabled	Boolean	Yes	
+Identity Is Federated	Boolean	Yes	
+Identity Is Guest	Boolean	Yes	
+Identity Is Password Changeable	Boolean	Yes	
+Identity Is Password Expired	Boolean	Yes	
+Identity Is Password Never Expire	Boolean	Yes	
+Identity Is Password Required	Boolean	Yes	
+Identity Key Management Created By	Short Text	Yes	
+Identity Key Management Last Modified	Date Picker	Yes	
+Identity Key Management Last Modified By	Short Text	Yes	
+Identity Last Login	Date Picker	Yes	
+Identity Last Managed Time	Date Picker	Yes	
+Identity Last Name	Short Text	Yes	
+Identity Last Used	Date Picker	Yes	
+Identity Managing Identities Count	Number	Yes	
+Identity Middle Name	Short Text	Yes	
+Identity Netbios	Short Text	Yes	
+Identity Netbios Domain	Short Text	Yes	
+Identity Netbios Sam Account Name	Short Text	Yes	
+Identity Number Of Bounded Identities	Number	Yes	
+Identity Number Of Policies	Number	Yes	
+Identity Number Of Roles	Number	Yes	
+Identity Os	Short Text	Yes	
+Identity Ou	Short Text	Yes	
+Identity Password Last Set	Date Picker	Yes	
+Identity Policy Audit Account Logon Failure	Boolean	Yes	
+Identity Policy Audit Account Logon Success	Boolean	Yes	
+Identity Policy Creation Time	Date Picker	Yes	
+Identity Policy Description	Short Text	Yes	
+Identity Policy Guid	Short Text	Yes	
+Identity Policy Is Empty	Boolean	Yes	
+Identity Policy Is Excessive	Boolean	Yes	
+Identity Policy Is Lanman Hash Storage Disabled	Boolean	Yes	
+Identity Policy Is Ldap Signing Required	Boolean	Yes	
+Identity Policy Is Smb Server Signing Required	Boolean	Yes	
+Identity Policy Last Changed	Date Picker	Yes	
+Identity Policy Number Of Groups	Number	Yes	
+Identity Policy Number Of Users	Number	Yes	
+Identity Policy Owner	Short Text	Yes	
+Identity Policy Security Properties Lockout Duration	Number	Yes	
+Identity Policy Security Properties Lockout Threshold	Number	Yes	
+Identity Policy Security Properties Max Password Age	Number	Yes	
+Identity Policy Security Properties Min Password Length	Number	Yes	
+Identity Policy Security Properties Password Complexity Enabled	Boolean	Yes	
+Identity Roles	Multi Select	Yes	
+Identity Sam Account Name	Short Text	Yes	
+Identity Scope	Single Select	Yes	
+Identity Secret Expiration Time	Date Picker	Yes	
+Identity Secret Is Expired	Boolean	Yes	
+Identity Secret Is Rotation Enabled	Boolean	Yes	
+Identity Secret Is Unrotated	Boolean	Yes	
+Identity Secret Kms Key	Short Text	Yes	
+Identity Secret Last Rotation	Date Picker	Yes	
+Identity Secret Last Used	Date Picker	Yes	
+Identity Secret Next Rotation	Date Picker	Yes	
+Identity Secret Owning Service	Short Text	Yes	
+Identity Secret Replicas Count	Number	Yes	
+Identity Secret Service Account	Short Text	Yes	
+Identity Secret Status	Single Select	Yes	
+Identity Secret Vault	Short Text	Yes	
+Identity Secret Version	Short Text	Yes	
+Identity Service Principal Names	Multi Select	Yes	
+Identity Sid	Short Text	Yes	
+Identity Upn	Short Text	Yes	
+Identity Username	Short Text	Yes	
+Identity User Type	Single Select	Yes	
+Kubernetes Cluster Name	Short Text	Yes	
+Kubernetes Namespace Name	Short Text	Yes	
+Malware Layer Id	Short Text	Yes	
+Malware Verdict	Single Select	Yes	
+Malware Virus Total Link	Short Text	Yes	
+Observer Name	Multi Select	Yes	
+Observer Sub Type	Short Text	Yes	
+Observer Type	Multi Select	Yes	
+Observer Unique Identifier	Short Text	Yes	
+Organizational Unit Creation Time	Date Picker	Yes	
+Organizational Unit Dn	Short Text	Yes	
+Organizational Unit Guid	Short Text	Yes	
+Organizational Unit Last Changed	Date Picker	Yes	
+Owasp Category	Multi Select	Yes	
+Remediation Owners	Multi Select	Yes	
+Repository Name	Short Text	Yes	
+Repository Organization	Short Text	Yes	
+Resolution SLA	Long Text	Yes	
+Resolution Timer	Long Text	Yes	
+Secret Layer Id	Short Text	Yes	
+Secret Secret Type	Single Select	Yes	
+Secret Snippet	Short Text	Yes	
+Secret Unique Identifier	Short Text	Yes	
+Secret Validation	Single Select	Yes	
+Security Control Effectiveness	Single Select	Yes	
+Software Package Dependency Type	Single Select	Yes	
+Software Package Installation Type	Single Select	Yes	
+Software Package Language	Single Select	Yes	
+Software Package Layer Id	Short Text	Yes	
+Software Package Package Manager	Single Select	Yes	
+Software Package Purl	Short Text	Yes	
+Software Package Type	Single Select	Yes	
+Software Package Version	Short Text	Yes	
+Source Agent Content Version	Short Text	Yes	
+Source Agent Identifier	Short Text	Yes	
+Source Agent Installation Id	Short Text	Yes	
+Source Agent Version	Short Text	Yes	
+Source Host Fqdn	Multi Select	Yes	
+Source Host Hostname	Short Text	Yes	
+Source Host Ipv4 Addresses	Multi Select	Yes	
+Source Host Ipv6 Addresses	Multi Select	Yes	
+Source Host Os Family	Single Select	Yes	
+Source Identity Identifier	Multi Select	Yes	
+Source Identity Identity Type	Multi Select	Yes	
+Source Identity Username	Multi Select	Yes	
+Source Identity User Type	Multi Select	Yes	
+Source Ipv4	Multi Select	Yes	
+Source Location Country	Multi Select	Yes	
+Source Process Causality Id	Multi Select	Yes	
+Source Process Command Line	Multi Select	Yes	
+Source Process Executable Filename	Multi Select	Yes	
+Source Process Executable Path	Multi Select	Yes	
+Source Process Executable Sha256	Multi Select	Yes	
+Source Process Executable Signature Status	Multi Select	Yes	
+Source Process Executable Signer	Multi Select	Yes	
+Source Process Name	Multi Select	Yes	
+Source User Username	Multi Select	Yes	
+Target Agent Identifier	Multi Select	Yes	
+Target Domain	Multi Select	Yes	
+Target File Filename	Multi Select	Yes	
+Target File Sha256	Multi Select	Yes	
+Target Host Fqdn	Multi Select	Yes	
+Target Host Hostname	Multi Select	Yes	
+Target Host Ipv4 Addresses	Multi Select	Yes	
+Target Host Ipv6 Addresses	Multi Select	Yes	
+Target Identity Username	Multi Select	Yes	
+Target Ipv4	Multi Select	Yes	
+Target Ipv6	Multi Select	Yes	
+Target Location Country	Multi Select	Yes	
+Target Module Filename	Multi Select	Yes	
+Target Module Sha256	Multi Select	Yes	
+Target Port	Multi Select	Yes	
+Target Process Command Line	Multi Select	Yes	
+Target Process Executable Filename	Multi Select	Yes	
+Target Process Executable Path	Multi Select	Yes	
+Target Process Executable Sha256	Multi Select	Yes	
+Target Process Executable Signature Status	Multi Select	Yes	
+Target Process Executable Signer	Multi Select	Yes	
+Target Process Name	Multi Select	Yes	
+Target Registry Data	Multi Select	Yes	
+Target Registry Key	Multi Select	Yes	
+Target Registry Value	Multi Select	Yes	
+Target Url	Multi Select	Yes	
+Tls Cipher	Short Text	Yes	
+Tls Protocol Version	Short Text	Yes	
+Url	Short Text	Yes	
+Vulnerability Cve Id	Short Text	Yes	
+Vulnerability Cve Risk Factors	Multi Select	Yes	
+Vulnerability Cvss Score	Number	Yes	
+Vulnerability Cvss Vector	Short Text	Yes	
+Vulnerability Fix Versions	Multi Select	Yes	
+Vulnerability Severity	Single Select	Yes	
+XPanse asset name	Multi Select	Yes	
+Attack Surface Rule ID	Multi Select	Yes	
+Broker VM ID	Multi Select	Yes	
+Broker VM Name	Multi Select	Yes	
+Broker VM IP	Multi Select	Yes	
+XDR Collector Name	Multi Select	Yes	
+XDR Collector ID	Multi Select	Yes	
+XDR Collector IP	Multi Select	Yes	
+Collector Name	Multi Select	Yes	
+Collector Type	Multi Select	Yes	
+Device ID	Multi Select	Yes	
+Final Reporting Device IP	Multi Select	Yes	
+Final Reporting Device Name	Multi Select	Yes	
+Product	Multi Select	Yes	
+Reporting Device IP	Multi Select	Yes	
+Reporting Device Name	Multi Select	Yes	
+Vendor	Multi Select	Yes	

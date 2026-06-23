@@ -1,0 +1,40 @@
+Field Name	Type	System	Content Pack
+AI HTML	HTML	No	
+Case Investigation Agent AI Canvas	HTML	No	
+eee	SLA	No	
+hezi	Short Text	No	
+Queue	Multi Select	No	
+Resolution SLA	Timer	No	
+SLA for Resolution	SLA	No	
+test	SLA	No	
+test_field	Short Text	No	
+triage_report	Long Text	No	
+Issue Categories	Multi Select	Yes	
+Issues Breakdown	Number	Yes	
+Case Detection Methods	Multi Select	Yes	
+Assignee Email	Short Text	Yes	
+Assignee	Short Text	Yes	
+Case ID	Number	Yes	
+Creation Time	Date Picker	Yes	
+Critical Severity Issues	Number	Yes	
+Case Description	Long Text	Yes	
+Issues Grouping Status	Boolean	Yes	
+High Severity Issues	Number	Yes	
+Hosts	Multi Select	Yes	
+Low Severity Issues	Number	Yes	
+Medium Severity Issues	Number	Yes	
+MITRE ATT&CK Tactic	Multi Select	Yes	
+MITRE ATT&CK Technique	Multi Select	Yes	
+Case Name	Short Text	Yes	
+Original Tags	Short Text	Yes	
+Resolved Timestamp	Date Picker	Yes	
+Resolve Comment	Long Text	Yes	
+Score	Number	Yes	
+Predicted score	Number	Yes	
+Severity	Single Select	Yes	
+Starred	Boolean	Yes	
+Status	Short Text	Yes	
+Tags	Short Text	Yes	
+Total Issues	Number	Yes	
+Users	Multi Select	Yes	
+WildFire Hits	Number	Yes	
