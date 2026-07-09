@@ -2,14 +2,8 @@
   "custom_packs": [
     {
       "id": "soc-crowdstrike-falcon.zip",
-      "url": "https://github.com/Palo-Cortex/secops-framework/releases/download/soc-crowdstrike-falcon-v1.1.15/soc-crowdstrike-falcon-v1.1.15.zip",
+      "url": "https://github.com/Palo-Cortex/secops-framework/releases/download/soc-crowdstrike-falcon-v1.1.18/soc-crowdstrike-falcon-v1.1.18.zip",
       "system": "yes"
-    }
-  ],
-  "post_config_docs": [
-    {
-      "name": "SOC Crowdstrike Falcon Enhancement - Manual Steps",
-      "url": "https://github.com/Palo-Cortex/secops-framework/blob/main/Packs/soc-crowdstrike-falcon/POST_CONFIG_README.md"
     }
   ],
   "marketplace_packs": [
@@ -17,6 +11,12 @@
       "id": "CrowdStrikeFalcon",
       "name": "CrowdStrike Falcon",
       "version": "latest"
+    }
+  ],
+  "post_config_docs": [
+    {
+      "name": "SOC Crowdstrike Falcon Enhancement - Manual Steps",
+      "url": "https://github.com/Palo-Cortex/secops-framework/blob/main/Packs/soc-crowdstrike-falcon/POST_CONFIG_README.md"
     }
   ]
 }

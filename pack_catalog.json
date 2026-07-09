@@ -33,8 +33,8 @@
     {
       "id": "SocFrameworkProofPointTap",
       "display_name": "SOC Proofpoint TAP Integration Enhancement for Cortex XSIAM2",
-      "category": "Forensics & Malware Analysis",
-      "version": "1.5.2",
+      "category": "Email Security",
+      "version": "1.5.3",
       "path": "Packs/SocFrameworkProofPointTap",
       "docs_path": "docs/SocFrameworkProofPointTap",
       "visible": true,
@@ -94,11 +94,31 @@
       "id": "soc-crowdstrike-falcon",
       "display_name": "SOC CrowdStrike Falcon Integration Enhancement for Cortex XSIAM2",
       "category": "Endpoint",
-      "version": "1.1.15",
+      "version": "1.1.18",
       "path": "Packs/soc-crowdstrike-falcon",
       "docs_path": "docs/soc-crowdstrike-falcon",
       "visible": true,
       "xsoar_config": "https://raw.githubusercontent.com/Palo-Cortex/secops-framework/refs/heads/main/Packs/soc-crowdstrike-falcon/xsoar_config.json"
+    },
+    {
+      "id": "soc-crowdstrike-idp",
+      "display_name": "SOC CrowdStrike Falcon IDP Integration Enhancement for Cortex XSIAM",
+      "category": "Identity",
+      "version": "1.0.1",
+      "path": "Packs/soc-crowdstrike-idp",
+      "docs_path": "docs/soc-crowdstrike-idp",
+      "visible": true,
+      "xsoar_config": "https://raw.githubusercontent.com/Palo-Cortex/secops-framework/refs/heads/main/Packs/soc-crowdstrike-idp/xsoar_config.json"
+    },
+    {
+      "id": "soc-crowdstrike-saas",
+      "display_name": "SOC CrowdStrike Falcon SaaS Integration Enhancement for Cortex XSIAM",
+      "category": "Cloud IR",
+      "version": "1.0.2",
+      "path": "Packs/soc-crowdstrike-saas",
+      "docs_path": "docs/soc-crowdstrike-saas",
+      "visible": true,
+      "xsoar_config": "https://raw.githubusercontent.com/Palo-Cortex/secops-framework/refs/heads/main/Packs/soc-crowdstrike-saas/xsoar_config.json"
     },
     {
       "id": "soc-framework-manager",
@@ -144,7 +164,7 @@
     {
       "id": "soc-microsoft-entra-id",
       "display_name": "SOC Framework - Microsoft Entra ID",
-      "category": "Analytics & SIEM",
+      "category": "Identity",
       "version": "1.0.1",
       "path": "Packs/soc-microsoft-entra-id",
       "docs_path": "docs/soc-microsoft-entra-id",
@@ -165,7 +185,7 @@
       "id": "soc-optimization-unified",
       "display_name": "SOC Framework Unified",
       "category": "Use Case",
-      "version": "3.10.12",
+      "version": "3.10.14",
       "path": "Packs/soc-optimization-unified",
       "docs_path": "docs/soc-optimization-unified",
       "visible": true,

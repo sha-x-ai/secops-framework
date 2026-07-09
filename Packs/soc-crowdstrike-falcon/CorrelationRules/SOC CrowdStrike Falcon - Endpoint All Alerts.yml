@@ -1,112 +1,110 @@
 rule_id: 0
 fromversion: 6.10.0
-tags:
-  - SOCFramework
-  - Passthrough
-  - Endpoint
-  - CrowdStrike
 action: ALERTS
 alert_category: User Defined
-alert_description: $alert_description
+alert_description: '$alert_description | User: $actor_effective_username | Display Name: $display_name | Email: $idr_email | UPN: $idr_upn | Domain: $idr_domain_name | SAM: $idr_sam_account_name | SID: $idr_sid | On-Prem SID: $idr_on_prem_sid | NetBIOS: $idr_netbios'
 alert_domain: DOMAIN_SECURITY
 alert_fields:
+  mac: mac_address
+  domain: agent_device_domain
+  userid: user_principal
   vendor: vendor
+  agentid: agent_id
+  localip: action_local_ip
   product: product
-  originalalertid: originalalertid
-  originalalertname: originalalertname
-  originalalertsource: originalalertsource
-  externallink: externallink
-  alert_description: alert_description
-  severity: severity
-  mitretacticid: mitretacticid
-  mitretacticname: mitretacticname
-  mitretechniqueid: mitretechniqueid
-  mitretechniquename: mitretechniquename
-  agent_hostname: agent_hostname
+  usersid: idr_sid
   agent_id: agent_id
+  deviceou: device_ou_arr
+  filehash: sha256
+  filename: action_file_name
+  filepath: action_file_path
+  hostname: agent_hostname
+  remoteip: action_remote_ip
+  scenario: scenario
+  severity: severity
+  sourceid: aggregate_id
+  username: actor_effective_username
+  cgosha256: causality_actor_process_image_sha256
+  objective: objective
+  processid: grandparent_local_process_id
+  _device_id: device_id
+  filesha256: action_file_sha256
+  processmd5: md5
+  alertaction: pattern_disposition_description
+  detectionid: template_instance_id
+  eventaction: ioc_source
+  initiatedby: actor_process_image_name
+  dns_requests: dns_requests
+  dnsqueryname: dns_queries
+  externallink: externallink
+  initiatorcmd: actor_process_command_line
+  initiatorpid: actor_process_os_pid
+  employeeemail: idr_email
+  files_written: files_written
+  initiatorpath: actor_process_image_path
+  mitretacticid: mitretacticid
+  agent_hostname: agent_hostname
+  dns_query_name: dns_queries
+  hostmacaddress: mac_address
+  originalrawlog: originalrawlog
+  prenatsourceip: local_ip
+  user_principal: user_principal
+  action_local_ip: action_local_ip
+  initiatorsha256: actor_process_image_sha256
+  mitretacticname: mitretacticname
+  originalalertid: originalalertid
+  parentprocessid: parent_local_process_id
+  action_file_name: action_file_name
+  action_file_path: action_file_path
+  action_remote_ip: action_remote_ip
+  externalseverity: severity_int_raw
+  mitretechniqueid: mitretechniqueid
+  network_accesses: network_accesses
+  parentprocesscmd: parent_process_cmd
+  parentprocessids: parent_local_process_id
+  alert_description: alert_description
+  deviceexternalips: external_ip
+  originalalertname: originalalertname
+  parentprocessname: parent_process_name
+  parentprocesspath: parent_process_path
+  action_file_sha256: action_file_sha256
+  external_pivot_url: falcon_host_link
+  externalconfidence: confidence
+  mitretechniquename: mitretechniquename
+  tim_main_indicator: ioc_value
   agent_device_domain: agent_device_domain
+  contactemailaddress: idr_email
+  employeedisplayname: idr_display_name
+  originalalertsource: originalalertsource
+  originaldescription: alert_description
+  parentprocesssha256: parent_process_sha256
+  processcreationtime: process_start_time
+  actor_process_os_pid: actor_process_os_pid
+  additionalindicators: ioc_value
+  grandparentprocessid: grandparent_local_process_id
+  postnatdestinationip: remote_ips
+  grandparentprocesscmd: grandparent_process_cmd
+  grandparentprocessname: grandparent_process_name
+  grandparentprocesspath: grandparent_process_path
   actor_effective_username: actor_effective_username
   actor_process_image_name: actor_process_image_name
   actor_process_image_path: actor_process_image_path
-  actor_process_image_sha256: actor_process_image_sha256
+  grandparentprocesssha256: grandparent_process_sha256
   actor_process_command_line: actor_process_command_line
-  actor_process_os_pid: actor_process_os_pid
+  actor_process_image_sha256: actor_process_image_sha256
+  action_process_image_sha256: sha256
+  pattern_disposition_details: pattern_disposition_details
+  xdmsourceprocesscausalityid: aggregate_id
+  causality_actor_causality_id: aggregate_id
   causality_actor_process_image_name: causality_actor_process_image_name
   causality_actor_process_image_path: causality_actor_process_image_path
-  causality_actor_process_image_sha256: causality_actor_process_image_sha256
-  action_file_name: action_file_name
-  action_file_path: action_file_path
-  action_file_sha256: action_file_sha256
-  action_local_ip: action_local_ip
-  action_remote_ip: action_remote_ip
-  _device_id: device_id
-  mac: mac_address
-  prenatsourceip: local_ip
-  postnatdestinationip: remote_ips
-  deviceexternalips: external_ip
-  deviceou: device_ou_arr
-  userid: user_principal
-  user_principal: user_principal
-  usersid: user_id
-  action_process_image_sha256: sha256
-  filehash: sha256
-  processmd5: md5
-  processcreationtime: process_start_time
-  parentprocessname: parent_process_name
-  parentprocesscmd: parent_process_cmd
-  parentprocesspath: parent_process_path
-  parentprocesssha256: parent_process_sha256
-  parentprocessid: parent_local_process_id
-  parentprocessids: parent_local_process_id
-  grandparentprocessname: grandparent_process_name
-  grandparentprocesscmd: grandparent_process_cmd
-  grandparentprocesspath: grandparent_process_path
-  grandparentprocesssha256: grandparent_process_sha256
-  grandparentprocessid: grandparent_local_process_id
-  processid: grandparent_local_process_id
-  causality_actor_causality_id: aggregate_id
   causality_actor_process_command_line: cgo_cmd
-  sourceid: aggregate_id
-  dns_query_name: dns_queries
-  dns_requests: dns_requests
-  network_accesses: network_accesses
-  files_written: files_written
-  additionalindicators: ioc_value
-  tim_main_indicator: ioc_value
-  eventaction: ioc_source
-  originaldescription: alert_description
-  detectionid: template_instance_id
-  alertaction: pattern_disposition_description
-  pattern_disposition_details: pattern_disposition_details
-  external_pivot_url: falcon_host_link
-  externalconfidence: confidence
-  externalseverity: severity_int_raw
-  scenario: scenario
-  objective: objective
-  originalrawlog: originalrawlog
-  agentid: agent_id
-  hostname: agent_hostname
-  domain: agent_device_domain
-  hostmacaddress: mac_address
-  initiatedby: actor_process_image_name
-  initiatorpath: actor_process_image_path
-  initiatorsha256: actor_process_image_sha256
-  initiatorcmd: actor_process_command_line
-  initiatorpid: actor_process_os_pid
-  xdmsourceprocesscausalityid: aggregate_id
-  cgosha256: causality_actor_process_image_sha256
-  filename: action_file_name
-  filepath: action_file_path
-  filesha256: action_file_sha256
-  localip: action_local_ip
-  remoteip: action_remote_ip
-  username: actor_effective_username
-  dnsqueryname: dns_queries
+  causality_actor_process_image_sha256: causality_actor_process_image_sha256
 alert_name: SOC CrowdStrike Falcon - $alert_name
 alert_type: null
 crontab: null
 dataset: alerts
-name: SOC CrowdStrike Falcon - Endpoint Alerts
+name: SOC CrowdStrike Falcon - Endpoint All Alerts
 description: >-
   Creates a single XSIAM alert for each CrowdStrike Falcon Endpoint Detection
   event. Consolidates 15 per-tactic rules from v1.0.14 into one rule using MITRE
@@ -114,7 +112,7 @@ description: >-
   field mappings from all 1.0.14 per-tactic rules.
 drilldown_query_timeframe: ALERT
 execution_mode: REAL_TIME
-global_rule_id: SOC CrowdStrike Falcon - Endpoint Alerts
+global_rule_id: SOC CrowdStrike Falcon - Endpoint All Alerts
 investigation_query_link: |-
   dataset = xdr_data
   | filter agent_hostname = $hostname
@@ -130,7 +128,7 @@ suppression_duration: 1 hours
 suppression_enabled: true
 suppression_fields:
 - composite_id
-timezone: null
+timezone: UTC
 user_defined_category: tactic
 user_defined_severity: severity_name
 xql_query: |
@@ -238,3 +236,66 @@ xql_query: |
           action_remote_ip                    = remote_ips
   | fields
       device_id, local_ip, user_name, user_principal, cmdline, sha256, domain, hostname, agent_id, pattern_disposition_description, pattern_disposition_details, cgo_cmd, cgo_name, cgo_path, template_instance_id, external_ip, falcon_host_link, mac_address, mitre_tactic_id, mitre_tactic, mitre_technique_id, mitre_technique, mitre_ids_str, tactic_id, tactic, technique_id, technique, objective, composite_id, parent_process_cmd, parent_process_name, parent_local_process_id, parent_process_path, parent_process_sha256, grandparent_process_name, grandparent_process_cmd, grandparent_process_path, grandparent_process_sha256, grandparent_local_process_id, device_ou_arr, process_start_time, local_process_id, md5, scenario, severity_name, aggregate_id, indicator_id, alert_name, alert_description, network_accesses, dns_requests, files_written, originalrawlog, *
+
+  | alter idr_sid = null,
+          idr_upn = user_principal,
+          idr_email = if(user_principal contains "@", lowercase(user_principal), if(user_name contains "@", lowercase(user_name), null)),
+          idr_netbios = null,
+          idr_display_name = null,
+          idr_domain_name = null,
+          idr_sam_account_name = null,
+          idr_on_prem_sid = null
+
+  // ============== CIE ENRICHMENT (optional, OFF by default) ==============
+  // Cloud Identity Engine enrichment is disabled. To enable it:
+  //   1. Set this rule to a schedule (it ships REAL_TIME):
+  //        execution mode = SCHEDULED
+  //        crontab        = */10 * * * *
+  //        search window  = 25 hours
+  //        schedule label = 10 minutes
+  //   2. Delete the /* and */ lines that wrap the block below.
+  // The join coalesces socfw_identity_map values OVER the inline idr_* fields;
+  // the alert-field mappings do not change. Requires SOC IdentityResolve.
+  // ----------------------------------------------------------------------
+  /*
+  | filter timestamp_diff(time_frame_end(), _insert_time, "MINUTE") <= 15
+  | alter cie_join_key = lowercase(coalesce(user_id, ""))
+  | join type = left (
+      dataset = socfw_identity_map
+      | filter type in ("user", "computer")
+      | alter cie_join_key = lowercase(coalesce(sid, on_prem_sid))
+      | dedup cie_join_key by asc netbios_and_sam_account_name
+      | fields cie_join_key,
+               sid                          as map_sid,
+               upn                          as map_upn,
+               email                        as map_email,
+               display_name                 as map_display,
+               domain_name                  as map_domain,
+               sam_account_name             as map_sam,
+               on_prem_sid                  as map_on_prem_sid,
+               netbios_and_sam_account_name as map_netbios
+    ) as m cie_join_key = m.cie_join_key
+  | alter idr_sid              = coalesce(map_sid, idr_sid),
+          idr_upn              = coalesce(map_upn, idr_upn),
+          idr_email            = coalesce(map_email, idr_email),
+          idr_display_name     = coalesce(map_display, idr_display_name),
+          idr_domain_name      = coalesce(map_domain, idr_domain_name),
+          idr_sam_account_name = coalesce(map_sam, idr_sam_account_name),
+          idr_on_prem_sid      = coalesce(map_on_prem_sid, idr_on_prem_sid),
+          idr_netbios          = coalesce(map_netbios, idr_netbios)
+  | alter _time = _insert_time
+  */
+  // ===================== END CIE ENRICHMENT =============================
+  | alter original_display_name   = display_name,
+          original_user_principal = user_principal
+
+  | alter display_name   = coalesce(idr_display_name, idr_sam_account_name, display_name),
+          email          = idr_email,
+          user_principal = coalesce(idr_upn, user_principal)
+  | alter actor_effective_username = lowercase(coalesce(idr_email, idr_upn, idr_netbios, actor_effective_username))
+
+  | alter idr_email = coalesce(idr_email, idr_upn, if(user_principal contains "@", lowercase(user_principal), null), if(user_name contains "@", lowercase(user_name), null))
+  | alter email     = idr_email
+
+  | alter original_user_name = user_name
+  | alter user_name = if(user_name contains "$", user_name, coalesce(idr_email, idr_upn, user_name))

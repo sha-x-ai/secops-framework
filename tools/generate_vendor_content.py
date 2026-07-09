@@ -433,9 +433,26 @@ def _build_correlation_yml(doc: dict, cr: dict) -> str:
 
     lines.append("xql_query: |")
     lines.append(f'  dataset = {doc["data_source"]}')
-    if cr.get("pre_alter"):
-        for pl in _strip_xql_comments(cr["pre_alter"]).splitlines():
+    def _emit_lines(text):
+        for pl in text.splitlines():
             lines.append(f"  {pl}" if pl.strip() else "")
+
+    if cr.get("pre_alter"):
+        _emit_lines(_strip_xql_comments(cr["pre_alter"]))
+
+    if cr.get("identity"):
+        if cr.get("pre_alter"):
+            lines.append("")
+        _emit_lines(_emit_identity_seed())
+        if cr.get("cie_join"):
+            _emit_lines(_emit_cie_overlay(_build_cie_overlay_xql(cr["cie_join"]), cr.get("cie_schedule")))
+        elif cr.get("cie_overlay"):
+            _emit_lines(_emit_cie_overlay(cr["cie_overlay"], cr.get("cie_schedule")))
+        _emit_lines(_emit_identity_finalization())
+    elif cr.get("cie_join"):
+        _emit_lines(_emit_cie_overlay(_build_cie_overlay_xql(cr["cie_join"]), cr.get("cie_schedule")))
+    elif cr.get("cie_overlay"):
+        _emit_lines(_emit_cie_overlay(cr["cie_overlay"], cr.get("cie_schedule")))
     if cr.get("final_projection"):
         lines.append("  | fields")
         proj = ", ".join(
@@ -444,6 +461,145 @@ def _build_correlation_yml(doc: dict, cr: dict) -> str:
         lines.append(f"      {proj}")
 
     return "\n".join(lines)
+
+
+def _emit_cie_overlay(overlay, schedule=None):
+    """Emit optional CIE (Cloud Identity Engine) enrichment as a PRESERVED
+    block comment. The XQL lines are wrapped in a single /* */ so enabling is
+    two edits (delete the /* and */), not un-commenting every line -- and the
+    editor treats it as a real block comment, so it won't lint the dormant
+    join. `schedule` is an optional dict {crontab, search_window,
+    simple_schedule}. The overlay coalesces socfw_identity_map values OVER the
+    inline idr_* fields, so the alert-field mappings are unaffected either way."""
+    sch = schedule or {}
+    crontab = sch.get("crontab", "*/10 * * * *")
+    window = sch.get("search_window", "25 hours")
+    label = sch.get("simple_schedule", "10 minutes")
+    header = [
+        "",
+        "// ============== CIE ENRICHMENT (optional, OFF by default) ==============",
+        "// Cloud Identity Engine enrichment is disabled. To enable it:",
+        "//   1. Set this rule to a schedule (it ships REAL_TIME):",
+        "//        execution mode = SCHEDULED",
+        f"//        crontab        = {crontab}",
+        f"//        search window  = {window}",
+        f"//        schedule label = {label}",
+        "//   2. Delete the /* and */ lines that wrap the block below.",
+        "// The join coalesces socfw_identity_map values OVER the inline idr_* fields;",
+        "// the alert-field mappings do not change. Requires SOC IdentityResolve.",
+        "// ----------------------------------------------------------------------",
+        "/*",
+    ]
+    body = list(overlay.splitlines())
+    footer = ["*/", "// ===================== END CIE ENRICHMENT ============================="]
+    return "\n".join(header + body + footer)
+
+
+# Standard SOC Framework identity blocks, emitted when a rule opts in via
+# `identity: true` (seed + finalization) and/or `cie_join` (the /* */ overlay).
+# Kept here so every vendor rule inherits one identity pattern instead of
+# hand-copying it. No vendor prefix: preserved raws are generic `original_*`.
+
+# Named join-key shorthands. Each expands to an {event, map, map_filter} triple.
+# A contract may also pass cie_join as that triple directly for bespoke keys.
+_CIE_JOIN_SHORTHANDS = {
+    "sid": {
+        "event": 'coalesce(user_id, "")',
+        "map": "coalesce(sid, on_prem_sid)",
+        "map_filter": 'type in ("user", "computer")',
+    },
+    "upn_email": {
+        "event": 'coalesce(if(user_principal contains "@", user_principal, null), if(user_name contains "@", user_name, null))',
+        "map": "coalesce(upn, email)",
+        "map_filter": 'type = "user"',
+    },
+    "email": {
+        "event": 'if(user_principal contains "@", user_principal, if(user_name contains "@", user_name, null))',
+        "map": "email",
+        "map_filter": 'type = "user"',
+    },
+}
+
+
+def _resolve_cie_join(cie_join):
+    """Accept a shorthand string or an explicit {event, map[, map_filter]} dict."""
+    if isinstance(cie_join, str):
+        spec = _CIE_JOIN_SHORTHANDS.get(cie_join)
+        if spec is None:
+            raise ValueError(f"unknown cie_join shorthand: {cie_join!r}")
+        return spec
+    spec = dict(cie_join)
+    spec.setdefault("map_filter", 'type in ("user", "computer")')
+    return spec
+
+
+def _emit_identity_seed():
+    """Inline idr_* fallbacks so the finalization resolves when CIE is off."""
+    return (
+        '| alter idr_sid = null,\n'
+        '        idr_upn = user_principal,\n'
+        '        idr_email = if(user_principal contains "@", lowercase(user_principal), if(user_name contains "@", lowercase(user_name), null)),\n'
+        '        idr_netbios = null,\n'
+        '        idr_display_name = null,\n'
+        '        idr_domain_name = null,\n'
+        '        idr_sam_account_name = null,\n'
+        '        idr_on_prem_sid = null'
+    )
+
+
+def _build_cie_overlay_xql(cie_join):
+    """Raw CIE overlay XQL for the given join key. Wrapped in /* */ later by
+    _emit_cie_overlay. Joins socfw_identity_map and coalesces map_* OVER idr_*."""
+    s = _resolve_cie_join(cie_join)
+    return (
+        '| filter timestamp_diff(time_frame_end(), _insert_time, "MINUTE") <= 15\n'
+        f'| alter cie_join_key = lowercase({s["event"]})\n'
+        '| join type = left (\n'
+        '    dataset = socfw_identity_map\n'
+        f'    | filter {s["map_filter"]}\n'
+        f'    | alter cie_join_key = lowercase({s["map"]})\n'
+        '    | dedup cie_join_key by asc netbios_and_sam_account_name\n'
+        '    | fields cie_join_key,\n'
+        '             sid                          as map_sid,\n'
+        '             upn                          as map_upn,\n'
+        '             email                        as map_email,\n'
+        '             display_name                 as map_display,\n'
+        '             domain_name                  as map_domain,\n'
+        '             sam_account_name             as map_sam,\n'
+        '             on_prem_sid                  as map_on_prem_sid,\n'
+        '             netbios_and_sam_account_name as map_netbios\n'
+        '  ) as m cie_join_key = m.cie_join_key\n'
+        '| alter idr_sid              = coalesce(map_sid, idr_sid),\n'
+        '        idr_upn              = coalesce(map_upn, idr_upn),\n'
+        '        idr_email            = coalesce(map_email, idr_email),\n'
+        '        idr_display_name     = coalesce(map_display, idr_display_name),\n'
+        '        idr_domain_name      = coalesce(map_domain, idr_domain_name),\n'
+        '        idr_sam_account_name = coalesce(map_sam, idr_sam_account_name),\n'
+        '        idr_on_prem_sid      = coalesce(map_on_prem_sid, idr_on_prem_sid),\n'
+        '        idr_netbios          = coalesce(map_netbios, idr_netbios)\n'
+        '| alter _time = _insert_time'
+    )
+
+
+def _emit_identity_finalization():
+    """Email-first identity finalization: resolve display_name/email/user_principal,
+    email-first actor_effective_username, and email-first user_name with the
+    machine/service ($) guard. Raw values preserved as original_*."""
+    return (
+        '| alter original_display_name   = display_name,\n'
+        '        original_user_principal = user_principal\n'
+        '\n'
+        '| alter display_name   = coalesce(idr_display_name, idr_sam_account_name, display_name),\n'
+        '        email          = idr_email,\n'
+        '        user_principal = coalesce(idr_upn, user_principal)\n'
+        '| alter actor_effective_username = lowercase(coalesce(idr_email, idr_upn, idr_netbios, actor_effective_username))\n'
+        '\n'
+        '| alter idr_email = coalesce(idr_email, idr_upn, if(user_principal contains "@", lowercase(user_principal), null), if(user_name contains "@", lowercase(user_name), null))\n'
+        '| alter email     = idr_email\n'
+        '\n'
+        '| alter original_user_name = user_name\n'
+        '| alter user_name = if(user_name contains "$", user_name, coalesce(idr_email, idr_upn, user_name))'
+    )
 
 
 def _strip_xql_comments(xql: str) -> str:
@@ -496,7 +652,10 @@ def _yaml_scalar(v: Any) -> str:
         return "null"
     if isinstance(v, bool):
         return str(v).lower()
-    return str(v)
+    s = str(v)
+    if s and (s[0] in "*&!@%#|>[]{},?:-\'\"`" or s.lower() in ("null", "true", "false", "yes", "no", "~") or ": " in s or s != s.strip()):
+        return "'" + s.replace("'", "''") + "'"
+    return s
 
 
 def _wrap(text: str, width: int) -> list[str]:
@@ -568,6 +727,126 @@ def _normalize(text: str) -> str:
     return "\n".join(out)
 
 
+# ----------------------- Emit-time tenant schema check -----------------------
+
+# Identifiers that appear in XQL bodies as grammar/keywords, never as columns.
+_XQL_NONCOLUMN = {
+    "dataset", "alter", "fields", "filter", "comp", "join", "dedup", "sort",
+    "limit", "as", "by", "asc", "desc", "and", "or", "not", "in", "contains",
+    "between", "preset", "config", "window", "over", "partition", "to",
+    "null", "true", "false", "nulls", "first", "last",
+}
+
+
+def _assemble_xql_body(doc: dict, cr: dict) -> str:
+    """Reconstruct the emitted XQL exactly as _build_correlation_yml does, so
+    the field check sees what actually ships in the rule."""
+    parts = [f'dataset = {doc["data_source"]}']
+    if cr.get("pre_alter"):
+        parts.append(_strip_xql_comments(cr["pre_alter"]))
+    if cr.get("final_projection"):
+        parts.append("| fields " + ", ".join(
+            "*" if c == "*" else c for c in cr["final_projection"]))
+    return "\n".join(parts)
+
+
+def _referenced_columns(xql_body: str) -> set:
+    """Best-effort set of raw dataset columns referenced in an XQL body.
+
+    Advisory heuristic: strips quoted strings, drops function-call names
+    (identifier immediately followed by '(') and XQL grammar words. Whatever
+    remains is treated as a dataset column reference."""
+    s = re.sub(r"'(?:[^'\\]|\\.)*'", " ", xql_body)
+    s = re.sub(r'"(?:[^"\\]|\\.)*"', " ", s)
+    s = re.sub(r"->\s*[A-Za-z_][A-Za-z0-9_]*", " ", s)   # drop nested-field accessors
+    cols = set()
+    for m in re.finditer(r"(?<![\w.])([A-Za-z_][A-Za-z0-9_]*)", s):
+        tok = m.group(1)
+        if tok in _XQL_NONCOLUMN:
+            continue
+        if s[m.end():].lstrip()[:1] == "(":   # function call, not a column
+            continue
+        cols.add(tok)
+    return cols
+
+
+def _fetch_tenant_columns(dataset: str, sample: int = 500):
+    """Union of columns observed in `sample` rows of `dataset` on the tenant
+    named by DEMISTO_BASE_URL / DEMISTO_API_KEY / XSIAM_AUTH_ID.
+
+    Advisory only. Returns None (check skipped) if creds are absent or any part
+    of the query fails - this must never break an offline or CI emit."""
+    import os, json as _json, time, urllib.request, urllib.error
+    base = os.environ.get("DEMISTO_BASE_URL")
+    key = os.environ.get("DEMISTO_API_KEY")
+    auth = os.environ.get("XSIAM_AUTH_ID")
+    if not (base and key and auth):
+        return None
+    base = base.rstrip("/")
+    H = {"Authorization": key, "x-xdr-auth-id": str(auth),
+         "Content-Type": "application/json"}
+
+    def _post(ep, body):
+        req = urllib.request.Request(base + ep, data=_json.dumps(body).encode(),
+                                     headers=H)
+        return _json.loads(urllib.request.urlopen(req, timeout=45).read().decode())
+
+    try:
+        q = f"dataset = {dataset} | limit {sample}"
+        r = _post("/public_api/v1/xql/start_xql_query/",
+                  {"request_data": {"query": q, "tenants": []}})
+        eid = r["reply"] if isinstance(r.get("reply"), str) \
+            else (r.get("reply") or {}).get("execution_id")
+        if not eid:
+            return None
+        for _ in range(25):
+            time.sleep(2)
+            rr = _post("/public_api/v1/xql/get_query_results/",
+                       {"request_data": {"query_id": eid, "pending_flag": True,
+                                         "format": "json"}})
+            rep = rr.get("reply", {}) if isinstance(rr, dict) else {}
+            if rep.get("status") == "SUCCESS":
+                cols = set()
+                for row in rep.get("results", {}).get("data", []) or []:
+                    cols.update(row.keys())
+                return cols or None
+            if rep.get("status") not in ("PENDING", "RUNNING"):
+                return None
+    except Exception:
+        return None
+    return None
+
+
+def emit_time_schema_check(doc: dict) -> None:
+    """Warn (never fail) when a correlation rule's XQL references a column the
+    target tenant's dataset doesn't carry - the class of gap that surfaces at
+    install time as error 101704."""
+    ds = doc.get("data_source")
+    present = _fetch_tenant_columns(ds) if ds else None
+    if present is None:
+        print("  schema-check: skipped (no DEMISTO_* tenant creds or query unavailable)")
+        return
+    print(f"  schema-check: sampled {len(present)} columns from {ds}")
+    warned = 0
+    for cr in doc.get("correlation_rules") or []:
+        try:
+            computed = _extract_computed_columns(cr.get("pre_alter", ""))
+            absent = sorted(_referenced_columns(_assemble_xql_body(doc, cr)) - present - computed - {ds})
+        except Exception:
+            # advisory only: an unanalyzable rule must never fail emit
+            print(f"  schema-check: skipped {cr.get('name', '<unnamed>')} (could not analyze XQL)")
+            continue
+        if absent:
+            warned += 1
+            print(f"  WARN  {cr.get('name', '<unnamed>')}")
+            print(f"        not in tenant schema: {', '.join(absent)}")
+    if not warned:
+        print("  schema-check: all correlation-rule fields resolve against tenant schema")
+    else:
+        print(f"  schema-check: {warned} rule(s) reference tenant-absent fields "
+              "(advisory; authored for a fuller-telemetry tenant?)")
+
+
 # ----------------------------- CLI -------------------------------------------
 
 def main(argv: list[str]) -> int:
@@ -580,6 +859,10 @@ def main(argv: list[str]) -> int:
     p_emit = sub.add_parser("emit", help="Emit all declared rules")
     p_emit.add_argument("--mapping", type=Path, required=True)
     p_emit.add_argument("--pack-root", type=Path, required=True)
+    p_emit.add_argument("--schema-check", action="store_true",
+                        help="After emit, warn on correlation-rule XQL fields "
+                             "absent from the target tenant dataset schema "
+                             "(reads DEMISTO_* env; advisory, never fails emit)")
 
     p_rt = sub.add_parser("roundtrip", help="Regenerate to temp + diff vs shipped")
     p_rt.add_argument("--mapping", type=Path, required=True)
@@ -608,6 +891,8 @@ def main(argv: list[str]) -> int:
     if args.cmd == "emit":
         for p in emit_all(doc, args.pack_root):
             print(f"  emitted: {p}")
+        if getattr(args, "schema_check", False):
+            emit_time_schema_check(doc)
         return 0
 
     if args.cmd == "roundtrip":
