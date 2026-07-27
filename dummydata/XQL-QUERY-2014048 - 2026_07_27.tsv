@@ -1,0 +1,21 @@
+_time	_insert_time	action_status	agentresolutioncontext	appname	cirtprocessphase	datatheftriskscore	demoid	impossibletravelriskscore	investigationhint	normalizeddata	original_tags	phishingdomain	playbook_run_status	remidiation	tamartestaudit	targetip	testpbactions	victimemail	xdm.active_directory.container.canonical_name	xdm.active_directory.container.creation_time	xdm.active_directory.container.dn	xdm.active_directory.container.last_changed	xdm.active_directory.container.object_guid	xdm.active_directory.trust.attributes	xdm.active_directory.trust.creation_time	xdm.active_directory.trust.direction	xdm.active_directory.trust.dn	xdm.active_directory.trust.last_changed	xdm.active_directory.trust.source_domain	xdm.active_directory.trust.target_domain	xdm.active_directory.trust.type	xdm.application.bundle_id	xdm.application_protocol	xdm.appsec.impact	xdm.auth_methods	xdm.backlog_status	xdm.case_grouping.external.artifact_id	xdm.case_grouping.external.artifact_name	xdm.certificate.algorithm	xdm.certificate.classifications	xdm.certificate.formatted_issuer_org	xdm.certificate.id	xdm.certificate.issuer	xdm.certificate.issuer_details.country	xdm.certificate.issuer_details.name	xdm.certificate.issuer_details.org	xdm.certificate.issuer_details.org_unit	xdm.certificate.md5	xdm.certificate.not_after	xdm.certificate.not_before	xdm.certificate.owner_name	xdm.certificate.owner_type	xdm.certificate.public_key_bits	xdm.certificate.serial
+Jul 26 2026 19:57:11	Jul 26 2026 19:57:28	SCANNED									DOM:Posture,DS:PANW/ASM																																											
+Jul 26 2026 19:57:11	Jul 26 2026 19:57:24	SCANNED									DOM:Posture,DS:PANW/ASM																																											
+Jul 26 2026 19:42:11	Jul 26 2026 19:42:19	SCANNED									DOM:Posture,DS:PANW/ASM																																											
+Jul 26 2026 19:42:11	Jul 26 2026 19:42:22	SCANNED									DOM:Posture,DS:PANW/ASM																																											
+Jul 26 2026 19:42:11	Jul 26 2026 19:42:15	SCANNED									DOM:Posture,DS:PANW/ASM																																											
+Jul 26 2026 19:37:12	Jul 26 2026 19:37:23	SCANNED									DOM:Posture,DS:PANW/ASM																																											
+Jul 26 2026 19:37:12	Jul 26 2026 19:37:20	SCANNED									DOM:Posture,DS:PANW/ASM																																											
+Jul 26 2026 19:32:11	Jul 26 2026 19:32:25	SCANNED									DOM:Posture,DS:PANW/ASM																																											
+Jul 26 2026 19:27:12	Jul 26 2026 19:27:49	SCANNED									DOM:Posture,DS:PANW/ASM																																											
+Jul 26 2026 19:27:12	Jul 26 2026 19:29:13	SCANNED									DOM:Posture,DS:PANW/ASM																																											
+Jul 26 2026 19:22:11	Jul 26 2026 19:22:22	SCANNED									DOM:Posture,DS:PANW/ASM																																											
+Jul 26 2026 19:17:12	Jul 26 2026 19:17:30	SCANNED									DOM:Posture,DS:PANW/ASM																																											
+Jul 26 2026 19:17:12	Jul 26 2026 19:17:27	SCANNED									DOM:Posture,DS:PANW/ASM																																											
+Jul 26 2026 19:17:12	Jul 26 2026 19:17:34	SCANNED									DOM:Posture,DS:PANW/ASM																																											
+Jul 26 2026 19:12:11	Jul 26 2026 19:12:26	SCANNED									DOM:Posture,DS:PANW/ASM																																											
+Jul 26 2026 19:12:11	Jul 26 2026 19:12:22	SCANNED									DOM:Posture,DS:PANW/ASM																																											
+Jul 26 2026 19:07:11	Jul 26 2026 19:07:25	SCANNED									DOM:Posture,DS:PANW/ASM																																											
+Jul 26 2026 19:07:11	Jul 26 2026 19:07:16	SCANNED									DOM:Posture,DS:PANW/ASM																																											
+Jul 26 2026 19:07:11	Jul 26 2026 19:07:20	SCANNED									DOM:Posture,DS:PANW/ASM																																											
+Jul 26 2026 19:07:11	Jul 26 2026 19:07:23	SCANNED									DOM:Posture,DS:PANW/ASM																																											
