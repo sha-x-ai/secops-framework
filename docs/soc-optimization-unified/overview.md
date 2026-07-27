@@ -1,14 +1,20 @@
-# SOC Framework Unified — Overview
+# SOC Framework Unified (SOCFW) — Overview
 
 <!-- GENERATED FILE — do not edit by hand. Run `python tools/generate_pack_overviews.py` to regenerate. -->
 
 | Field | Value |
 |---|---|
 | ID | `soc-optimization-unified` |
-| Version | `3.10.14` |
-| Category | Use Case |
+| Version | `3.11.2` |
+| Category | Utility |
 | Pack Path | `Packs/soc-optimization-unified` |
 | Manifest | [`Packs/soc-optimization-unified/xsoar_config.json`](https://github.com/Palo-Cortex/secops-framework/blob/main/Packs/soc-optimization-unified/xsoar_config.json) |
+
+## Schemas
+
+Reference documentation for the schemas this pack defines.
+
+- [Directory Sync (pan-cie)](identity-resolve.md)
 
 > ⚠️ This pack requires manual post-install steps. See [Manual Steps](#manual-steps) below.
 
@@ -24,8 +30,7 @@ Additional custom packs the installer pulls in alongside this pack.
 
 | Pack | System | Source |
 |---|---|---|
-| `soc-optimization-unified.zip` | `yes` | [release](https://github.com/Palo-Cortex/secops-framework/releases/download/soc-optimization-unified-v3.10.14/soc-optimization-unified-v3.10.14.zip) |
-| `soc-framework-nist-ir.zip` | `yes` | [release](https://github.com/Palo-Cortex/secops-framework/releases/download/soc-framework-nist-ir-v1.6.3/soc-framework-nist-ir-v1.6.3.zip) |
+| `soc-optimization-unified.zip` | `yes` | [release](https://github.com/Palo-Cortex/secops-framework/releases/download/soc-optimization-unified-v3.11.2/soc-optimization-unified-v3.11.2.zip) |
 
 ## Marketplace Dependencies
 
@@ -77,9 +82,8 @@ Integration brand instances the installer configures. Credentials and propagatio
 | `Rasterize_instance_1` | `Rasterize` | Utilities | true |
 | `WildFire-Reports_default_instance` | `WildFire-Reports` | Forensics & Malware Analysis | true |
 | `WildFire-v2_default_instance` | `WildFire-v2` | Forensics & Malware Analysis | true |
-| `PlaybookMetrics` | `System XQL HTTP Collector` | Utilities | true |
-| `socfw_ir_execution` | `System XQL HTTP Collector` | Utilities | true |
 | `Unit_42_Intelligence_SOCFW` | `Unit 42 Intelligence` | Data Enrichment & Threat Intelligence | true |
+| `socfw_ir_execution_writer` | `SOCFWDatasetWriter` | Utilities | true |
 
 ## Jobs
 
@@ -94,15 +98,6 @@ Automatically closes unstarred cases that exceed the configured age and score th
 | Playbook | `JOB - Auto Triage V3` |
 | Recurrent | ✓ |
 | Schedule | every 10 minutes daily |
-| Owner | `abarone@paloaltonetworks.com` |
-
-### Collect Playbook Metrics V3
-
-| Field | Value |
-|---|---|
-| Playbook | `JOB - Store Playbook Metrics in Dataset V3` |
-| Recurrent | ✓ |
-| Schedule | every 15 minutes daily |
 | Owner | `abarone@paloaltonetworks.com` |
 
 ## Exported Playbooks

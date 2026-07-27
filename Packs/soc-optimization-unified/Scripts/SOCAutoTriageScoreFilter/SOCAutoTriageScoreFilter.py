@@ -2,6 +2,7 @@ import demistomock as demisto  # noqa: F401
 from CommonServerPython import *  # noqa: F401
 import json
 import time
+import re
 
 
 # 100 is the get_incidents per-request ceiling. War-room arrays may show a
@@ -28,10 +29,105 @@ API_URI = GET_INCIDENTS_URI  # back-compat alias
 # automation's timeout). Leave ~10% headroom for the dataset write + return.
 # Current automation timeout: 600s.
 MAX_RUNTIME_SECONDS = 540
+
+# Execution metrics are written through the SOC Framework Dataset Writer
+# integration. The instance name is addressed explicitly so a tenant can point
+# separate lifecycles at separate collectors.
+DATASET_WRITER_COMMAND = 'socfw-post-to-dataset'
+DATASET_WRITER_INSTANCE = 'socfw_ir_execution_writer'
 FIELDS = [
     'incident_id', 'aggregated_score', 'creation_time',
-    'status', 'starred', 'manual_score'
+    'status', 'starred', 'manual_score', 'incident_domain'
 ]
+
+# Case domain scoping. get_incidents returns incident_domain (native XSIAM case
+# field, e.g. DOMAIN_SECURITY) but does NOT allow it as a server-side filter
+# (allowed filter fields: incident_id, incident_id_list, starred, status,
+# modification_time, alert_sources, creation_time, description — verified
+# against tenant). So the domain scope is enforced client-side on the returned
+# incident_domain. Friendly names map to the enum; 'all' disables the gate.
+DOMAIN_ALIASES = {
+    'security': 'DOMAIN_SECURITY',
+    'posture': 'DOMAIN_POSTURE',
+    'health': 'DOMAIN_HEALTH',
+    'cloud': 'DOMAIN_CLOUD',
+    'data': 'DOMAIN_DATA',
+}
+
+
+def parse_domains(raw):
+    """Resolve the `domains` arg to (match_all, allowed_enum_set).
+
+    - None/empty -> defaults to 'security'.
+    - 'all' anywhere -> (True, set()): gate disabled, every case eligible
+      regardless of domain, INCLUDING cases with no domain.
+    - otherwise -> (False, {DOMAIN_*}): friendly names mapped, raw DOMAIN_*
+      passed through, unknown tokens raise ValueError.
+    Accepts a list or a comma/space-separated string (multiple domains).
+    """
+    if raw is None:
+        raw = 'security'
+    if isinstance(raw, (list, tuple)):
+        tokens = [str(t) for t in raw]
+    else:
+        tokens = [t for t in re.split(r'[,\s]+', str(raw).strip()) if t]
+    if not tokens:
+        tokens = ['security']
+    allowed = set()
+    for tok in tokens:
+        low = tok.strip().lower()
+        if low == 'all':
+            return True, set()
+        if low in DOMAIN_ALIASES:
+            allowed.add(DOMAIN_ALIASES[low])
+        elif tok.strip().upper().startswith('DOMAIN_'):
+            allowed.add(tok.strip().upper())
+        else:
+            raise ValueError(
+                f"Unknown domain '{tok}'. Use all, security, posture, or a "
+                f"DOMAIN_* value (comma-separated for multiple)."
+            )
+    return False, allowed
+
+
+def _norm_domain(value):
+    """Reduce a domain value to a bare lowercase token for comparison.
+    get_incidents returns the case domain as 'DOMAIN_SECURITY' on some tenants
+    and 'SECURITY' on others; comparing bare tokens makes the gate work across
+    both instead of failing an exact-string match on the prefix."""
+    token = str(value).strip().upper()
+    if token.startswith('DOMAIN_'):
+        token = token[len('DOMAIN_'):]
+    return token.lower()
+
+
+def is_writer_unavailable(err):
+    """True when the failure is a missing command or instance rather than a
+    transport error. Covers the integration not being installed, having no
+    configured instance, or not being registered in the module support list."""
+    text = str(err).lower()
+    return any(marker in text for marker in (
+        'module support list',
+        'unsupported command',
+        'could not find command',
+        'no instance',
+        'instance not found',
+        'does not exist',
+    ))
+
+
+def domain_allowed(incident_domain, match_all, allowed):
+    """Scope gate. match_all -> always eligible (undomained included).
+    Otherwise the case must carry a domain that is in the allowed set; a
+    missing/empty domain fails the gate, so undomained cases are only ever
+    cleaned by an 'all' run. Comparison is prefix- and case-insensitive so a
+    tenant returning 'SECURITY' still matches an allowed 'DOMAIN_SECURITY'."""
+    if match_all:
+        return True
+    if not incident_domain:
+        return False
+    allowed_norm = {_norm_domain(a) for a in allowed}
+    return _norm_domain(incident_domain) in allowed_norm
 
 
 def close_case(incident_id):
@@ -105,7 +201,7 @@ def fetch_batch(cutoff_ms: int, search_from: int, batch_size: int) -> dict:
         'request_data': {
             'filters': [
                 {'field': 'status', 'operator': 'in', 'value': ['new']},
-                {'field': 'starred', 'operator': 'in', 'value': [False]},
+                {'field': 'starred', 'operator': 'eq', 'value': False},
                 {'field': 'creation_time', 'operator': 'lte', 'value': int(cutoff_ms)},
             ],
             'fields': FIELDS,
@@ -159,6 +255,16 @@ def main():
     # dry_run = Shadow Mode for triage: select eligible cases and report what
     # WOULD close, but emit nothing to the close path so the JOB closes nothing.
     dry_run = str(args.get('dry_run', 'false')).strip().lower() in ('true', '1', 'yes')
+
+    # domains scopes which case domain(s) this run cleans up. Default 'security'.
+    # 'all' disables the gate (every case, undomained included); a specific set
+    # only closes cases whose incident_domain is in it. Enforced client-side
+    # because get_incidents cannot filter incident_domain server-side.
+    try:
+        match_all_domains, allowed_domains = parse_domains(args.get('domains', 'security'))
+    except ValueError as e:
+        return_error(str(e))
+    domain_scope_label = 'all' if match_all_domains else ','.join(sorted(allowed_domains))
 
     # creation_time from the API is epoch milliseconds (13-digit).
     cutoff_ms = int((time.time() - (window_hours * 3600)) * 1000)
@@ -245,6 +351,18 @@ def main():
                         'incident_id': incident_id,
                         'aggregated_score': aggregated_score,
                         'reason': f"status guard: status={inc.get('status')!r} not confirmed 'new'"
+                    })
+                    continue
+
+                # Domain scope gate. Unless the run is 'all', only close cases
+                # whose incident_domain is in the selected set; undomained cases
+                # fail here and are cleaned only by an 'all' run.
+                incident_domain = inc.get('incident_domain')
+                if not domain_allowed(incident_domain, match_all_domains, allowed_domains):
+                    skipped.append({
+                        'incident_id': incident_id,
+                        'aggregated_score': aggregated_score,
+                        'reason': f"domain {incident_domain!r} not in scope [{domain_scope_label}]"
                     })
                     continue
 
@@ -346,6 +464,7 @@ def main():
             'lifecycle': 'AUTO_TRIAGE',
             'phase': 'triage',
             'incident_id': incident_id,
+            'incident_domain': inc.get('incident_domain', ''),
             'aggregated_score': str(inc.get('aggregated_score', '')),
             'tags': ['auto_triage_would_close' if dry_run else 'auto_triage_closed'],
             'has_error': (not dry_run and not success),
@@ -353,19 +472,30 @@ def main():
             'error_message': '' if (dry_run or success) else err
         })
 
-    # One dataset write per run with the actual per-case outcomes.
+    # One dataset write per run with the actual per-case outcomes. Cases are
+    # already closed by this point and this job sits on the Foundation chain, so
+    # a write failure is reported through the results rather than raised.
+    dataset_write_error = ''
     if rows:
         try:
             execute_command(
-                'xql-post-to-dataset',
+                DATASET_WRITER_COMMAND,
                 {
-                    'using': 'socfw_ir_execution',
-                    'using-brand': 'System XQL HTTP Collector',
+                    'using': DATASET_WRITER_INSTANCE,
                     'JSON': json.dumps(rows)
                 }
             )
         except Exception as e:
-            demisto.debug(f'Dataset write failed: {e}')
+            if is_writer_unavailable(e):
+                dataset_write_error = (
+                    f"execution metrics not recorded — '{DATASET_WRITER_COMMAND}' is "
+                    f"unavailable. Install the SOC Framework pack and configure an "
+                    f"instance of SOC Framework Dataset Writer named "
+                    f"'{DATASET_WRITER_INSTANCE}'."
+                )
+            else:
+                dataset_write_error = f'execution metrics not recorded — {e}'
+            demisto.debug(dataset_write_error)
 
     outputs = {
         'dry_run': dry_run,
@@ -378,7 +508,8 @@ def main():
         'skipped_count': len(skipped),
         'total_scanned': total_scanned,
         'batches_run': batches_run,
-        'budget_hit': budget_hit
+        'budget_hit': budget_hit,
+        'dataset_write_error': dataset_write_error
     }
     if dry_run:
         outputs['would_close_count'] = len(passed)
@@ -386,19 +517,21 @@ def main():
 
     budget_note = (' [runtime budget hit — partial run, next run resumes]'
                    if budget_hit else '')
+    metrics_note = f'. WARNING: {dataset_write_error}' if dataset_write_error else ''
 
     if dry_run:
         readable = (
             f'DRY RUN — would close {len(passed)} case(s); closed 0. '
-            f'{len(skipped)} skipped (threshold: {threshold}, window: {window_hours}h, '
-            f'scanned: {total_scanned} across {batches_run} batches){budget_note}. '
-            f'Set dry_run=false to close for real.'
+            f'{len(skipped)} skipped (domains: {domain_scope_label}, threshold: {threshold}, '
+            f'window: {window_hours}h, scanned: {total_scanned} across {batches_run} '
+            f'batches){budget_note}{metrics_note}. Set dry_run=false to close for real.'
         )
     else:
         readable = (
             f'Auto triage: closed {len(closed_ok)}, failed {len(closed_fail)}, '
-            f'{len(skipped)} skipped (threshold: {threshold}, window: {window_hours}h, '
-            f'scanned: {total_scanned} across {batches_run} batches){budget_note}'
+            f'{len(skipped)} skipped (domains: {domain_scope_label}, threshold: {threshold}, '
+            f'window: {window_hours}h, scanned: {total_scanned} across {batches_run} '
+            f'batches){budget_note}{metrics_note}'
         )
 
     return_results(CommandResults(

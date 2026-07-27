@@ -5,8 +5,8 @@
 | Field | Value |
 |---|---|
 | ID | `soc-framework-posture` |
-| Version | `1.0.1` |
-| Category | Utilities |
+| Version | `1.0.3` |
+| Category | Use Case |
 | Pack Path | `Packs/soc-framework-posture` |
 | Manifest | [`Packs/soc-framework-posture/xsoar_config.json`](https://github.com/Palo-Cortex/secops-framework/blob/main/Packs/soc-framework-posture/xsoar_config.json) |
 
@@ -33,15 +33,7 @@ Additional custom packs the installer pulls in alongside this pack.
 
 | Pack | System | Source |
 |---|---|---|
-| `soc-framework-posture.zip` | `yes` | [release](https://github.com/Palo-Cortex/secops-framework/releases/download/soc-framework-posture-v1.0.1/soc-framework-posture-v1.0.1.zip) |
-
-## Integration Instances
-
-Integration brand instances the installer configures. Credentials and propagation labels are always tenant-specific — only the scaffolding ships in the pack.
-
-| Instance Name | Brand | Category | Enabled |
-|---|---|---|---|
-| `socfw_posture_execution` | `System XQL HTTP Collector` | Utilities | true |
+| `soc-framework-posture.zip` | `yes` | [release](https://github.com/Palo-Cortex/secops-framework/releases/download/soc-framework-posture-v1.0.3/soc-framework-posture-v1.0.3.zip) |
 
 ## Exported Playbooks
 

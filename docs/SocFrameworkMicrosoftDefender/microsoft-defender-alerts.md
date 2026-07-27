@@ -34,45 +34,6 @@ Fields available in the raw ingest dataset.
 | `evidence` | `json` | ✓ | declared | @odata.type, imageFile, processCommandLine, processCreationDateTime, detectio... |
 | `detectorId` | `string` |  | inferred_from_correlation |  |
 
-## Modeling Rule — Microsoft Graph Defender EP Modeling Rule
-
-| Field | Value |
-|---|---|
-| modeling_rule_id | `Microsoft_Graph_MDE_ModelingRule` |
-| modeling_rule_name | `Microsoft Graph Defender EP Modeling Rule` |
-| directory_name | `MSGraphMDE_ModelingRule` |
-| fromversion | `6.10.0` |
-
-### Field Mappings
-
-What each XDM field is, where it sources from, what issue field it surfaces on, and why the mapping is shaped the way it is.
-
-| XDM Path | Expression | Sources | Issue Field | Description |
-|---|---|---|---|---|
-| `xdm.event.id` | `id` | `id` | `eventid` |  |
-| `xdm.event.description` | `coalesce(description, title)` | `description, title` | `eventdescription` | Falls back to title when description is empty. |
-| `xdm.event.original_event_type` | `category` | `category` | `original_event_type` |  |
-| `xdm.alert.name` | `title` | `title` | `alertname` |  |
-| `xdm.alert.category` | `category` | `category` | `alertcategory` |  |
-| `xdm.alert.original_alert_id` | `providerAlertId` | `providerAlertId` | `originalalertid` |  |
-| `xdm.alert.severity` | `severity` | `severity` | `severity` | Microsoft Graph severity is a string ("low"/"medium"/"high"/"informational"). XDM severity accepts string values; no coercion needed. |
-| `xdm.observer.product` | `productName` | `productName` | `observerproduct` |  |
-| `xdm.observer.vendor` | `"Microsoft"` |  | `observervendor` | Literal — vendor is constant for this rule. |
-| `xdm.network.http.url` | `alertWebUrl` | `alertWebUrl` | `alerturl` | Direct link back to the Microsoft Defender portal for the alert. |
-
-### Contributes (Artifacts.*)
-
-Fields populated for downstream lifecycle Artifacts schemas:
-
-- `Endpoint.AlertID`
-- `Endpoint.AlertName`
-- `Endpoint.AlertCategory`
-- `Endpoint.AlertSeverity`
-- `Endpoint.OriginalAlertID`
-- `Endpoint.AlertURL`
-- `Vendor`
-- `Product`
-
 ## Correlation Rules
 
 ### SOC Microsoft Graph Defender EndPoint
@@ -81,7 +42,7 @@ Fields populated for downstream lifecycle Artifacts schemas:
 |---|---|
 | global_rule_id | `SOC Microsoft Graph Defender EndPoint` |
 | subtype | `passthrough` |
-| fromversion | `8.0.0` |
+| fromversion | `6.10.0` |
 
 Creates an XSIAM alert for each Microsoft Graph Endpoint Detection Event.
 
@@ -95,7 +56,7 @@ Creates an XSIAM alert for each Microsoft Graph Endpoint Detection Event.
 | alert_category | `User Defined` |
 | alert_domain | `DOMAIN_SECURITY` |
 | action | `ALERTS` |
-| execution_mode | `REAL_TIME` |
+| execution_mode | `SCHEDULED` |
 | mapping_strategy | `CUSTOM` |
 | user_defined_category | `tactic` |
 | user_defined_severity | `severity` |
@@ -309,6 +270,14 @@ Issue-field assignments emitted by the correlation rule. The Description column 
     target_process_sha256 = evidence_process_sha256,
     file_sha256           = evidence_file_sha256,
     remote_ip             = evidence_remote_ipv4
+
+// user_name / display_name are read by the shared identity seed +
+// finalization (identity: true). MDE's Graph evidence carries neither as
+// a native field, so define them here or the install-time schema check
+// rejects the rule (101704). user_name is email-first as a grouping
+// pivot; display_name is null (Graph MDE evidence has no display name).
+| alter user_name    = source_user
+| alter display_name = null
 
 // Final description and alert_name
 | alter

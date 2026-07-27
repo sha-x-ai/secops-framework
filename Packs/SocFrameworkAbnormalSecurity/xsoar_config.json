@@ -1,0 +1,22 @@
+{
+  "custom_packs": [
+    {
+      "id": "SocFrameworkAbnormalSecurity.zip",
+      "url": "https://github.com/Palo-Cortex/secops-framework/releases/download/SocFrameworkAbnormalSecurity-v1.0.4/SocFrameworkAbnormalSecurity-v1.0.4.zip",
+      "system": "yes"
+    }
+  ],
+  "post_config_docs": [
+    {
+      "name": "SOC Abnormal Security - Manual Steps",
+      "url": "https://github.com/Palo-Cortex/secops-framework/blob/main/Packs/SocFrameworkAbnormalSecurity/POST_CONFIG_README.md"
+    }
+  ],
+  "marketplace_packs": [
+    {
+      "id": "AbnormalSecurity",
+      "name": "Abnormal Security",
+      "version": "latest"
+    }
+  ]
+}

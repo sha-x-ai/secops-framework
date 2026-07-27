@@ -6,15 +6,8 @@
       "TriageWindowHours": "6",
       "TriageScoreThreshold": "40",
       "TriageMaxBatches": "200",
-      "TriageBatchSize": "100"
-    }
-  },
-  "Store Playbook Metrics in Dataset JOB": {
-    "enabled": true,
-    "playbook": "JOB - Store Playbook Metrics in Dataset",
-    "fields": {
-      "LookBack": "1 hour ago",
-      "AlertLimit": "500"
+      "TriageBatchSize": "100",
+      "TriageDomains": "security"
     }
   },
   "Dedup": {

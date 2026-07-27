@@ -42,127 +42,9 @@ raw_schema:
   # Fields referenced in correlation rule but missing from shipped _schema.json
   detectorId: {type: string, is_array: false, status: inferred_from_correlation}
 
-modeling_rule:
-  fromversion: "6.10.0"
-  modeling_rule_id: Microsoft_Graph_MDE_ModelingRule
-  modeling_rule_name: Microsoft Graph Defender EP Modeling Rule
-  # Folder convention is MSGraphMDE_ModelingRule (different from id).
-  directory_name: MSGraphMDE_ModelingRule
-
-  filter:
-    expression: 'serviceSource = "microsoftDefenderForEndpoint"'
-    notes: |
-      Microsoft Graph Security ingests alerts from many products (Office 365,
-      Sentinel, Cloud App Security, etc.) into one dataset. This filter scopes
-      the rule to Defender for Endpoint detections only.
-
-  fields:
-
-    # ------ Event identity ------
-
-    - xdm_path: xdm.event.id
-      expression: id
-      sources: [id]
-      issue_field: eventid
-
-    - xdm_path: xdm.event.description
-      expression: 'coalesce(description, title)'
-      sources: [description, title]
-      issue_field: eventdescription
-      notes: Falls back to title when description is empty.
-
-    - xdm_path: xdm.event.original_event_type
-      expression: category
-      sources: [category]
-      issue_field: original_event_type
-
-    # ------ Alert metadata ------
-
-    - xdm_path: xdm.alert.name
-      expression: title
-      sources: [title]
-      issue_field: alertname
-
-    - xdm_path: xdm.alert.category
-      expression: category
-      sources: [category]
-      issue_field: alertcategory
-
-    - xdm_path: xdm.alert.original_alert_id
-      expression: providerAlertId
-      sources: [providerAlertId]
-      issue_field: originalalertid
-
-    - xdm_path: xdm.alert.severity
-      expression: severity
-      sources: [severity]
-      issue_field: severity
-      notes: |
-        Microsoft Graph severity is a string ("low"/"medium"/"high"/"informational").
-        XDM severity accepts string values; no coercion needed.
-
-    # ------ Observer (vendor/product) ------
-
-    - xdm_path: xdm.observer.product
-      expression: productName
-      sources: [productName]
-      issue_field: observerproduct
-
-    - xdm_path: xdm.observer.vendor
-      expression: '"Microsoft"'
-      sources: []
-      issue_field: observervendor
-      notes: Literal — vendor is constant for this rule.
-
-    # ------ Network / pivot link ------
-
-    - xdm_path: xdm.network.http.url
-      expression: alertWebUrl
-      sources: [alertWebUrl]
-      issue_field: alerturl
-      notes: Direct link back to the Microsoft Defender portal for the alert.
-
-  # Coverage commitment — Artifacts category fields this modeling rule populates.
-  contributes:
-    - Endpoint.AlertID
-    - Endpoint.AlertName
-    - Endpoint.AlertCategory
-    - Endpoint.AlertSeverity
-    - Endpoint.OriginalAlertID
-    - Endpoint.AlertURL
-    - Vendor
-    - Product
-
-  not_contributed_by_modeling_rule:
-    # All endpoint/process/file/user/IP enrichment lives in the evidence[] array
-    # and is extracted by the correlation rule's pre_alter, not the modeling rule.
-    - Endpoint.Hostname
-    - Endpoint.Domain
-    - Endpoint.AgentID
-    - Endpoint.OS
-    - Network.LocalIP
-    - Network.RemoteIP
-    - User
-    - User.Domain
-    - User.SID
-    - Process.Name
-    - Process.Path
-    - Process.SHA256
-    - Process.PID
-    - Process.CommandLine
-    - Process.Parent.Name
-    - Process.Parent.Path
-    - Process.Parent.SHA256
-    - Target.File
-    - Target.SHA256
-    - MITRE.Tactic
-    - MITRE.TacticID
-    - MITRE.Technique
-    - MITRE.TechniqueID
-
 correlation_rules:
   - subtype: passthrough
-    fromversion: "8.0.0"
+    fromversion: "6.10.0"
     global_rule_id: 'SOC Microsoft Graph Defender EndPoint'
     name: 'SOC Microsoft Graph Defender EndPoint'
     description: >-
@@ -178,7 +60,7 @@ correlation_rules:
       alert_category: User Defined
       alert_domain: DOMAIN_SECURITY
       action: ALERTS
-      execution_mode: REAL_TIME
+      execution_mode: SCHEDULED
       mapping_strategy: CUSTOM
       user_defined_category: tactic
       user_defined_severity: severity
@@ -186,6 +68,9 @@ correlation_rules:
       drilldown_query_timeframe: ALERT
       severity: User Defined
 
+    crontab: "*/10 * * * *"
+    search_window: 20 minutes
+    simple_schedule: 10 minutes
     alert_name: '$alert_name'
     alert_description: '$description'
 
@@ -198,6 +83,21 @@ correlation_rules:
         Suppressing on it scopes dedup to a single alert — different alerts
         on the same device fire independently. 1-hour window prevents
         back-to-back ingestion polls from re-creating the same alert.
+
+    identity: true
+    # SID-first join: MDE evidence carries userAccount.userSid (on-prem SID).
+    # Cloud-only / AAD identities with no on-prem SID won't match and fall back
+    # to the email-first raw canonicalization in the shared finalization.
+    cie_join:
+      event: 'coalesce(evidence_user_userSid, "")'
+      map: 'coalesce(sid, on_prem_sid)'
+      map_filter: 'type in ("user")'
+    # Rule already ships SCHEDULED at this cadence, so enabling CIE needs no
+    # schedule change. These values only populate the enable-instructions comment.
+    cie_schedule:
+      crontab: '*/10 * * * *'
+      search_window: 20 minutes
+      simple_schedule: 10 minutes
 
     pre_alter: |
       // Vendor / product (required for SOCProductCategoryMap routing)
@@ -320,6 +220,14 @@ correlation_rules:
           file_sha256           = evidence_file_sha256,
           remote_ip             = evidence_remote_ipv4
 
+      // user_name / display_name are read by the shared identity seed +
+      // finalization (identity: true). MDE's Graph evidence carries neither as
+      // a native field, so define them here or the install-time schema check
+      // rejects the rule (101704). user_name is email-first as a grouping
+      // pivot; display_name is null (Graph MDE evidence has no display name).
+      | alter user_name    = source_user
+      | alter display_name = null
+
       // Final description and alert_name
       | alter
           description = coalesce(description,
@@ -432,6 +340,10 @@ correlation_rules:
       - evidence_parent_process_signer
       - evidence_process_starttime
       - evidence_process_action
+      # Retain all pre_alter columns so the post-projection identity blocks
+      # (seed / CIE overlay / finalization) can read user_name, display_name,
+      # user_principal, actor_effective_username, and the SID join key.
+      - '*'
 
     alert_fields:
 
@@ -553,47 +465,7 @@ correlation_rules:
       - {issue_field: localip                         , source: action_local_ip                         , bucket: computed}  # ← action_local_ip
       - {issue_field: remoteip                        , source: action_remote_ip                        , bucket: computed}  # ← action_remote_ip
 
-    mitre_defs:
-      TA0001 - Initial Access:
-        - T1566 - Phishing
-        - T1190 - Exploit Public-Facing Application
-      TA0002 - Execution:
-        - T1059 - Command and Scripting Interpreter
-        - T1204 - User Execution
-        - T1047 - Windows Management Instrumentation
-      TA0003 - Persistence:
-        - T1547 - Boot or Logon Autostart Execution
-        - T1053 - Scheduled Task/Job
-        - T1574 - Hijack Execution Flow
-      TA0004 - Privilege Escalation:
-        - T1547 - Boot or Logon Autostart Execution
-        - T1134 - Access Token Manipulation
-        - T1055 - Process Injection
-      TA0005 - Defense Evasion:
-        - T1036 - Masquerading
-        - T1055 - Process Injection
-        - T1562 - Impair Defenses
-        - T1027 - Obfuscated Files or Information
-      TA0006 - Credential Access:
-        - T1003 - OS Credential Dumping
-        - T1558 - Steal or Forge Kerberos Tickets
-        - T1110 - Brute Force
-      TA0007 - Discovery:
-        - T1033 - System Owner/User Discovery
-        - T1082 - System Information Discovery
-      TA0008 - Lateral Movement:
-        - T1021 - Remote Services
-        - T1550 - Use Alternate Authentication Material
-      TA0009 - Collection:
-        - T1005 - Data from Local System
-      TA0011 - Command and Control:
-        - T1071 - Application Layer Protocol
-        - T1105 - Ingress Tool Transfer
-      TA0010 - Exfiltration:
-        - T1041 - Exfiltration Over C2 Channel
-      TA0040 - Impact:
-        - T1486 - Data Encrypted for Impact
-        - T1490 - Inhibit System Recovery
+    mitre_defs: {}
 
     investigation_query_link: |-
       // All (stitched) activity from host - assuming raw telemetry is being collected
