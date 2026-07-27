@@ -1,0 +1,11 @@
+finding_count	xdm.issue.detection.rule_id
+26	InsecureInfluxDataInfluxDB
+10	SshServer
+9	InsecureOpenSSH
+8	OpenSSH
+6	InsecureNginxWebServer
+6	EmbeddedSystem
+3	InsecureRejettoHttpFileServer
+3	CrushFTP
+3	SplunkPlatform
+3	InsecureJetBrainsTeamCityServer
