@@ -232,6 +232,14 @@ tasks:
       - - operator: isEqualString
           left:
             value:
+              simple: Analysis.Endpoint.verdict
+            iscontext: true
+          right:
+            value:
+              simple: malicious
+      - - operator: isEqualString
+          left:
+            value:
               simple: Analysis.Endpoint.compromise_level
             iscontext: true
           right:
@@ -828,7 +836,7 @@ tasks:
         simple: ${SOCFramework.Artifacts.Target.SHA256}
       verdict:
         simple: ${SOCFramework.Artifacts.Target.Verdict}
-    separatecontext: true
+    separatecontext: false
     continueonerrortype: ""
     loop:
       iscommand: false
@@ -866,7 +874,7 @@ tasks:
     nexttasks:
       '#none#':
       - "52"
-    separatecontext: true
+    separatecontext: false
     continueonerrortype: ""
     view: |-
       {
@@ -955,7 +963,7 @@ tasks:
           is \"${Analysis.Endpoint.confidence}\". \nResponse recommendation: ${Analysis.Endpoint.response_recommended}."
       verdict:
         simple: ${Analysis.Endpoint.verdict}
-    separatecontext: true
+    separatecontext: false
     continueonerrortype: ""
     loop:
       iscommand: false

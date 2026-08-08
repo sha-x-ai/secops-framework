@@ -6,13 +6,18 @@ contentitemexportablefields:
   contentitemfields:
     packID: soc-framework-nist-ir
     packName: SOC Framework NIST IR (800-61)
-    itemVersion: 1.4.5
+    itemVersion: 1.6.8
     fromServerVersion: 5.0.0
     toServerVersion: ""
     definitionid: ""
     prevname: ""
     isoverridable: false
     supportedModules: []
+aclrelations: []
+aclowner:
+  id: ""
+  type: ""
+  name: ""
 name: SOC Analysis_V3
 description: |-
   Identify potential security events, determine whether they represent true alerts, understand their scope and impact, and establish the actionable context needed to respond effectively.
@@ -90,13 +95,13 @@ tasks:
     nexttasks:
       '#none#':
       - "9"
-    separatecontext: true
+    separatecontext: false
     continueonerrortype: ""
     view: |-
       {
         "position": {
           "x": 162.5,
-          "y": 775
+          "y": 1145
         }
       }
     note: false
@@ -162,7 +167,7 @@ tasks:
         simple: ${SOCFramework.Artifacts.ProcessNames}
       XSIAM_RiskScore:
         simple: ${SOCFramework.Investigation.RiskScore}
-    separatecontext: true
+    separatecontext: false
     continueonerrortype: ""
     loop:
       iscommand: false
@@ -173,7 +178,7 @@ tasks:
       {
         "position": {
           "x": 1062.5,
-          "y": 775
+          "y": 1145
         }
       }
     note: false
@@ -200,13 +205,13 @@ tasks:
     nexttasks:
       '#none#':
       - "9"
-    separatecontext: true
+    separatecontext: false
     continueonerrortype: ""
     view: |-
       {
         "position": {
           "x": 1512.5,
-          "y": 775
+          "y": 1145
         }
       }
     note: false
@@ -233,13 +238,13 @@ tasks:
     nexttasks:
       '#none#':
       - "9"
-    separatecontext: true
+    separatecontext: false
     continueonerrortype: ""
     view: |-
       {
         "position": {
           "x": 1962.5,
-          "y": 775
+          "y": 1145
         }
       }
     note: false
@@ -266,13 +271,13 @@ tasks:
     nexttasks:
       '#none#':
       - "9"
-    separatecontext: true
+    separatecontext: false
     continueonerrortype: ""
     view: |-
       {
         "position": {
           "x": 2412.5,
-          "y": 775
+          "y": 1145
         }
       }
     note: false
@@ -299,13 +304,13 @@ tasks:
     nexttasks:
       '#none#':
       - "9"
-    separatecontext: true
+    separatecontext: false
     continueonerrortype: ""
     view: |-
       {
         "position": {
           "x": 2862.5,
-          "y": 775
+          "y": 1145
         }
       }
     note: false
@@ -334,7 +339,7 @@ tasks:
       {
         "position": {
           "x": 1287.5,
-          "y": 960
+          "y": 1330
         }
       }
     note: false
@@ -451,7 +456,7 @@ tasks:
       {
         "position": {
           "x": 1175,
-          "y": 405
+          "y": 775
         }
       }
     note: false
@@ -530,7 +535,7 @@ tasks:
       {
         "position": {
           "x": 950,
-          "y": 590
+          "y": 960
         }
       }
     note: false
@@ -609,7 +614,7 @@ tasks:
       {
         "position": {
           "x": 50,
-          "y": 590
+          "y": 960
         }
       }
     note: false
@@ -688,7 +693,7 @@ tasks:
       {
         "position": {
           "x": 1400,
-          "y": 590
+          "y": 960
         }
       }
     note: false
@@ -767,7 +772,7 @@ tasks:
       {
         "position": {
           "x": 1850,
-          "y": 590
+          "y": 960
         }
       }
     note: false
@@ -846,7 +851,7 @@ tasks:
       {
         "position": {
           "x": 2300,
-          "y": 590
+          "y": 960
         }
       }
     note: false
@@ -925,7 +930,7 @@ tasks:
       {
         "position": {
           "x": 2750,
-          "y": 590
+          "y": 960
         }
       }
     note: false
@@ -1004,7 +1009,7 @@ tasks:
       {
         "position": {
           "x": 500,
-          "y": 590
+          "y": 960
         }
       }
     note: false
@@ -1049,13 +1054,13 @@ tasks:
     nexttasks:
       '#none#':
       - "9"
-    separatecontext: true
+    separatecontext: false
     continueonerrortype: ""
     view: |-
       {
         "position": {
           "x": 612.5,
-          "y": 775
+          "y": 1145
         }
       }
     note: false
@@ -1087,20 +1092,22 @@ tasks:
       type: regular
       iscommand: false
       brand: ""
+      playbooktaskmissingcomponent: null
+      istaskmissingcomponenterrordismissed: false
+    nexttasks:
+      '#none#':
+      - "9500"
     scriptarguments:
       phase:
         simple: analysis
-    nexttasks:
-      '#none#':
-      - "9000"
     separatecontext: false
-    continueonerrortype: ""
     continueonerror: true
+    continueonerrortype: ""
     view: |-
       {
         "position": {
-          "x": 480,
-          "y": 200
+          "x": 1175,
+          "y": 405
         }
       }
     note: false
@@ -1139,6 +1146,53 @@ tasks:
       {
         "position": {
           "x": 1175,
+          "y": 590
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "9500":
+    id: "9500"
+    taskid: 78414246-694e-44a6-9475-749a1b72c549
+    type: playbook
+    task:
+      id: 78414246-694e-44a6-9475-749a1b72c549
+      version: -1
+      name: SOC Entity Enrichment_V3
+      playbookName: SOC Entity Enrichment_V3
+      type: playbook
+      iscommand: false
+      brand: ""
+      playbooktaskmissingcomponent: null
+      istaskmissingcomponenterrordismissed: false
+    scriptarguments:
+      IdentityName:
+        simple: ${inputs.IdentityName}
+      IdentityUPN:
+        simple: ${inputs.IdentityUPN}
+      IdentityID:
+        simple: ${inputs.IdentityID}
+      IdentityEmail:
+        simple: ${inputs.IdentityEmail}
+      IdentityDisplayName:
+        simple: ${inputs.IdentityDisplayName}
+      IdentitySAM:
+        simple: ${inputs.IdentitySAM}
+    nexttasks:
+      '#none#':
+      - "9000"
+    separatecontext: false
+    continueonerror: true
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 1175,
           "y": 220
         }
       }
@@ -1149,6 +1203,7 @@ tasks:
     quietmode: 0
     isoversize: false
     isautoswitchedtoquietmode: false
+outlinetasks: {}
 system: true
 view: |-
   {
@@ -1160,7 +1215,7 @@ view: |-
     },
     "paper": {
       "dimensions": {
-        "height": 970,
+        "height": 1340,
         "width": 3192.5,
         "x": 50,
         "y": 50
@@ -1180,7 +1235,85 @@ inputs:
   required: false
   description: Get The Product Category
   playbookInputQuery: null
+- key: IdentityName
+  value:
+    simple: ${SOCFramework.Artifacts.Identity.User.Name}
+  required: false
+  description: Resolved identity Name from the SOCFramework contract, threaded to Entity Enrichment.
+  playbookInputQuery: null
+- key: IdentityUPN
+  value:
+    simple: ${SOCFramework.Artifacts.Identity.User.UPN}
+  required: false
+  description: Resolved identity UPN from the SOCFramework contract, threaded to Entity Enrichment.
+  playbookInputQuery: null
+- key: IdentityID
+  value:
+    simple: ${SOCFramework.Artifacts.Identity.User.ID}
+  required: false
+  description: Resolved identity ID from the SOCFramework contract, threaded to Entity Enrichment.
+  playbookInputQuery: null
+- key: IdentityEmail
+  value:
+    simple: ${SOCFramework.Artifacts.Identity.User.Email}
+  required: false
+  description: Resolved identity Email from the SOCFramework contract, threaded to Entity Enrichment.
+  playbookInputQuery: null
+- key: IdentityDisplayName
+  value:
+    simple: ${SOCFramework.Artifacts.Identity.User.DisplayName}
+  required: false
+  description: Resolved identity DisplayName from the SOCFramework contract, threaded to Entity Enrichment.
+  playbookInputQuery: null
+- key: IdentitySAM
+  value:
+    simple: ${SOCFramework.Artifacts.Identity.User.SAM}
+  required: false
+  description: Resolved identity SAM account from the SOCFramework contract.
+  playbookInputQuery: null
 outputs:
+- contextPath: Analysis.Identity.User.DisplayName
+  type: unknown
+- contextPath: Analysis.primary_entity_id
+  type: unknown
+- contextPath: Analysis.primary_entity_name
+  type: unknown
+- contextPath: Analysis.primary_entity_type
+  type: unknown
+- contextPath: Analysis.primary_entity_user
+  type: unknown
+- contextPath: Analysis.Identity.User.Name
+  type: unknown
+- contextPath: Analysis.Identity.User.ID
+  type: unknown
+- contextPath: Analysis.Identity.User.SAM
+  type: unknown
+- contextPath: Analysis.Identity.User.UPN
+  type: unknown
+- contextPath: Analysis.Identity.User.Email
+  type: unknown
+- contextPath: Analysis.Identity.User.JobTitle
+  type: unknown
+- contextPath: Analysis.Identity.User.Department
+  type: unknown
+- contextPath: Analysis.Identity.User.Manager
+  type: unknown
+- contextPath: Analysis.Identity.User.City
+  type: unknown
+- contextPath: Analysis.Identity.User.OfficeLocation
+  type: unknown
+- contextPath: Analysis.Identity.User.EmployeeID
+  type: unknown
+- contextPath: Analysis.Identity.User.AccountEnabled
+  type: unknown
+- contextPath: Analysis.Identity.User.EmploymentStatus
+  type: unknown
+- contextPath: Analysis.Endpoint.Tags
+  type: unknown
+- contextPath: Analysis.Endpoint.MostLogonUser
+  type: unknown
+- contextPath: Analysis.Endpoint.NewestLogonUser
+  type: unknown
 - contextPath: Analysis.verdict
   type: unknown
 - contextPath: Analysis.confidence
@@ -1194,14 +1327,6 @@ outputs:
 - contextPath: Analysis.spread_level
   type: unknown
 - contextPath: Analysis.persistence_type
-  type: unknown
-- contextPath: Analysis.primary_entity_id
-  type: unknown
-- contextPath: Analysis.primary_entity_name
-  type: unknown
-- contextPath: Analysis.primary_entity_type
-  type: unknown
-- contextPath: Analysis.primary_entity_user
   type: unknown
 - contextPath: Analysis.case_category
   type: unknown
@@ -1225,3 +1350,36 @@ outputs:
   type: unknown
 - contextPath: Analysis.case_user_count
   type: unknown
+- contextPath: Analysis.Email.verdict
+  type: unknown
+- contextPath: Analysis.Email.confidence
+  type: unknown
+- contextPath: Analysis.Email.category
+  type: unknown
+- contextPath: Analysis.Email.signal_type
+  type: unknown
+- contextPath: Analysis.Email.source_verdict
+  type: unknown
+- contextPath: Analysis.Email.response_recommended
+  type: unknown
+- contextPath: Analysis.Email.spread_level
+  type: unknown
+- contextPath: Analysis.Email.persistence_type
+  type: unknown
+- contextPath: Email.Exposure.level
+  type: unknown
+- contextPath: Email.Exposure.click_count
+  type: unknown
+- contextPath: Email.Exposure.delivered_count
+  type: unknown
+- contextPath: Email.Exposure.mailbox_count
+  type: unknown
+- contextPath: Email.Exposure.recipient_scope
+  type: unknown
+- contextPath: Email.Exposure.message_id
+  type: unknown
+- contextPath: Email.Exposure.high_value_user
+  type: unknown
+- contextPath: Email.Classification
+  type: unknown
+possibleresponses: []

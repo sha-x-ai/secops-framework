@@ -35,6 +35,20 @@
       "status": "complete",
       "mappings": [
         {
+          "target": "Endpoint.alert_name",
+          "issue_field": "name",
+          "shape": "flat",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Endpoint.alert_source",
+          "issue_field": "sourcebrand",
+          "shape": "flat",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
           "target": "Endpoint.alert_action",
           "issue_field": "alertaction",
           "shape": "flat",
@@ -471,6 +485,176 @@
           "shape": "structured",
           "role": "legacy_alias",
           "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "username",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "username.[0]",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "user_principal",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.Name",
+          "issue_field": "username",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.Name",
+          "issue_field": "username.[0]",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.ID",
+          "issue_field": "userid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.ID",
+          "issue_field": "usersid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.ID",
+          "issue_field": "usersid.[0]",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.SAM",
+          "issue_field": "samaccountname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.DisplayName",
+          "issue_field": "socfwidentityuserdisplayname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "socfw_custom",
+          "reason": "Resolved user display name; no native XSIAM issue field (overlay/enrichment-derived)"
+        },
+        {
+          "target": "Artifacts.Endpoint.Tags",
+          "issue_field": "tags",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Email",
+          "issue_field": "email",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "email",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.DisplayName",
+          "issue_field": "displayname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Department",
+          "issue_field": "department",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.City",
+          "issue_field": "location",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Manager",
+          "issue_field": "managername",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.IPAddress",
+          "issue_field": "localip",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.IPAddress",
+          "issue_field": "hostip",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.OS",
+          "issue_field": "deviceosname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Hostname",
+          "issue_field": "agent_hostname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.AgentID",
+          "issue_field": "agent_id",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Domain",
+          "issue_field": "agent_device_domain",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
         }
       ],
       "stamps": [
@@ -493,6 +677,20 @@
       "status": "partial",
       "mappings": [
         {
+          "target": "Email.alert_name",
+          "issue_field": "name",
+          "shape": "flat",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Email.alert_source",
+          "issue_field": "sourcebrand",
+          "shape": "flat",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
           "target": "Email.attachment_name",
           "issue_field": "filename.[0]",
           "shape": "flat",
@@ -511,49 +709,56 @@
           "issue_field": "socfwemailcampaignid",
           "shape": "flat",
           "role": "canonical",
-          "source_origin": "socfw_custom"
+          "source_origin": "socfw_custom",
+          "reason": "Email-security campaign id; no native XSIAM issue field"
         },
         {
           "target": "Email.classification",
           "issue_field": "socfwemailclassification",
           "shape": "flat",
           "role": "canonical",
-          "source_origin": "socfw_custom"
+          "source_origin": "socfw_custom",
+          "reason": "Vendor email threat classification; no native issue field"
         },
         {
           "target": "Email.click_ip",
           "issue_field": "socfwemailclickip",
           "shape": "flat",
           "role": "canonical",
-          "source_origin": "socfw_custom"
+          "source_origin": "socfw_custom",
+          "reason": "Email URL-click source IP; no native issue field"
         },
         {
           "target": "Email.click_time",
           "issue_field": "socfwemailclicktime",
           "shape": "flat",
           "role": "canonical",
-          "source_origin": "socfw_custom"
+          "source_origin": "socfw_custom",
+          "reason": "Email URL-click timestamp; no native issue field"
         },
         {
           "target": "Email.delivery_action",
           "issue_field": "socfwemaildeliveryaction",
           "shape": "flat",
           "role": "canonical",
-          "source_origin": "socfw_custom"
+          "source_origin": "socfw_custom",
+          "reason": "Email delivery disposition; no native issue field"
         },
         {
           "target": "Email.direction",
           "issue_field": "socfwemaildirection",
           "shape": "flat",
           "role": "canonical",
-          "source_origin": "socfw_custom"
+          "source_origin": "socfw_custom",
+          "reason": "Email direction (inbound/outbound); no native issue field"
         },
         {
           "target": "Email.malware_score",
           "issue_field": "socfwemailmalwarescore",
           "shape": "flat",
           "role": "canonical",
-          "source_origin": "socfw_custom"
+          "source_origin": "socfw_custom",
+          "reason": "Vendor email malware score; no native issue field"
         },
         {
           "target": "Email.message_id",
@@ -569,7 +774,8 @@
           "issue_field": "socfwemailphishscore",
           "shape": "flat",
           "role": "canonical",
-          "source_origin": "socfw_custom"
+          "source_origin": "socfw_custom",
+          "reason": "Vendor email phishing score; no native issue field"
         },
         {
           "target": "Email.recipient",
@@ -613,28 +819,266 @@
           "issue_field": "socfwemailthreatid",
           "shape": "flat",
           "role": "canonical",
-          "source_origin": "socfw_custom"
+          "source_origin": "socfw_custom",
+          "reason": "Vendor email threat id; no native issue field"
         },
         {
           "target": "Email.threat_status",
           "issue_field": "socfwemailthreatstatus",
           "shape": "flat",
           "role": "canonical",
-          "source_origin": "socfw_custom"
+          "source_origin": "socfw_custom",
+          "reason": "Vendor email threat/remediation status; no native issue field"
         },
         {
           "target": "Email.threat_type",
           "issue_field": "socfwemailthreattype",
           "shape": "flat",
           "role": "canonical",
-          "source_origin": "socfw_custom"
+          "source_origin": "socfw_custom",
+          "reason": "Vendor email threat type; no native issue field"
         },
         {
           "target": "Email.threat_url",
           "issue_field": "socfwemailthreaturl",
           "shape": "flat",
           "role": "canonical",
-          "source_origin": "socfw_custom"
+          "source_origin": "socfw_custom",
+          "reason": "Vendor email threat URL; no native issue field"
+        },
+        {
+          "target": "Primary.User",
+          "issue_field": "username",
+          "shape": "flat",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Email",
+          "issue_field": "emailrecipient",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "username",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "username.[0]",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "user_principal",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.Name",
+          "issue_field": "username",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.Name",
+          "issue_field": "username.[0]",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.DisplayName",
+          "issue_field": "socfwidentityuserdisplayname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "socfw_custom",
+          "reason": "Resolved user display name; no native XSIAM issue field (overlay/enrichment-derived)"
+        },
+        {
+          "target": "Artifacts.Identity.User.ID",
+          "issue_field": "userid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.ID",
+          "issue_field": "usersid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.ID",
+          "issue_field": "usersid.[0]",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.SAM",
+          "issue_field": "samaccountname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Tags",
+          "issue_field": "tags",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Email",
+          "issue_field": "email",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "email",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.DisplayName",
+          "issue_field": "displayname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Department",
+          "issue_field": "department",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.City",
+          "issue_field": "location",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Manager",
+          "issue_field": "managername",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.AgentID",
+          "issue_field": "agentid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Domain",
+          "issue_field": "domain",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.FQDN",
+          "issue_field": "hostfqdn",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Hostname",
+          "issue_field": "hostname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.MACAddress",
+          "issue_field": "hostmacaddress",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.OS",
+          "issue_field": "hostos",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.OSVersion",
+          "issue_field": "agentossubtype",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.IPAddress",
+          "issue_field": "localip",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.IPAddress",
+          "issue_field": "hostip",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.OS",
+          "issue_field": "deviceosname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Hostname",
+          "issue_field": "agent_hostname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.AgentID",
+          "issue_field": "agent_id",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Domain",
+          "issue_field": "agent_device_domain",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
         }
       ],
       "stamps": [
@@ -689,6 +1133,20 @@
     "identity": {
       "status": "in-progress",
       "mappings": [
+        {
+          "target": "Identity.alert_name",
+          "issue_field": "name",
+          "shape": "flat",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Identity.alert_source",
+          "issue_field": "sourcebrand",
+          "shape": "flat",
+          "role": "canonical",
+          "source_origin": "native"
+        },
         {
           "target": "Identity.client_ip",
           "issue_field": "localip",
@@ -748,6 +1206,333 @@
           "source_origin": "native",
           "dedup_key": true,
           "dedup_match": "json"
+        },
+        {
+          "target": "Identity.display_name",
+          "issue_field": "socfwidentityuserdisplayname",
+          "shape": "flat",
+          "role": "canonical",
+          "source_origin": "socfw_custom",
+          "reason": "Resolved user display name; no native XSIAM issue field (overlay/enrichment-derived)"
+        },
+        {
+          "target": "Artifacts.MITRE.Category",
+          "issue_field": "categoryname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.MITRE.Tactic",
+          "issue_field": "mitretacticname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.MITRE.TacticID",
+          "issue_field": "mitretacticid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.MITRE.Technique",
+          "issue_field": "mitretechniquename",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.MITRE.TechniqueID",
+          "issue_field": "mitretechniqueid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Identity.user_principal",
+          "issue_field": "user_principal",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Identity.sam_account_name",
+          "issue_field": "samaccountname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "username",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "username.[0]",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "user_principal",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.Name",
+          "issue_field": "username",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.Name",
+          "issue_field": "username.[0]",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.ID",
+          "issue_field": "userid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.ID",
+          "issue_field": "usersid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.ID",
+          "issue_field": "usersid.[0]",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.SAM",
+          "issue_field": "samaccountname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Email",
+          "issue_field": "emailrecipient",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.DisplayName",
+          "issue_field": "socfwidentityuserdisplayname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "socfw_custom",
+          "reason": "Resolved user display name; no native XSIAM issue field (overlay/enrichment-derived)"
+        },
+        {
+          "target": "Artifacts.Endpoint.Tags",
+          "issue_field": "tags",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Email",
+          "issue_field": "email",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "email",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.DisplayName",
+          "issue_field": "displayname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Department",
+          "issue_field": "department",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.City",
+          "issue_field": "location",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Manager",
+          "issue_field": "managername",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.AgentID",
+          "issue_field": "agentid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Domain",
+          "issue_field": "domain",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.FQDN",
+          "issue_field": "hostfqdn",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Hostname",
+          "issue_field": "hostname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.MACAddress",
+          "issue_field": "hostmacaddress",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.OS",
+          "issue_field": "hostos",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.OSVersion",
+          "issue_field": "agentossubtype",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.IPAddress",
+          "issue_field": "localip",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.IPAddress",
+          "issue_field": "hostip",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.OS",
+          "issue_field": "deviceosname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Hostname",
+          "issue_field": "agent_hostname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.AgentID",
+          "issue_field": "agent_id",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Domain",
+          "issue_field": "agent_device_domain",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Primary.User",
+          "issue_field": "email",
+          "shape": "flat",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Primary.User",
+          "issue_field": "employeeemail",
+          "shape": "flat",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Primary.User",
+          "issue_field": "user_principal",
+          "shape": "flat",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Primary.Email",
+          "issue_field": "employeeemail",
+          "shape": "flat",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Primary.Email",
+          "issue_field": "email",
+          "shape": "flat",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Primary.SamAccountName",
+          "issue_field": "samaccountname",
+          "shape": "flat",
+          "role": "canonical",
+          "source_origin": "native"
         }
       ],
       "stamps": [
@@ -772,6 +1557,12 @@
         {
           "target": "Artifacts.Identity.User.Email",
           "source": "Identity.user_email",
+          "role": "canonical",
+          "shape": "structured"
+        },
+        {
+          "target": "Artifacts.Identity.User.DisplayName",
+          "source": "Identity.display_name",
           "role": "canonical",
           "shape": "structured"
         },
@@ -804,12 +1595,39 @@
           "source": "Identity.event_type",
           "role": "canonical",
           "shape": "structured"
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "source": "Identity.user_principal",
+          "role": "canonical",
+          "shape": "structured",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.SAM",
+          "source": "Identity.sam_account_name",
+          "role": "canonical",
+          "shape": "structured"
         }
       ]
     },
     "network": {
       "status": "in-progress",
       "mappings": [
+        {
+          "target": "Network.alert_name",
+          "issue_field": "name",
+          "shape": "flat",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Network.alert_source",
+          "issue_field": "sourcebrand",
+          "shape": "flat",
+          "role": "canonical",
+          "source_origin": "native"
+        },
         {
           "target": "Network.action",
           "issue_field": "action",
@@ -932,6 +1750,268 @@
           "shape": "flat",
           "role": "canonical",
           "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.MITRE.Category",
+          "issue_field": "categoryname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.MITRE.Tactic",
+          "issue_field": "mitretacticname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.MITRE.TacticID",
+          "issue_field": "mitretacticid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.MITRE.Technique",
+          "issue_field": "mitretechniquename",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.MITRE.TechniqueID",
+          "issue_field": "mitretechniqueid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "username",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "username.[0]",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "user_principal",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.Name",
+          "issue_field": "username",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.Name",
+          "issue_field": "username.[0]",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.ID",
+          "issue_field": "userid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.ID",
+          "issue_field": "usersid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.ID",
+          "issue_field": "usersid.[0]",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.SAM",
+          "issue_field": "samaccountname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Email",
+          "issue_field": "emailrecipient",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.DisplayName",
+          "issue_field": "socfwidentityuserdisplayname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "socfw_custom",
+          "reason": "Resolved user display name; no native XSIAM issue field (overlay/enrichment-derived)"
+        },
+        {
+          "target": "Artifacts.Endpoint.Tags",
+          "issue_field": "tags",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Email",
+          "issue_field": "email",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "email",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.DisplayName",
+          "issue_field": "displayname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Department",
+          "issue_field": "department",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.City",
+          "issue_field": "location",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Manager",
+          "issue_field": "managername",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.AgentID",
+          "issue_field": "agentid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Domain",
+          "issue_field": "domain",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.FQDN",
+          "issue_field": "hostfqdn",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Hostname",
+          "issue_field": "hostname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.MACAddress",
+          "issue_field": "hostmacaddress",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.OS",
+          "issue_field": "hostos",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.OSVersion",
+          "issue_field": "agentossubtype",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.IPAddress",
+          "issue_field": "localip",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.IPAddress",
+          "issue_field": "hostip",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.OS",
+          "issue_field": "deviceosname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Hostname",
+          "issue_field": "agent_hostname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.AgentID",
+          "issue_field": "agent_id",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Domain",
+          "issue_field": "agent_device_domain",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
         }
       ],
       "stamps": [
@@ -1049,6 +2129,20 @@
       "status": "complete",
       "mappings": [
         {
+          "target": "Cloud.alert_name",
+          "issue_field": "name",
+          "shape": "flat",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Cloud.alert_source",
+          "issue_field": "sourcebrand",
+          "shape": "flat",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
           "target": "Cloud.principal",
           "issue_field": "username",
           "shape": "flat",
@@ -1149,6 +2243,233 @@
           "shape": "flat",
           "role": "canonical",
           "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "username",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "username.[0]",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "user_principal",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.Name",
+          "issue_field": "username",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.Name",
+          "issue_field": "username.[0]",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.ID",
+          "issue_field": "userid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.ID",
+          "issue_field": "usersid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.ID",
+          "issue_field": "usersid.[0]",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.SAM",
+          "issue_field": "samaccountname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Email",
+          "issue_field": "emailrecipient",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.DisplayName",
+          "issue_field": "socfwidentityuserdisplayname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "socfw_custom",
+          "reason": "Resolved user display name; no native XSIAM issue field (overlay/enrichment-derived)"
+        },
+        {
+          "target": "Artifacts.Endpoint.Tags",
+          "issue_field": "tags",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Email",
+          "issue_field": "email",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "email",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.DisplayName",
+          "issue_field": "displayname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Department",
+          "issue_field": "department",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.City",
+          "issue_field": "location",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Manager",
+          "issue_field": "managername",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.AgentID",
+          "issue_field": "agentid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Domain",
+          "issue_field": "domain",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.FQDN",
+          "issue_field": "hostfqdn",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Hostname",
+          "issue_field": "hostname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.MACAddress",
+          "issue_field": "hostmacaddress",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.OS",
+          "issue_field": "hostos",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.OSVersion",
+          "issue_field": "agentossubtype",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.IPAddress",
+          "issue_field": "localip",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.IPAddress",
+          "issue_field": "hostip",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.OS",
+          "issue_field": "deviceosname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Hostname",
+          "issue_field": "agent_hostname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.AgentID",
+          "issue_field": "agent_id",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Domain",
+          "issue_field": "agent_device_domain",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
         }
       ],
       "stamps": [
@@ -1226,6 +2547,233 @@
           "target": "Generic.alert_source",
           "issue_field": "sourcebrand",
           "shape": "flat",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "username",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "username.[0]",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "user_principal",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.Name",
+          "issue_field": "username",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.Name",
+          "issue_field": "username.[0]",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.ID",
+          "issue_field": "userid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.ID",
+          "issue_field": "usersid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.ID",
+          "issue_field": "usersid.[0]",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.SAM",
+          "issue_field": "samaccountname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Email",
+          "issue_field": "emailrecipient",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.DisplayName",
+          "issue_field": "socfwidentityuserdisplayname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "socfw_custom",
+          "reason": "Resolved user display name; no native XSIAM issue field (overlay/enrichment-derived)"
+        },
+        {
+          "target": "Artifacts.Endpoint.Tags",
+          "issue_field": "tags",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Email",
+          "issue_field": "email",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.UPN",
+          "issue_field": "email",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native",
+          "lower": true
+        },
+        {
+          "target": "Artifacts.Identity.User.DisplayName",
+          "issue_field": "displayname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Department",
+          "issue_field": "department",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.City",
+          "issue_field": "location",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Identity.User.Manager",
+          "issue_field": "managername",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.AgentID",
+          "issue_field": "agentid",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Domain",
+          "issue_field": "domain",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.FQDN",
+          "issue_field": "hostfqdn",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Hostname",
+          "issue_field": "hostname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.MACAddress",
+          "issue_field": "hostmacaddress",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.OS",
+          "issue_field": "hostos",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.OSVersion",
+          "issue_field": "agentossubtype",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.IPAddress",
+          "issue_field": "localip",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.IPAddress",
+          "issue_field": "hostip",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.OS",
+          "issue_field": "deviceosname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Hostname",
+          "issue_field": "agent_hostname",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.AgentID",
+          "issue_field": "agent_id",
+          "shape": "structured",
+          "role": "canonical",
+          "source_origin": "native"
+        },
+        {
+          "target": "Artifacts.Endpoint.Domain",
+          "issue_field": "agent_device_domain",
+          "shape": "structured",
           "role": "canonical",
           "source_origin": "native"
         }
