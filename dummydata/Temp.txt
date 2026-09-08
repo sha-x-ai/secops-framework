@@ -1,0 +1,179 @@
+
+
+DBot
+Sep 8th 2026 12:12:01
+Initial investigation data is being processed. Please wait.
+
+Sep 8th 2026 12:12:01
+Field	Value
+Issue Name	ai test - s3 bucket public access check2
+Occurred	0001-01-01 00:00:00 +0000 UTC
+Owner	
+Type	Unclassified
+Severity	High
+Playbook	
+Phase	
+Remediation	
+Contains Featured Host	NO
+Contains Featured IP Address	NO
+Is Phishing	NOT_AVAILABLE
+Rule ID	APPSEC_CUSTOM_13
+Timestamp	Tue, 08 Sep 2026 12:36:47 UTC
+Issue Domain	DOMAIN_POSTURE
+xdm.policy_id	f25e73c6-1050-47e6-8675-a1d7734ea9a5
+Last Modified	Tue, 08 Sep 2026 12:51:18 UTC
+Category Name	CONFIGURATION
+Contains Featured User	NO
+Excluded	false
+Process execution signature	SIGNATURE_UNAVAILABLE
+Partial View: Too many rows. View full artifact in a new tab.
+
+Sep 8th 2026 12:12:01
+Issue Details
+The Terraform plan resource with ID module.s3_module_2.module.inner_s3_module.aws_s3_bucket_public_access_block.var_bucket in the repository cider-research-testing/third-party-open-source located in the file at /tests/terraform/runner/resources/plan_and_tf_combine_graph_with_missing_resources/tfplan.json on line(s) 141-146, is misconfigured due to "ai test - s3 bucket public access check2".
+
+Sep 8th 2026 12:12:01
+Processing of initial investigation data is complete.
+
+Vad Vadwlas
+Sep 8th 2026 12:12:01
+!aws-s3-public-access-block-quick-action account_id="Account ID" region="Region" bucket="Bucket Name"
+DBot
+Sep 8th 2026 12:12:08
+AWS returned an errorHide reason
+Command:
+ 
+!aws-s3-public-access-block-quick-action account_id="Account ID" region="Region" bucket="Bucket Name" block_public_acls="true" ignore_public_acls="true" block_public_policy="true" restrict_public_buckets="true"
+(AWS)
+Hide reason
+Reason
+Failed to execute aws-s3-public-access-block-quick-action command.
+Error:
+Failed to get credentials from CTS: [api/v0/cts/accounts/token] failed client execute - error: request to [/api/v0/cts/accounts/token] returned non-whitelisted status [404] body: {"detail":"Not Found: The server can not find the requested resource.","source":"downstream","platform_details":{"detail":"HTTP response error in the downstream service: '404 NOT FOUND' for url 'http://xdr-st-3109671799143-cts.cortex-cts.svc.cluster.local:3435/get_access_token'","source":"platform"}}
+. Response: None
+DBot
+Sep 8th 2026 12:12:08
+AWS returned an errorShow reason
+Command:
+ 
+!aws-s3-public-access-block-quick-action account_id="Account ID" region="Region" bucket="Bucket Name" block_public_acls="true" ignore_public_acls="true" block_public_policy="true" restrict_public_buckets="true"
+(AWS)
+Show reason
+DBot
+Sep 8th 2026 12:12:08
+AWS returned an errorShow reason
+Command:
+ 
+!aws-s3-public-access-block-quick-action account_id="Account ID" region="Region" bucket="Bucket Name" block_public_acls="true" ignore_public_acls="true" block_public_policy="true" restrict_public_buckets="true"
+(AWS)
+Show reason
+DBot
+Sep 8th 2026 12:12:08
+AWS returned an errorShow reason
+Command:
+ 
+!aws-s3-public-access-block-quick-action account_id="Account ID" region="Region" bucket="Bucket Name" block_public_acls="true" ignore_public_acls="true" block_public_policy="true" restrict_public_buckets="true"
+(AWS)
+Show reason
+DBot
+Sep 8th 2026 12:12:08
+AWS returned an errorShow reason
+Command:
+ 
+!aws-s3-public-access-block-quick-action account_id="Account ID" region="Region" bucket="Bucket Name" block_public_acls="true" ignore_public_acls="true" block_public_policy="true" restrict_public_buckets="true"
+(AWS)
+Show reason
+
+Vad Vadwlas
+Sep 8th 2026 12:12:51
+#37: Is Asset Details Exists?
+Command:
+ 
+Executing conditions: Label: yes, Condition: [null Is not empty ] Label: No, Condition: [null Is empty]
+Condition result: "No"
+
+Sep 8th 2026 12:12:53
+Task Done
+#37: Is Asset Details Exists?
+
+
+DBot
+Sep 8th 2026 12:12:53
+Task Started
+#5: Get Asset details
+!core-get-asset-details asset_id="[\"c51b69159166f5bcf015bb0a3de87ae0253d053f074a4e2e2af42978dbaedbd7\"]" using-brand="Cortex Core - Platform"
+
+Sep 8th 2026 12:12:59
+Task Result
+#5: Get Asset details
+Command:
+ 
+!core-get-asset-details asset_id="c51b69159166f5bcf015bb0a3de87ae0253d053f074a4e2e2af42978dbaedbd7"
+(Cortex Core - Platform)
+Asset Details
+Cases Breakdown	critical: 0
+high: 1
+low: 0 ...
+Cases Critical	0
+Issues Breakdown	critical: 0
+high: 2
+low: 0 ...
+Issues Critical	0
+Xdm Asset Asset Group Names	product-code-github,
+Asset group for CIS GitHub Benchmark v1.0.0
+Xdm Asset Cloud Region	
+Xdm Asset Extended Fields	CAS: {"enrichment_time": 1788872151188, "integration_id": "69b181a89c09e315c53ef10f", "repository_internal_id": "69b181e2e4f25db25541d2c7", "scan_id": "3a83423a-3d9d-44cc-8728-8afb0ef01052", "scan_type": "PERIODIC", "trigger_type": "PERIODIC"}
+Xdm Asset External Provider Id	
+Xdm Asset First Observed	1786344095623
+Xdm Asset Group Ids	12,
+15
+Xdm Asset Id	c51b69159166f5bcf015bb0a3de87ae0253d053f074a4e2e2af42978dbaedbd7
+Xdm Asset Last Observed	1788872127148
+Xdm Asset Name	module.s3_module_2.module.inner_s3_module.aws_s3_bucket_public_access_block.var_bucket
+Xdm Asset Normalized Fields By Source	CAS: {"xdm.asset.first_observed": 1786344095623, "xdm.asset.last_observed": 1788872127148, "xdm.asset.name": "module.s3_module_2.module.inner_s3_module.aws_s3_bucket_public_access_block.var_bucket", "xdm.asset.relations": [{"xdm.asset.relation.asset_id": "a8cadd1c627bc0323e9ab5710fcfe50a9b80894d0ddbf655d23aa8db36958322", "xdm.asset.relation.asset_type_id": "GITHUB_REPOSITORY", "xdm.asset.relation.metadata": {}, "xdm.asset.relation.type": "RELATES_TO"}], "xdm.asset.tags": {}, "xdm.code.git.branch": "main", "xdm.code.git.commit.author.name": "asi-cider", "xdm.code.git.commit.hash": "2a359acd288af5110e283d44a89d2f81053aeed2", "xdm.code.git.commit.time": "1756285515000", "xdm.code.iac.code_block": "                           "values":{\n                              "block_public_acls":true,\n                              "block_public_policy":true,\n                              "ignore_public_acls":true,\n                              "restrict_public_buckets":true\n", "xdm.code.iac.fram ...
+Xdm Asset Provider	GITHUB
+Xdm Asset Raw Fields	CAS: {"cloud_provider": "AWS", "generates_virtual_assets": false, "integration_id": "69b181a89c09e315c53ef10f", "repository_id": "a8cadd1c627bc0323e9ab5710fcfe50a9b80894d0ddbf655d23aa8db36958322", "scan_stage": "PERIODIC"}
+Xdm Asset Realm	GITHUB-third-party-open-source
+Xdm Asset Relations	{'xdm.asset.relation.asset_id': 'a8cadd1c627bc0323e9ab5710fcfe50a9b80894d0ddbf655d23aa8db36958322', 'xdm.asset.relation.asset_type_id': 'GITHUB_REPOSITORY', 'xdm.asset.relation.metadata': {}, 'xdm.asset.relation.type': 'RELATES_TO'}
+Xdm Asset Strong Id	PERIODIC:69b181e2e4f25db25541d2c7:main:/tests/terraform/runner/resources/plan_and_tf_combine_graph_with_missing_resources/tfplan.json:module.s3_module_2.module.inner_s3_module.aws_s3_bucket_public_access_block.var_bucket
+Xdm Asset Tags	
+Partial View: Showing 20 out of 40 rows. View full table in a new tab.
+
+
+DBot
+Sep 8th 2026 12:13:00
+#62: Is Asset Details Exists?
+Command:
+ 
+Executing conditions: Label: yes, Condition: [module.s3_module_2.module.inner_s3_module.aws_s3_bucket_public_access_block.var_bucket Is not empty ] Label: No, Condition: [module.s3_module_2.module.inner_s3_module.aws_s3_bucket_public_access_block.var_bucket Is empty]
+Condition result: "yes"
+
+Sep 8th 2026 12:13:02
+#61: Check ServiceNow and Jira Integration
+Command:
+ 
+Executing conditions: Label: Jira, Condition: [No Equals Yes AND {"brand":"Jira V3","category":"Case Management","commands":[{"arguments":[{"default":false,"deprecated":false,"description":"A CSV list
+Condition result: "No"
+
+Sep 8th 2026 12:13:04
+Task Result
+#64: Check Microsoft Teams and Slack Integration
+Command:
+ 
+Executing conditions: Label: Microsoft Teams, Condition: [No Equals Yes AND null Is not empty] Label: Slack, Condition: [No Equals Yes AND null Is not empty] Label: No, Condition: [No Equals No] Label
+Condition result: "No"
+
+Sep 8th 2026 12:13:05
+#59: Check Notification Email Recipients Inputs
+Command:
+ 
+Executing conditions: Label: Yes, Condition: [No Equals Yes AND ${} Is not empty OR null Is not empty] Label: Input, Condition: [No Equals Yes AND Is empty AND null Is empty] Label: No, Condition: [No Equals No]
+Condition result: "No"
+
+Sep 8th 2026 12:13:07
+#14: Is remediation available?
+Command:
+ 
+Executing conditions: Label: Yes, Condition: [APPSEC_CUSTOM_13 Equals 70b5bb02-aafd-4c23-ac4b-4872b3aced30 OR APPSEC_CUSTOM_13 Equals 1c513ad3-7db5-4fbf-abdd-39969f222f13 OR null Equals 70b5bb02-aafd-4c23-ac4b-4872b3aced30 OR null Equals 1c513ad3-7db5-4fbf-abdd-39969f222f13] Label: No, Condition: [APPSEC_CUSTOM_13 Doesn't equal 70b5bb02-aafd-4c23-ac4b-4872b3aced30 OR APPSEC_CUSTOM_13 Doesn't equal 1c513ad3-7db5-4fbf-abdd-39969f222f13 OR null Doesn't equal 70b5bb02-aafd-4c23-ac4b-4872b3aced30 OR null Doesn't equal 1c513ad3-7db5-4fbf-abdd-39969f222f13]
+Condition result: "No"
+
