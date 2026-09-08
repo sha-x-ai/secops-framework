@@ -1,0 +1,997 @@
+Cloud Security Posture Management Playbooks
+
+
+Details
+Content
+Dependencies
+Version History
+
+Show Deprecated Content
+
+Collapse all
+|
+Expand all
+Automation Rules (47)
+Name ↑
+Description
+Remediation playbook for AWS S3 Bucket Publicly accessible
+This trigger is responsible for handling AWS S3 Bucket Publicly Accessible Issues
+Remove GCP Bucket AllAuthenticatedUser Access
+This CLI command requires 'storage.buckets.getIamPolicy' and 'storage.buckets.setIamPolicy' permissions. Successful execution will revoke 'allAuthenticatedUsers' permission access in GCP Storage buckets.
+Remove GCP Bucket AllUsers Access
+This CLI command requires 'storage.buckets.getIamPolicy' and 'storage.buckets.setIamPolicy' permissions. Successful execution will revoke 'allUsers' permission access in GCP Storage buckets.
+Set AMI to Private
+This CLI command requires 'ec2:ModifyImageAttribute' permission. Successful execution will make this AMI's access to private. This will ensure that only Owner has full privileges.
+Set Function App HTTP Version to 2.0
+This CLI command requires 'Microsoft.Web/sites/config/Write' permission. Successful execution sets HTTP version to 2.0, which has additional performance improvements on the head-of-line blocking problem of old HTTP version, header compression, and prioritization of requests.
+Set Function App Min TLS Version
+This CLI command requires 'Microsoft.Web/sites/config/Write' permission. Successful execution sets web app TLS encryption version to latest TLS version(i.e. TLS 1.2).
+Set GCP Bucket Access to Uniform
+This CLI command requires 'storage.buckets.update' permission. Successful execution will set uniform bucket level access in GCP Storage buckets. Important: Once uniform bucket-level access has been enabled on a bucket for 90 consecutive days, it can no longer be disabled.
+Set RDS Cluster Snapshot to Private
+This CLI command requires 'rds:ModifyDBClusterSnapshotAttribute' permission. Successful execution will reset this RDS Cluster snapshot ACL (Access Control List) to private. This will ensure that only Owner has full privileges.
+Set Secure Transport for MySQL
+This CLI command requires 'Microsoft.DBforMySQL/flexibleServers/configurations/write' permission. Successful execution will enable SSL connection on your Azure MySQL database flexible server.
+Set Snapshot to Private
+This CLI command requires 'ec2:ModifySnapshotAttribute' permission. Successful execution will make this EBS snapshot's access to private. This will ensure that only Owner has full privileges.
+Set Storage Account to HTTPS only
+This CLI command requires 'Microsoft.Storage/storageAccounts/*' permission. Successful execution will enable secure transfer for this storage account.
+Set Web App Min TLS Version
+This CLI command requires 'Microsoft.Web/sites/{app_name}/config/*' permission. Successful execution sets web app TLS encryption version to latest TLS version(i.e. TLS 1.2).
+Set Webapp HTTP Version to 2.0
+This CLI command requires 'Microsoft.Web/sites/{app_name}/config/*' permission. Successful execution sets HTTP version to 2.0, which has additional performance improvements on the head-of-line blocking problem of old HTTP version, header compression, and prioritization of requests.
+Trigger - AWS Network Exposure
+Recommends the AWS Network Exposure - Auto-remediate playbook to automatically remediate the network exposure of AWS resources by updating the AWS asset with a new security group which is a copy of the original but without the offending security rule that causes public exposure.
+Set RDS Snapshot to Private
+This CLI command requires 'rds:ModifyDBSnapshotAttribute' permission. Successful execution will reset this RDS snapshot's ACL (Access Control List) to private. This will ensure that only Owner has full privileges.
+Playbooks (11)
+Name ↑
+Description
+AWS EC2 Instance Misconfiguration - Remediate and Notify
+This playbook helps you fix cloud security misconfigurations on your AWS EC2 Instances. It also makes it easy to involve your team by creating tickets and sending notifications through your chosen services.
+You have the flexibility to fully automate the fix or include an analyst review and approval step before any changes are made. Ticketing and notifications are handled by a sub-playbook, which you need to set up with your preferred integrations. You can choose to only create or update a ticket and skip the notification, skip creating or updating a ticket and send only a notification, or both create or update a ticket and notify relevant parties. If you want an analyst to approve the fix, you need to provide their email address. The playbook will send them the issue details and wait for their decision before applying any changes.
+
+This playbook can fix the following misconfigurations:
+
+- AWS EC2 instance not configured with Instance Metadata Service v2 (IMDSv2).
+AWS IAM Password Policies Misconfiguration - Remediate and Notify
+This playbook helps you fix cloud security misconfigurations related to your AWS IAM password policy. It also makes it easy to involve your team by creating tickets and sending notifications through your chosen services.
+You have the flexibility to fully automate the fix or include an analyst review and approval step before any changes are made. Ticketing and notifications are handled by a sub-playbook, which you need to set up with your preferred integrations. You can choose to only create or update a ticket and skip the notification, skip creating or updating a ticket and send only a notification, or both create or update a ticket and notify relevant parties. If you want an analyst to approve the fix, you need to provide their email address. The playbook will send them the issue details and wait for their decision before applying any changes.
+
+This playbook can fix the following misconfigurations:
+
+- AWS IAM password policy allows password reuse
+- AWS IAM password policy does not expire in 90 days
+- AWS IAM password policy does not have a lowercase character
+- AWS IAM password policy does not have a minimum of 14 characters
+- AWS IAM password policy does not have a number
+- AWS IAM password policy does not have a symbol
+- AWS IAM password policy does not have an uppercase character
+- AWS IAM password policy does not have password expiration period
+- AWS IAM Password policy is unsecure.
+AWS Network Exposure - Auto-remediate
+This playbook remediates AWS Network Exposure detections, specifically Amazon EC2 instances with management ports exposed to the public internet. It updates the AWS asset with a new security group that mirrors the original but excludes the security rule causing public exposure.
+AWS Public Access Misconfiguration - Auto-remediate
+Automatically remediates 9 AWS public access misconfigurations: 1 RDS database, 1 EBS snapshot, and 7 S3 bucket issues:
+1. AWS RDS database instance is publicly accessible
+2. AWS EBS snapshots are accessible to public
+3. AWS S3 buckets are accessible to public via ACL
+4. AWS S3 Buckets Block public access setting disabled
+5. AWS CloudTrail bucket is publicly accessible
+6. AWS Connect instance using publicly accessible S3 bucket
+7. AWS S3 bucket policy overly permissive to any principal
+8. AWS S3 bucket publicly readable
+9. AWS S3 bucket publicly writable
+
+The playbook disables public access by modifying RDS publicly_accessible settings, removing EBS snapshot createVolumePermission, and enabling S3 PublicAccessBlockConfiguration respectively.
+
+Optional stakeholder notification is available via the "Notify Stakeholders" sub-playbook by setting enableNotifications input to 'yes' (default: 'no'). When enabled, configure at least one recipient (email, Slack channel, or Teams channel) in the Notify Stakeholders playbook inputs. The playbook automatically updates the issue status to "Resolved - Fixed" upon successful remediation.
+AWS S3 Bucket Publicly Accessible - Remediate and Notify
+This playbook helps you fix cloud security misconfigurations related to your AWS S3 bucket. It also makes it easy to involve your team by creating tickets and sending notifications through your chosen services.
+You have the flexibility to fully automate the fix or include an analyst review and approval step before any changes are made. Ticketing and notifications are handled by a sub-playbook, which you need to set up with your preferred integrations. You can choose to only create or update a ticket and skip the notification, skip creating or updating a ticket and send only a notification, or both create or update a ticket and notify relevant parties. If you want an analyst to approve the fix, you need to provide their email address. The playbook will send them the issue details and wait for their decision before applying any changes.
+
+This playbook can fix the following misconfigurations.
+
+- AWS S3 bucket publicly readable
+- AWS S3 bucket publicly writable.
+Azure Network Exposure - Auto-remediate
+This playbook remediates Azure Network Exposure detections where virtual machines have management ports exposed to the public internet. It updates the Network Security Group (NSG) by adding a high-priority Deny rule to block public access and an Allow rule to permit internal traffic.
+Azure Public Access Misconfiguration - Auto-remediate
+Automatically remediates 3 Azure public access misconfigurations: 
+1. Azure storage account has a blob container with public access
+2. Azure VM disk configured with overly permissive network access
+3. Azure Storage Account default network access is set to 'Allow'
+
+The playbook disables public access by setting allowBlobPublicAccess to false, configuring VM disk publicNetworkAccess to Disabled with a DenyAll policy, and updating the storage account default network access action to Deny.
+
+Optional stakeholder notification is available via the "Notify Stakeholders" sub-playbook by setting enableNotifications input to 'yes' (default: 'no'). When enabled, configure at least one recipient (email, Slack channel, or Teams channel) in the Notify Stakeholders playbook inputs. The playbook automatically updates the issue status to "Resolved - Fixed" upon successful remediation.
+Create Ticket and Notify
+This playbook automates the handling of issues, sending them through ServiceNow v2 or Jira v3 and notifying stakeholders via Slack v3, Microsoft Teams, or email. You have the flexibility to create or update a ticket using Jira or ServiceNow, to notify other teams using Slack or Microsoft Teams, or to send an email. You can choose to only create or update a ticket and skip the notification, skip creating or updating a ticket and send only a notification, or both create or update a ticket and notify relevant parties. This playbook requires existing integrations with Jira, ServiceNow, Slack, or Microsoft Teams to perform these actions. If none of these integrations are found in your account, the playbook will post message to the Issue War Room notifying the missing integrations.
+GCP Network Exposure - Auto-remediate
+This playbook automatically remediates Google Compute Engine instances with management ports exposed to the internet. It adds GCP firewall rules to deny public access on specified ports while allowing internal IP traffic. It also uses network tags to apply rules to resources or adds the required tag to assets if the rule already exists.
+GCP Public Access Misconfiguration - Auto-remediate
+Automatically remediates 2 GCP public access misconfigurations:
+1. GCP Storage buckets are publicly accessible to all users
+2. GCP Storage buckets are publicly accessible to all authenticated users
+
+The playbook removes public IAM policy bindings by deleting 'allUsers' and 'allAuthenticatedUsers' entities from the bucket's Access Control List respectively.
+
+Optional stakeholder notification is available via the "Notify Stakeholders" sub-playbook by setting enableNotifications input to 'yes' (default: 'no'). When enabled, configure at least one recipient (email, Slack channel, or Teams channel) in the Notify Stakeholders playbook inputs. The playbook automatically updates the issue status to "Resolved - Fixed" upon successful remediation.
+Notify Stakeholders
+This playbook automates stakeholder notifications via Slack v3, Microsoft Teams, or email. It requires active Slack, Microsoft Teams, Mail Sender, or Gmail integrations. If no supported integration is configured, the playbook exits without taking action.
+Cart
+0
+
+Your cart is empty
+Go shopping
+Agentix
+
+
+
+
+
+AWS Enrichment and Remediation
+
+
+Details
+Content
+Dependencies
+Version History
+
+Show Deprecated Content
+
+Collapse all
+|
+Expand all
+Playbooks (10)
+Name ↑
+Description
+AWS - Enrichment
+Given the IP address this playbook enriches EC2 and IAM information.
+AWS - Security Group Remediation
+Replace current security groups with limited access security groups.
+AWS - Security Group Remediation v2
+This playbook takes in some information about an EC2 instance (ID and public_ip) and with provided port and protocol, determines what security groups on the primary interface of an EC2 instance are over-permissive. It uses an automation to determine what interface on an EC2 instance has an over-permissive security group on, determine which security groups have over-permissive rules and to replace them with a copy of the security group that has only the over-permissive portion removed. Over-permissive is defined as sensitive ports (SSH, RDP, etc) being exposed to the internet via IPv4.
+AWS - Unclaimed S3 Bucket Remediation
+The playbook will create the unclaimed S3 bucket.
+AWS - Unclaimed S3 Bucket Validation
+The playbook sends a HTTP get response to the hostname and validates if there is missing bucket information. 
+AWS - User Investigation
+This playbook performs an investigation on a specific user in AWS environments, using queries and logs from AWS CloudTrail to locate the following activities performed by the user:
+- Failed login attempt
+- Suspicious activities 
+- API access denied
+- Administrative user activities
+- Security rules and policies changes
+- Access keys and access token activities
+- Script-based user agent usage
+- User role changes activities
+- MFA device changes activities
+Cloud Credentials Rotation - AWS
+## **AWS Credentials Rotation Playbook**
+
+### **Identity Remediation**
+Secure compromised accounts by taking swift action:
+- **Reset Password**: Resets the user password to halt any unauthorized access.
+
+- **Access Key Deactivation**: Deactivate any suspicious or known-compromised access keys.
+
+- **Combo Action**: In some cases, you may want to reset both the password and deactivate the access key for absolute security.
+
+### **Role Remediation**
+If a role is suspected to be compromised:
+- **Deny Policy Implementation**: Attach a deny-all policy to the compromised role, thus preventing it from performing any further actions.
+
+- **Role Cloning**: Before outright remediation, clone the role. This ensures that you have a backup with the same permissions, making transition smoother.
+Cloud Response - AWS
+This playbook provides response actions to AWS. The following are available for execution automatically/manually:
+ - Resource remediation:
+   - Terminate the instance
+   - Stop the instance
+ - Identity remediation:
+   - Delete the user
+   - Revoke the user's credentials
+- Access key remediation:
+   - Disable the access key
+   - Delete the access key
+- Block indicators.
+Function Deployment - AWS
+This playbook automates the deployment of an AWS Lambda function to manage resources within an Amazon EKS cluster. It ensures that all necessary configurations are created, updated, and verified.
+
+### Setup
+
+- **Describe EKS Cluster**: Gather essential details of the EKS cluster.
+- **Create IAM Role**: Set up a new IAM role for the Lambda function.
+- **Create and Attach Policy**: Define and attach a policy to the IAM role to grant necessary permissions.
+
+### Authentication Mode Check
+
+- **Verify Authentication Mode**: Ensure the current authentication mode allows API access.
+  - **If not**: Update the cluster authentication mode to permit API access.
+
+### Access Entry Configuration
+
+- **Create Access Entry**: Establish a new access entry in the EKS cluster.
+- **Associate Access Policy**: Link the access policy with the created access entry.
+- **Update Access Entry**: Apply the latest configurations to the access entry.
+
+### VPC and Security Group Setup
+
+- **Describe VPCs**: Identify the appropriate VPC for the Lambda function.
+- **Create Security Group**: Define a security group to manage Lambda function traffic.
+- **Set Ingress Rules**: Configure ingress rules for the security group.
+
+### VPC Endpoint Creation
+
+- **Create VPC Endpoint for eks-auth**: Establish a VPC endpoint for EKS authentication.
+- **Check for Errors**: Verify if there are any errors during the creation of the VPC endpoint.
+  - **If errors**: Handle and log them.
+- **Verify VPC Endpoint Existence**: Ensure the VPC endpoint already exists.
+  - **If exists**: Proceed with the next steps.
+
+### Lambda Function Deployment
+
+- **Download Kubernetes Library**: Fetch the necessary Kubernetes library.
+- **Publish AWS Lambda Layer**: Publish a new layer version for the AWS Lambda function.
+- **Create Lambda Code**: Develop the Lambda function code.
+- **Zip Lambda Code**: Compress the Lambda function code for deployment.
+- **Create AWS Lambda Function**: Deploy the Lambda function using the zipped code.
+
+### Resolution
+
+- **Final Verification**: Ensure all operations have been successfully completed.
+- **Completion**: Confirm the deployment process is finished, ensuring robust management of EKS authentication through AWS Lambda.
+
+This playbook provides a comprehensive, automated approach to deploying an AWS Lambda function for managing resources within an EKS cluster, efficiently handling all configurations and potential errors.
+
+### Required Integration
+
+#### AWS IAM (Identity and Access Management)
+- [AWS IAM API Documentation](https://docs.aws.amazon.com/IAM/latest/APIReference/Welcome.html)
+- [Cortex AWS IAM Integration](https://cortex.marketplace.pan.dev/marketplace/details/AWSIAM/)
+
+#### AWS EC2 (Elastic Compute Cloud)
+- [AWS EC2 API Documentation](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Welcome.html)
+- [Cortex AWS EC2 Integration](https://cortex.marketplace.pan.dev/marketplace/details/AWSEC2/)
+
+#### AWS EKS (Elastic Kubernetes Service)
+- [AWS EKS API Documentation](https://docs.aws.amazon.com/eks/latest/APIReference/Welcome.html)
+- [Cortex AWS EKS Integration](https://cortex.marketplace.pan.dev/marketplace/details/AWSEKS/)
+
+#### AWS Lambda
+- [AWS Lambda API Documentation](https://docs.aws.amazon.com/lambda/latest/dg/API_Reference.html)
+- [Cortex AWS Lambda Integration](https://cortex.marketplace.pan.dev/marketplace/details/AWSLambda/).
+Function Removal - AWS
+This playbook automates the removal of an AWS Lambda function and its associated resources used for managing resources within an Amazon EKS cluster. It ensures all related roles, policies, and security configurations are properly detached and deleted.
+
+### Resource Detachment and Deletion
+
+- **Get the Lambda Role**: Retrieve the IAM role associated with the Lambda function.
+- **Detach Policy from Lambda Role**: Remove the policy attached to the Lambda role.
+- **Delete IAM Role**: Delete the IAM role that was used for the Lambda function.
+- **Delete Lambda Policy**: Remove the policy specifically created for the Lambda function.
+- **Delete Security Group**: Delete the security group that was managing the Lambda function's traffic.
+
+### Access Entry Check
+
+- **Check if Access Entry was Created**: Verify if the access entry for the EKS cluster was created.
+  - **If YES**: Proceed to delete additional resources.
+  - **If NO**: Skip the deletion of additional resources.
+
+### Additional Resource Deletion
+
+- **Delete Kubernetes Layer**: Remove the Kubernetes layer that was used by the Lambda function.
+- **Delete Lambda Function**: Delete the Lambda function itself, ensuring all related code and configurations are removed.
+
+### Resolution
+
+- **Final Cleanup**: Ensure all specified resources have been deleted successfully.
+- **Completion**: Confirm that the removal process is complete, providing a clean environment free from the previously deployed Lambda function and its configurations.
+
+This playbook provides a comprehensive, automated approach to removing an AWS Lambda function and its related resources, ensuring all configurations and dependencies are properly managed and deleted.
+
+### Required Integration
+
+#### AWS IAM (Identity and Access Management)
+- [AWS IAM API Documentation](https://docs.aws.amazon.com/IAM/latest/APIReference/Welcome.html)
+- [Cortex AWS IAM Integration](https://cortex.marketplace.pan.dev/marketplace/details/AWSIAM/)
+
+#### AWS EC2 (Elastic Compute Cloud)
+- [AWS EC2 API Documentation](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Welcome.html)
+- [Cortex AWS EC2 Integration](https://cortex.marketplace.pan.dev/marketplace/details/AWSEC2/)
+
+#### AWS Lambda
+- [AWS Lambda API Documentation](https://docs.aws.amazon.com/lambda/latest/dg/API_Reference.html)
+- [Cortex AWS Lambda Integration](https://cortex.marketplace.pan.dev/marketplace/details/AWSLambda/).
+Scripts (1)
+Name ↑
+Description
+Tags
+AWSRecreateSG
+Automation to determine which interface on an EC2 instance has an over-permissive security group, determine which security groups have over-permissive rules, and replace them with a copy of the security group that has only the over-permissive portion removed. Over-permissive is defined as sensitive ports (SSH, RDP, etc) being exposed to the internet via IPv4.
+Cart
+0
+
+Your cart is empty
+Go shopping
+Agentix
+
+
+
+Cortex Response And Remediation
+
+
+Details
+Content
+Dependencies
+Version History
+
+Show Deprecated Content
+
+Collapse all
+|
+Expand all
+Automation Rules (51)
+Name ↑
+Description
+SSO Authentication With Suspicious Characteristics
+This trigger is responsible for handling SSO Authentication With Suspicious Characteristics alerts
+SSO Brute Force
+This trigger is responsible for handling the 'SSO Brute Force Threat Detected' and 'SSO Brute Force Activity Observed' alerts
+SSO Brute Force Activity
+This trigger is responsible for handling the 'SSO Brute Force Threat Detected' and 'SSO Brute Force Activity Observed' alerts
+Successful guest user invitation
+This trigger is responsible for handling Valid Accounts alerts related to successful guest user invitations.
+Suspicious certutil command line
+This trigger is responsible for handling 'Suspicious certutil command line' alerts
+Suspicious Conditional Access operation for an identity
+This trigger runs the Suspicious Conditional Access operation for an identity playbook, which handles the Suspicious Conditional Access operation for an identity alert.
+Suspicious execution from tmp folder
+This trigger is responsible for handling the 'Suspicious interactive execution of a binary from the tmp folder', 'Suspicious cron job task execution of a binary from the tmp folder' and 'A web server process executed an unpopular application from the tmp folder' alerts via the 'Suspicious execution from tmp folder' playbook
+Suspicious LDAP search query
+This trigger is responsible for handling the 'Suspicious LDAP search query executed' and 'Possible LDAP enumeration by unsigned process' alerts via the 'Suspicious LDAP search query' playbook
+Suspicious local administrator login
+This trigger is responsible for handling alerts for Suspicious local administrator login.
+Suspicious process execution by scheduled task on a sensitive server
+This trigger is responsible for handling 'Suspicious process execution by scheduled task on a sensitive server' alert
+Suspicious SaaS Access From a TOR Exit Node
+This trigger is responsible for handling Suspicious SaaS Access From a TOR Exit Node
+Uncommon creation or access operation of sensitive shadow copy by a high-risk process
+This trigger is responsible for handling 'Uncommon creation or access operation of sensitive shadow copy by a high-risk process
+Uncommon execution of ODBCConf
+This trigger is responsible for handling 'Uncommon execution of ODBCConf' alerts.
+Uncommon remote scheduled task created
+This trigger is responsible for handling 'Uncommon remote scheduled task created
+Unprivileged process opened a registry hive
+This trigger is responsible for handling the 'Unprivileged process opened a registry hive' alert
+Unsigned and unpopular process performed an injection
+This trigger is responsible for handling several the 'Unsigned and unpopular process performed an injection' alerts
+Unusual process accessed web browser credentials and executed by a terminal process
+This trigger is responsible for handling 'Unusual process accessed web browser credentials and executed by a terminal process' alerts
+User added to local administrator group using a PowerShell command
+This trigger is responsible for handling 'User added to local administrator group using a PowerShell command' alert
+SSO Password Spray
+This trigger is responsible for handling SSO Password Spray alerts
+Playbooks (52)
+Name ↑
+Description
+A mail forwarding rule was configured in Google Workspace
+This playbook addresses the following alerts:
+
+- A mail forwarding rule was configured in Google Workspace.
+- A mail forwarding rule was configured in Google Workspace to an uncommon domain.
+
+Playbook Stages:
+ 
+Triage: 
+
+- The playbook retrieves the caller's IP, the forwarding email address, and associated filters.
+
+Early Containment:
+
+- The playbook checks if the IP or domain of the forwarding email address is malicious. If so, it suggests blocking the IP using PAN-OS while continuing the investigation in parallel.
+
+Investigation:
+
+- The playbook verifies if the rule was created outside of working hours or from an unusual geolocation and extracts suspicious keywords from the forwarding rules. It then aggregates all evidence collected during the investigation.
+
+Containment:
+
+- If only one suspicious evidence is found, the playbook executes soft response actions, including signing the user out and deleting the forwarding email address from the user account mailbox. The user will be notified of these actions via email.
+- If multiple suspicious evidences are found, the playbook executes both soft and hard response actions, recommending the analyst suspend the user account.
+
+Requirements: 
+
+For any response action, you need one of the following integrations:
+- Gmail integration to fetch filters and remove the forwarding email address.
+- Google Workspace Admin access to sign out and suspend the user account.
+A Successful login from TOR
+This playbook is designed to handle the following alert:
+
+- A successful login from TOR
+
+The playbook executes the following stages:
+
+Triage:
+
+- The playbook will fetch the user identity details.
+
+Remediation & Eradication:
+
+- The playbooks will suggest several actions for the analyst to take: disabling the user account using Active Directory or Azure Active Directory, expiring the user password using Active Directory, or blocking traffic from TOR exit nodes using PAN-OS and Palo Alto Networks' predefined EDL.
+
+The analyst can select multiple actions, which will then be executed by the playbook based on the analyst's choices.
+
+Requirements: 
+For any response action, you will need one of the following integrations: Azure Active Directory Users / Active Directory Users.
+A successful SSO sign-in from TOR
+This playbook is designed to handle the following alerts:
+- A successful SSO sign-in from TOR
+- A successful SSO sign-in from TOR via a mobile device
+
+The playbook executes the following stages:
+
+Early Containment:
+- The playbooks will perform early containment actions by clearing\revoking user sessions and enforcing re-authentication to terminate the connection from the Tor exit node and verify the user's identity. 
+Depending on the alert source, the playbook will use either
+Azure Active Directory Users or Okta v2 integrations to clear the user sessions.
+
+Investigation:
+During the alert investigation, the playbook will perform the following:
+- Checks the user's risk score.
+- Search for suspicious user agent usage within the alert.
+- Search for related XDR alerts using the following MITRE techniques to identify any malicious activity:
+T1566 - Phishing 
+T1621 - Multi-Factor Authentication Request Generation
+ T1110 - Brute Force
+ T1556 - Modify Authentication Process
+
+Remediation:
+- Remediation actions will be taken if the user’s risk score is high, a suspicious user agent is detected, or a related alert is found. In such cases, the playbook will disable the account.
+By default, account disabling requires analyst approval.
+
+Requires: 
+For any response action, you will need one of the following integrations: Azure Active Directory Users / Okta v2.
+A user deleted multiple users for the first time
+This playbook addresses the following alerts:
+
+- A user deleted multiple users for the first time
+
+Playbook Stages:
+
+Triage:
+
+- Collect initial alert data regarding the event.
+- Check the user type of the source user.
+- Host enrichment. 
+
+Investigation:
+
+- Check if an admin user initiated the operation and whether the deleted users are disabled. 
+- Correlate recent user activity with related security alerts.
+- Assess user's and host's risk level in Cortex XDR.
+- Check the type of the user target. 
+
+Remediation:
+
+- Evaluate investigation findings, if TP, the playbook will display the findings to an analyst for review and suggest user/host account disablement.
+
+
+Requirements:
+
+For response actions, you need the following integrations:
+
+- Cortex Core - Investigation and Response
+- Active Directory Query v2.
+A user executed multiple LDAP enumeration queries
+This playbook addresses the following alerts:
+
+- A user executed suspicious LDAP enumeration queries
+
+Playbook Stages:
+
+Triage:
+
+- Get additional event information about the LDAP searches executed by the user
+- Ensure that a single client IP exists in the alert
+- Get endpoint information for the client IP
+- Check preconditions for continuing investigation based on the number of suspicious attributes, attack tool queries, and vulnerable certificate templates
+
+
+Investigation:
+
+- Enrich the user that executed the queries
+- Check if the user was created recently
+- Search for additional discovery alerts in the alert
+- Check user groups and roles to determine if the user is unprivileged
+- Check user querying frequency to detect anomalies
+- Get host risk level
+- Search for recent malware alerts on client IP
+
+Remediation:
+
+- With analyst approval, disable the user in Active Directory if user-related anomalies are found and the alert is a True Positive.
+- With analyst approval, isolate the endpoint if host-related anomalies are found and the alert is a True Positive.
+- Logoff user from client host if an active session is detected and the alert is a True Positive.
+
+Requirements:
+
+For any response action, you need the following integrations:
+
+- Core - IR
+- Active Directory Query v2.
+AppleScript Process Executed With Rare Command Line
+This playbook handles "AppleScript Process Executed With Rare Command Line" alerts.
+
+Playbook Stages:
+
+Investigation:
+During the alert investigation, the playbook will perform the following:
+
+- Searches for XSIAM prevention alerts with the same causality process ID.
+- Checks if the causality|actor image has bad reputation or is not signed.
+- Checks if malicious|suspicious patterns found in the command line.
+- Searches for XSIAM insights alerts indicating a suspicious activity.
+
+
+Remediation:
+
+- Automatically terminate the causality process.
+- Quarantine the causality|actor image (requires analyst approval).
+- Automatically Close the alert.
+Authentication method added to an Azure account
+**This playbook addresses the following alert**:
+- Suspicious authentication method addition to Azure account
+
+**Playbook Stages**:
+
+**Triage**:
+- Gather initial information about the user.
+
+**Investigation**:
+- **Check IP Reputation**:
+  - Analyze the reputation of the IP address related to the alert.
+- **Check for Azure Alerts**:
+  - Extract recent Azure security alerts for the user.
+- **Check if User is Risky**:
+  - Assess the risk score of the user based on Core and Azure risk indicators.
+  - Investigate reasons behind any identified risks, including recent detections.
+
+**Containment**:
+- The playbook checks If hard remediation is needed, if yes, it will check if the integration "Microsoft Graph User" is enabled, the playbook will revoke the sessions of the user and provide a manual task for an analyst to review the findings and decide the next steps.
+- Possible actions:
+  - Disable the user.
+  - Take no action.
+
+If the integration is not enabled, the playbook will recommend performing the same action but manually.
+- The playbook will check if soft remediation is needed, If yes, continue to revoke user's active sessions to ensure immediate containment.
+
+**Requirements**:
+For the best results, it's recommended to ensure these integrations are configured and working:
+- `Cortex Core - Investigation and Response` for Core user risk evaluation.
+- `Azure Risky Users` for retrieving user risk scores.
+- `Microsoft 365 Defender` for advanced hunting queries and Azure security alerts.
+- `Microsoft Graph User` is used to disable user and revoke session.
+Azure AD account unlock or password reset
+**This playbook addresses the following alert**:
+- Azure AD account unlock/successful password reset
+
+**Playbook Stages**:
+
+**Triage**:
+- Gather initial information about the user.
+
+**Investigation**:
+- **Check IP Reputation**:
+  - Analyze the reputation of the IP address related to the alert.
+- **Check for Azure Alerts**:
+  - Extract recent Azure security alerts for the user.
+- **Check if User is Risky**:
+  - Assess the risk score of the user based on Core and Azure risk indicators.
+  - Investigate reasons behind any identified risks, including recent detections.
+
+**Containment**:
+- Check if feature sum is greater than 2 (Possible features:new user agent/new asn/new country). If yes, continue to revoke user's active sessions to ensure immediate containment.
+If no, continue to check investigation findings.
+- Provide a manual task for an analyst to review the findings and decide the next steps.
+- Possible actions:
+  - Disable the target user.
+  - Disable the resource user.
+  - Disable both users.
+  - Take no action.
+
+**Requirements**:
+For the best results, it's recommended to ensure these integrations are configured and working:
+- `Cortex Core - Investigation and Response` for Core user risk evaluation.
+- `Azure Risky Users` for retrieving user risk scores.
+- `Microsoft 365 Defender` for advanced hunting queries and Azure security alerts.
+- `Microsoft Graph User` for disabling accounts and revoking sessions.
+Azure AD PIM role settings change
+This playbook addresses the following alerts:
+
+- Azure AD PIM role settings change
+
+Playbook Stages:
+
+Triage:
+
+- Collect initial alert data regarding the Azure AD role settings modification.
+
+Investigation:
+
+- Analyze the impact of the role settings changes, categorizing them as high or moderate risk.
+- Determine if the changes affect privileged roles in Azure AD.
+- Correlate recent user activity with related security alerts.
+- Assess the user's risk status in Azure AD and Cortex XDR.
+- Evaluate the reputation of the IP address used for the changes.
+
+Containment:
+
+- Automatically revoke the user's active sessions across all applications.
+- Present findings to an analyst for review and potential user account disablement.
+
+Requirements:
+
+For response actions, you need the following integrations:
+
+- Cortex Core - Investigation and Response
+- Microsoft Graph User.
+Azure Temporary Access Pass (TAP) registered to an account
+This playbook addresses the following alerts:
+
+- Abnormal Azure Temporary Access Pass (TAP) account registration
+
+Playbook Stages:
+
+Triage:
+
+- Retrieve additional data about the TAP registration including start/end times, usage type, and user details
+
+Investigation:
+
+- Analyze the reputation of the caller IP address
+- Examine alerts from Microsoft Defender 365 related to the TAP assigner
+- Check Azure AD risky user status and risk detections
+- Review Cortex Core risk level for the user
+- Verify creation date of the user account in Azure AD to identify recently created accounts
+- Correlate evidence across multiple sources to determine potential compromise
+
+Containment:
+
+- For alerts determined to be true positives, automatically revoke the user's session in Microsoft applications
+- Upon analyst approval, disable the user account that granted the TAP
+
+Requirements: For response actions, you need the following integrations:
+
+- Microsoft Graph User.
+Compromise Accounts - User rejected numerous SSO MFA attempts
+This playbook addresses the following alerts:
+
+- User rejected numerous SSO MFA attempts
+- Multiple SSO MFA attempts were rejected by a user with suspicious characteristics
+
+Playbook Stages:
+
+Triage:
+- The playbook checks the IP address reputation associated with the MFA attempts and gathers related login events.
+
+Early Containment:
+- If the IP address is identified as malicious, the playbook blocks the IP. The investigation continues in parallel to this phase.
+
+Investigation:
+- The playbook performs an in-depth analysis, including:
+  - Assessing the user's risk score to identify potentially compromised accounts.
+  - Checking for an unusually high number of invalid credential attempts, which may indicate brute-force or credential-stuffing activity.
+  - Verifying whether Okta logs indicate a malicious source IP based on Okta's threat intelligence.
+  - Reviewing whether there have been an excessive number of MFA rejections from the user, suggesting potentially compromised behavior.
+  - Looking for abnormal user agent patterns that may indicate suspicious or compromised access methods.
+  - Investigating previous failed Okta login attempts within a specified timeframe to identify patterns.
+
+Containment:
+- If suspicious activity is confirmed, the playbook initiates the following containment actions:
+  - Clears the user's active sessions and expires their password to prevent further unauthorized access.
+  - If a successful login attempt was also detected, the playbook prompts a manual task for an analyst to review and decide on further action.
+
+Requirements:
+For any response actions, the following integration is required:
+- Okta v2
+
+For early containment actions, the following integration is required:
+- Palo Alto Networks PAN-OS.
+Credential Dumping using a known tool
+This playbook is designed to handle the following alerts:
+- Command-line arguments match Mimikatz execution
+- Mimikatz command-line arguments
+- Credential dumping via wce.exe
+- Credential dumping via gsecdump.exe
+- PowerShell runs with known Mimikatz arguments
+- Hash cracking using Hashcat tool
+- Credential dumping via fgdump.exe
+- Credential dumping via LaZagne
+- Credential dumping via pwdumpx.exe
+- Dumping lsass.exe memory for credential extraction
+- Memory dumping with comsvcs.dll
+
+The playbook executes the following stages:
+
+Early Containment:
+- Handles malicious alerts by terminating the causality process.
+
+Remediation:
+- Handles malicious alerts by suggesting the analyst to isolate the endpoint.
+CVE-2025-31324 - SAP NetWeaver Visual Composer
+CVE-2025-31324 is a critical zero-day vulnerability affecting the Metadata Uploader component of SAP NetWeaver Visual Composer. The vulnerability arises from missing authorization checks, allowing unauthenticated attackers to upload malicious executable binaries. Exploitation of this flaw can lead to full remote code execution (RCE) on affected systems, posing a significant risk to confidentiality, integrity, and availability.
+
+## CVE-2025-31324 - SAP NetWeaver RCE Vulnerability
+
+## Vulnerability Overview
+
+- **Component Affected**: SAP NetWeaver Visual Composer Metadata Uploader 
+- **Endpoint**: `/developmentserver/metadatauploader` 
+- **CVE ID**: CVE-2025-31324 
+- **CVSS Score**: 10.0 (Critical) 
+- **Exploitability**: Unauthenticated remote attackers can exploit this without user interaction 
+
+This flaw allows unauthenticated attackers to upload arbitrary files (e.g., JSP web shells), enabling remote code execution with the same privileges as the SAP application server process. 
+[Source: Unit42 - Palo Alto Networks](https://unit42.paloaltonetworks.com/threat-brief-sap-netweaver-cve-2025-31324/)
+
+
+## Mitigation and Recommendations
+
+- **Apply Patch**: SAP Note #3594142 (released April 24, 2025) 
+- **Disable Visual Composer** if not in use 
+- **Restrict Access** to the vulnerable endpoint 
+- **Monitor for IoCs** in `/irj/servlet_jsp/irj/root/` and suspicious traffic 
+
+## Conclusion
+
+CVE-2025-31324 is actively exploited and is critically severe. Organizations should patch immediately, monitor for compromise, and disable or restrict vulnerable components.
+
+[View official CVE details on NIST](https://nvd.nist.gov/vuln/detail/CVE-2025-31324)
+
+## Playbook Triggers
+- Manually
+- "CVE Exploitation - 986328356" Agent rule
+
+## Playbook Flow
+1. Using XQL, identify potential SAP NetWeaver instances in your environment.
+2. Using XQL, check if there are events that point to any potential webshells downloaded in the directories.
+3. Directory enumeration to identify if there are already any suspicious files that might indicate a webshell.
+4. *Collect* IOCs from a Unit42 blog, *search* them using the "Threat Hunting - Generic" playbook (supports Palo Alto networks products, Qradar, and Splunk), and *block* those indicators using the "Containment Plan - Block Indicators" playbook.
+5. Provides Mitigation recommendations.
+CVE-2025-49704 and CVE-2025-49706 and CVE-2025-53770 and CVE-2025-53771 - Microsoft SharePoint ToolShell vulnerability chain
+CVE-2025-49706 and CVE-2025-49704 and CVE-2025-53770 and CVE-2025-53771 — Microsoft SharePoint Identity Spoofing & RCE Chain - ToolShell
+
+---
+
+CVE-2025-49704, CVE-2025-49706, CVE-2025-53770, and CVE-2025-53771 are a set of vulnerabilities that impact Microsoft SharePoint. CVE-2025-49704 and CVE-2025-49706, or CVE-2025-53770 and CVE-2025-53771, may be chained together, allowing unauthenticated threat actors to access functionality that is normally restricted, to run arbitrary commands on vulnerable instances of Microsoft SharePoint.
+
+### Vulnerability Overview
+
+* **Platform Affected**: Microsoft SharePoint Server 2016 / 2019 / Subscription Edition
+* **CVE IDs**:
+  * CVE-2025-49706 – Improper authentication in Microsoft Office SharePoint allows an authorized attacker to perform spoofing over a network.	
+  * CVE-2025-49704 – Improper control of generation of code ('code injection') in Microsoft Office SharePoint allows an authorized attacker to execute code over a network.
+  * CVE-2025-53770 – Deserialization of untrusted data in on-premises Microsoft SharePoint Server allows an unauthorized attacker to execute code over a network.	
+  * CVE-2025-53771 – Improper limitation of a pathname to a restricted directory (path traversal) in Microsoft Office SharePoint allows an authorized attacker to perform spoofing over a network.	
+
+* **CVSS Scores**: 7.1, 8.8, 9.8 ,7.1
+
+* **Impact**:When chained together, they allow an attacker to run arbitrary commands on vulnerable instances of Microsoft SharePoint.
+
+These flaws enable an attacker to:
+- Spoof authentication
+- Bypass security boundaries
+- Gain remote execution
+
+
+### Mitigation & Recommendations
+
+* Apply Patches Immediately:
+  * [CVE-2025-49706](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-49706)
+  * [CVE-2025-49704](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-49704)
+  * [CVE-2025-53770](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-53770)
+  * [CVE-2025-53771](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-53771)
+
+* Harden SharePoint diagnostic/debug endpoints
+* Rotate SharePoint Server ASP.NET machine keys
+* Check IIS logs for suspicious activity
+* Disable/Isolate unnecessary SharePoint services or endpoints (at least until those servers are patched)
+
+---
+
+### References
+
+* [CVE-2025-49706 - NVD](https://nvd.nist.gov/vuln/detail/CVE-2025-49706)
+* [CVE-2025-49704 - NVD](https://nvd.nist.gov/vuln/detail/CVE-2025-49704)
+* [CVE-2025-53770 - NVD](https://nvd.nist.gov/vuln/detail/CVE-2025-53770)
+* [CVE-2025-53771 - NVD](https://nvd.nist.gov/vuln/detail/CVE-2025-53771)
+* [Microsoft Security Update – July 2025](https://msrc.microsoft.com/update-guide/)
+* [Unit42 Blog](https://unit42.paloaltonetworks.com/microsoft-sharepoint-cve-2025-49704-cve-2025-49706-cve-2025-53770/)
+
+---
+
+### How to trigger the playbook
+
+Triggered via:
+- Cortex XDR alerts: `"CVE Exploitation - 685768089"` or `"CVE Exploitation - 818854253"` or `"CVE Exploitation - 903162508"`
+- Manual creation of an alert with this playbook.
+
+---
+
+### Playbook Flow
+
+1. Run XQL Queries to detect possible affected servers running Microsoft SharePoint.
+2. Search for downloaded or created webshell files using XQL (especially for the known file name artifacts).
+3. Run XQL on network events and XDR .net events to determine if there was any usage of the CVEs in the organization.
+4. Check for malicious activity on the possible affected hosts for post-exploitation activities (such as running PowerShell encoded commands on the hosts) via additional alerts on the same host.
+5. Retrieve IOCs from the Unit42 blog, hunt for those IOCs with XQL, and block malicious indicators.
+6. Instruct the analyst on relevant response actions and mitigation steps.
+
+---
+
+**Note:** 
+This is a beta playbook. Updates to the pack during the beta phase might include non-backward-compatible features. We appreciate your feedback on the quality and usability of the pack to help us identify issues, fix them, and continually improve.
+CVE-2025-55182 and CVE-2025-66478 - React and Next js Remote Code Execution
+## CVE-2025-55182 and CVE-2025-66478 - React and Next.js Remote Code Execution
+
+## Vulnerability Overview
+
+- **Vulnerability Name**: Insecure Deserialization in React Server Components (RSC) "Flight" Protocol (Also referred to as React2Shell)
+- **CVE ID**: CVE-2025-55182 (Primary React RCE) and CVE-2025-66478 (Next.js RCE, affecting downstream implementations).
+- **CVSS Score**: 10 (Critical) 
+
+
+An unauthenticated Remote Code Execution (RCE) vulnerability exists in the core packages used by React Server Components (RSC), which are primarily exposed via the Next.js App Router. The flaw is an insecure deserialization issue in the RSC "Flight" protocol that allows an attacker to execute arbitrary code on the server by sending a single, crafted HTTP request. The vulnerability is present in default configurations of affected applications.
+[Source: Unit42 - Palo Alto Networks](https://unit42.paloaltonetworks.com/cve-2025-55182-react-and-cve-2025-66478-next/)
+
+
+## Mitigation and Recommendations
+
+- **Apply Patch**
+- **Restrict Access** to the vulnerable serves 
+- **Monitor for IoCs and suspicious traffic** 
+
+## Conclusion
+
+CVE‑2025‑55182 is a critical, highly reliable, and unauthenticated RCE vulnerability in the modern React ecosystem. Due to its remote exploitability without user interaction or authentication, immediate patching is required to prevent server compromise.
+
+[View official CVE details on NIST](https://nvd.nist.gov/vuln/detail/CVE-2025-55182)
+
+## Vulnerable Versions
+
+**React**: Versions 19.0, 19.1, and 19.2
+**Next.js**: Versions 15.x and 16.x (App Router), as well as Canary builds starting from 14.3.0
+**Other frameworks**: Any library bundling the react-server implementation, including React Router, Waku, RedwoodSDK, Parcel and Vite RSC plugins
+
+
+## Playbook Triggers
+- Manually - Create a new alert and select this playbook from the dropdown menu.
+
+## Playbook Flow
+1. Collects IOCs from the Unit42 blog.
+2. Uses XQL to detect any suspicious command lines indicative of exploitation of this vulnerability.
+3. Investigates the command lines to identify malicious indicators related to the vulnerability.
+4. Uses XQL to hunt for malicious IOCs.
+5. Isolates possible compromised servers.
+6. Blocks malicious indicators using the "Containment Plan – Block Indicators" playbook.
+7. Provides mitigation recommendations.
+
+Note: This is a beta playbook, which lets you implement and test pre-release software. Since the playbook is beta, it might contain bugs. Updates to the pack during the beta phase might include non-backward compatible features. We appreciate your feedback on the quality and usability of the pack to help us identify issues, fix them, and continually improve.
+CVE-2025-59287 - Microsoft WSUS Remote Code Execution
+CVE-2025-59287 - Microsoft WSUS Remote Code Execution
+
+
+## Vulnerability Overview
+
+- **Vulnerability Name**: Microsoft Windows Server Update Service (WSUS) Deserialization of Untrusted Data Vulnerability
+- **CVE ID**: CVE-2025-59287 
+- **CVSS Score**: 9.8 (Critical) 
+
+
+An unauthenticated remote code execution (RCE) vulnerability has been identified in Microsoft Windows Server Update Services (WSUS).
+[Source: Unit42 - Palo Alto Networks](https://unit42.paloaltonetworks.com/microsoft-cve-2025-59287/)
+
+
+## Mitigation and Recommendations
+
+- **Apply Patch**
+- **Restrict Access** to the vulnerable serves 
+- **Monitor for IoCs and suspicious traffic** 
+
+## Conclusion
+
+CVE‑2025‑59287 is a critical, remotely exploitable vulnerability in WSUS that allows unauthenticated attackers to execute arbitrary code with SYSTEM privileges.
+
+[View official CVE details on NIST](https://nvd.nist.gov/vuln/detail/CVE-2025-59287)
+
+## Playbook Triggers
+- Manually
+- "CVE Exploitation - 2037164431" or "CVE Exploitation - 3823999562" Agents rules
+
+## Playbook Flow
+1. Uses XQL to identify WSUS servers in your environment.
+2. Collects IOCs from the Unit42 blog.
+3. Uses XQL to detect any suspicious command lines indicative of exploitation of this vulnerability.
+4. Investigates the command lines to identify malicious indicators related to the vulnerability.
+5. Uses XQL to hunt for malicious IOCs.
+6. Isolates compromised WSUS servers.
+7. Blocks malicious indicators using the "Containment Plan – Block Indicators" playbook.
+8. Provides mitigation recommendations.
+Endpoint initiated uncommon remote scheduled task creation
+This playbook handles "Uncommon remote scheduled task creation" alert, which is generated on the source host that created the remote scheduled task.
+
+Playbook Stages:
+
+Analysis:
+
+- The playbook verifies whether the causality process is signed and prevalent. If the process is not signed and not prevalent, it proceeds with remediation actions; otherwise, it continues investigating the alert.
+
+Investigation:
+
+During the alert investigation, the playbook will perform the following:
+
+- Searches for related Cortex XSIAM alerts on the endpoint that use the following MITRE techniques to identify malicious activity: T1202 - Indirect Command Execution, T1021 - Remote Services.
+- Searches for related Cortex XSIAM agent alerts on the remote endpoint, to determine if the creation of the scheduled task is part of an attack pattern.
+- Searches for suspicious command-line parameters indicating a malicious scheduled task.
+
+Remediation:
+
+- Automatically disable the malicious scheduled task on the remote host.
+- Automatically terminate the causality process.
+- Automatically close the alert.
+Event Log Was Cleared
+This playbook is designed to handle the following alerts: 
+- Windows Event Log was cleared using wevtutil.exe
+- Security Event Log was cleared using wevtutil.exe
+- A Sensitive Windows Event Log was cleared using wevtutil.exe
+- Windows event logs were cleared with PowerShell
+- Suspicious clear or delete security provider event logs with PowerShell
+- Suspicious clear or delete default providers event logs with PowerShell
+- Windows event logs cleared using wmic.exe
+
+The playbook executes the following stages:
+
+Investigation:
+Check the following parameters to determine if remediation actions are needed:
+- Cortex XSIAM alerts related to the hostname by MITRE tactics indicating malicious activity.
+- Whether the CGO or the OSParent process is unsigned.
+- The prevalence of the OSParent process.
+
+Remediation:
+- Handles malicious alerts by terminating the relevant processes.
+- Handles non-malicious alerts identified during the investigation.
+Excessive User Account Lockouts
+This playbook addresses the following alerts:
+
+- Excessive user account lockouts
+- Excessive account lockouts on suspicious users
+- Excessive user account lockouts from a suspicious source
+
+The playbook investigates and responds to excessive user account lockout alerts. It gathers information about the alert, enriches relevant host data, and analyzes event patterns. This analysis helps distinguish between benign lockouts and lockouts caused by brute-force or password spray attacks.
+
+Playbook Stages:
+
+Triage:
+
+- The playbook enriches the alert with details about the lockout events.
+
+Investigation:
+
+- Analyzes the lockout event timestamps to detect patterns.
+- Checks for related medium severity brute-force alerts in the alert.
+- Retrieves the Risk Score for the Caller Computer that caused the lockouts.
+
+Containment:
+
+- With analyst approval, the playbook can isolate the endpoint (either the Caller Computer or the target host) if it's determined to be a true positive and not a server.
+
+Requirements:
+
+- For response actions, the following integration is required: Core - IR.
+Cart
+0
+
+Your cart is empty
+Go shopping
+Agentix
