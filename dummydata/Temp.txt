@@ -1,179 +1,464 @@
+Cloud Security Posture Management Playbooks
+2.1.1 11826762
+This pack provides the remediation playbooks for Cortex Cloud Issues and Cases.
+
+11 Playbooks
+
+47 Automation Rules
+Overview
+This content pack helps fix common cloud misconfigurations automatically with analyst approval or performs auto-remediation without approval, optionally notifying stakeholders. It also includes two versatile, cloud-agnostic playbooks for creating tickets and sending notifications via ServiceNow, Jira, Email, Slack, or Microsoft Teams.
+Key Use Cases
+Automatically remediate AWS misconfigurations with optional analyst approval.
+Automatically remediate AWS, Azure, and GCP public access misconfigurations with minimal or no manual intervention.
+Create or update issue tickets in Jira or ServiceNow.
+Notify teams through Slack, Microsoft Teams, or email.
+Included Playbooks
+AWS Remediation Playbooks
+AWS EC2 Instance Misconfiguration Remediation
+Ensures EC2 instances are configured with Instance Metadata Service v2 (IMDSv2).
+Offers analyst-in-the-loop or fully automated remediation.
+Integrates with AWS and Cortex Core IR.
+AWS IAM Password Policy Remediation
+Remediates 9 different insecure IAM password policy configurations, such as:
+Password reuse
+Minimum password length
+Lack of complexity requirements (uppercase, symbols, etc.)
+No expiration policy
+Supports both automated and analyst approval flows.
+AWS S3 Bucket Public Access Remediation
+Detects and remediates publicly accessible S3 buckets (read or write access).
+Ensures S3 compliance with cloud security policies.
+AWS Public Access Misconfiguration - Auto-remediate
+Automatically disables public access settings for RDS Database instances, EBS Snapshots and S3 buckets.
+Option to notify stakeholders about the remediation via Email, Slack or MS Teams.
+Set enableNotifications to ‘yes’ and configure inputs for the Notify Stakeholders playbook to send issue, asset and remediation details.
+Azure Remediation Playbooks
+Azure Public Access Misconfiguration - Auto-remediate
+Automatically remediates the misconfiguration issues for publicly accessible Azure blob containers, overly permissive Azure VM Disks or default Allow network access to Azure Storage Accounts.
+Option to notify stakeholders about the remediation via Email, Slack or MS Teams.
+Set enableNotifications to ‘yes’ and configure inputs for the Notify Stakeholders playbook to send issue, asset and remediation details.
+GCP Remediation Playbooks
+GCP Public Access Misconfiguration - Auto-remediate
+Automatically secure the publicly exposed GCP bucket by updating policies to block public access immediately.
+Option to notify stakeholders about the remediation via Email, Slack or MS Teams.
+Set enableNotifications to ‘yes’ and configure inputs for the Notify Stakeholders playbook to send issue, asset and remediation details.
+All remediation playbooks leverage:
+AWS integrations
+Sub-playbooks for ticket creation and/or notification
+Context-aware command execution
+Generic Utility Playbook
+Create Ticket and Notify
+Creates or updates incident tickets using Jira V3 or ServiceNow v2.
+Notifies stakeholders via Slack, Microsoft Teams, or email.
+Customizable behavior: ticket-only, notification-only, or both.
+Detects available integrations and adapts accordingly.
+Notify Stakeholders
+This is a sub-playbook that is used in the Public Access Misconfiguration remediation playbooks for AWS, Azure, and GCP.
+It is used to send issue and asset details along with the remediation action taken, in a well formatted notification message via Email, Slack or MS Teams, depending on the configured and enabled integrations.
+Configure recipients for email, slack or MS Teams notification in the Playbook Triggered header of this playbook
+If no inputs are pre-configured and enableNotifications is set to ‘yes’ in the remediation playbook, execution will pause to request at least one recipient.
+Dependencies
+This pack uses the following integrations:
+AWS
+Azure
+GCP
+Cortex Core - IR
+Jira V3
+ServiceNow v2
+Microsoft Teams
+SlackV3
+mail-sender
+Future Roadmap
+Additional coverage for High/Critical severity AWS, Azure, and GCP misconfiguration issues
+Requirements
+Active integrations for AWS, Azure, GCP, Jira, ServiceNow, Slack, Microsoft Teams (depending on use)
+Access to cloud account APIs with sufficient permissions for remediation
+Pack Contributors
+Shashi Testman
+Ann Testman
+Marc Cyr
+Anmol Baansal
+Contributions are welcome and appreciated. For more info, visit our Contribution Guide.
+Pack Contributors:
+Marc Cyr
+Anmol Baansal
+Contributions are welcome and appreciated. For more info, visit our Contribution Guide.
+PUBLISHER
+Cortex
+INFO
+Status
+Installed
+Last installed
+Sep 8th 2026 09:34:02
+Installed version
+2.1.1 11826762
+Certification
+
+Certified
+Supported by
+Cortex
+Go to
+Content Pack support site
+First Created
+Sep 26th 2025
+Last Release
+Aug 11th 2026
+Core
+WORKS WITH THE FOLLOWING INTEGRATIONS:
+Goo...
+Ama...
+Ser...
+Ser...
+Ser...
+Ser...
+Ser...
+Atl...
+Atl...
+Jir...
+Mic...
+Mic...
+Mic...
+Cor...
+Ind...
+Inv...
+XQL...
+Sla...
+Sla...
+Sla...
+Sla...
+Azure
+DISCLAIMER
+Content packs are licensed by the Publisher identified above and subject to the Publisher’s own licensing terms. Palo Alto Networks is not liable for and does not warrant or support any content pack produced by a third-party Publisher, whether or not such packs are designated as “Palo Alto Networks-certified” or otherwise. Palo Alto Networks disclaims all liability, however arising, in connection with third party content packs and any use thereof. For more information, see the Marketplace documentation.
 
 
-DBot
-Sep 8th 2026 12:12:01
-Initial investigation data is being processed. Please wait.
-
-Sep 8th 2026 12:12:01
-Field	Value
-Issue Name	ai test - s3 bucket public access check2
-Occurred	0001-01-01 00:00:00 +0000 UTC
-Owner	
-Type	Unclassified
-Severity	High
-Playbook	
-Phase	
-Remediation	
-Contains Featured Host	NO
-Contains Featured IP Address	NO
-Is Phishing	NOT_AVAILABLE
-Rule ID	APPSEC_CUSTOM_13
-Timestamp	Tue, 08 Sep 2026 12:36:47 UTC
-Issue Domain	DOMAIN_POSTURE
-xdm.policy_id	f25e73c6-1050-47e6-8675-a1d7734ea9a5
-Last Modified	Tue, 08 Sep 2026 12:51:18 UTC
-Category Name	CONFIGURATION
-Contains Featured User	NO
-Excluded	false
-Process execution signature	SIGNATURE_UNAVAILABLE
-Partial View: Too many rows. View full artifact in a new tab.
-
-Sep 8th 2026 12:12:01
-Issue Details
-The Terraform plan resource with ID module.s3_module_2.module.inner_s3_module.aws_s3_bucket_public_access_block.var_bucket in the repository cider-research-testing/third-party-open-source located in the file at /tests/terraform/runner/resources/plan_and_tf_combine_graph_with_missing_resources/tfplan.json on line(s) 141-146, is misconfigured due to "ai test - s3 bucket public access check2".
-
-Sep 8th 2026 12:12:01
-Processing of initial investigation data is complete.
-
-Vad Vadwlas
-Sep 8th 2026 12:12:01
-!aws-s3-public-access-block-quick-action account_id="Account ID" region="Region" bucket="Bucket Name"
-DBot
-Sep 8th 2026 12:12:08
-AWS returned an errorHide reason
-Command:
- 
-!aws-s3-public-access-block-quick-action account_id="Account ID" region="Region" bucket="Bucket Name" block_public_acls="true" ignore_public_acls="true" block_public_policy="true" restrict_public_buckets="true"
-(AWS)
-Hide reason
-Reason
-Failed to execute aws-s3-public-access-block-quick-action command.
-Error:
-Failed to get credentials from CTS: [api/v0/cts/accounts/token] failed client execute - error: request to [/api/v0/cts/accounts/token] returned non-whitelisted status [404] body: {"detail":"Not Found: The server can not find the requested resource.","source":"downstream","platform_details":{"detail":"HTTP response error in the downstream service: '404 NOT FOUND' for url 'http://xdr-st-3109671799143-cts.cortex-cts.svc.cluster.local:3435/get_access_token'","source":"platform"}}
-. Response: None
-DBot
-Sep 8th 2026 12:12:08
-AWS returned an errorShow reason
-Command:
- 
-!aws-s3-public-access-block-quick-action account_id="Account ID" region="Region" bucket="Bucket Name" block_public_acls="true" ignore_public_acls="true" block_public_policy="true" restrict_public_buckets="true"
-(AWS)
-Show reason
-DBot
-Sep 8th 2026 12:12:08
-AWS returned an errorShow reason
-Command:
- 
-!aws-s3-public-access-block-quick-action account_id="Account ID" region="Region" bucket="Bucket Name" block_public_acls="true" ignore_public_acls="true" block_public_policy="true" restrict_public_buckets="true"
-(AWS)
-Show reason
-DBot
-Sep 8th 2026 12:12:08
-AWS returned an errorShow reason
-Command:
- 
-!aws-s3-public-access-block-quick-action account_id="Account ID" region="Region" bucket="Bucket Name" block_public_acls="true" ignore_public_acls="true" block_public_policy="true" restrict_public_buckets="true"
-(AWS)
-Show reason
-DBot
-Sep 8th 2026 12:12:08
-AWS returned an errorShow reason
-Command:
- 
-!aws-s3-public-access-block-quick-action account_id="Account ID" region="Region" bucket="Bucket Name" block_public_acls="true" ignore_public_acls="true" block_public_policy="true" restrict_public_buckets="true"
-(AWS)
-Show reason
-
-Vad Vadwlas
-Sep 8th 2026 12:12:51
-#37: Is Asset Details Exists?
-Command:
- 
-Executing conditions: Label: yes, Condition: [null Is not empty ] Label: No, Condition: [null Is empty]
-Condition result: "No"
-
-Sep 8th 2026 12:12:53
-Task Done
-#37: Is Asset Details Exists?
 
 
-DBot
-Sep 8th 2026 12:12:53
-Task Started
-#5: Get Asset details
-!core-get-asset-details asset_id="[\"c51b69159166f5bcf015bb0a3de87ae0253d053f074a4e2e2af42978dbaedbd7\"]" using-brand="Cortex Core - Platform"
 
-Sep 8th 2026 12:12:59
-Task Result
-#5: Get Asset details
-Command:
- 
-!core-get-asset-details asset_id="c51b69159166f5bcf015bb0a3de87ae0253d053f074a4e2e2af42978dbaedbd7"
-(Cortex Core - Platform)
-Asset Details
-Cases Breakdown	critical: 0
-high: 1
-low: 0 ...
-Cases Critical	0
-Issues Breakdown	critical: 0
-high: 2
-low: 0 ...
-Issues Critical	0
-Xdm Asset Asset Group Names	product-code-github,
-Asset group for CIS GitHub Benchmark v1.0.0
-Xdm Asset Cloud Region	
-Xdm Asset Extended Fields	CAS: {"enrichment_time": 1788872151188, "integration_id": "69b181a89c09e315c53ef10f", "repository_internal_id": "69b181e2e4f25db25541d2c7", "scan_id": "3a83423a-3d9d-44cc-8728-8afb0ef01052", "scan_type": "PERIODIC", "trigger_type": "PERIODIC"}
-Xdm Asset External Provider Id	
-Xdm Asset First Observed	1786344095623
-Xdm Asset Group Ids	12,
-15
-Xdm Asset Id	c51b69159166f5bcf015bb0a3de87ae0253d053f074a4e2e2af42978dbaedbd7
-Xdm Asset Last Observed	1788872127148
-Xdm Asset Name	module.s3_module_2.module.inner_s3_module.aws_s3_bucket_public_access_block.var_bucket
-Xdm Asset Normalized Fields By Source	CAS: {"xdm.asset.first_observed": 1786344095623, "xdm.asset.last_observed": 1788872127148, "xdm.asset.name": "module.s3_module_2.module.inner_s3_module.aws_s3_bucket_public_access_block.var_bucket", "xdm.asset.relations": [{"xdm.asset.relation.asset_id": "a8cadd1c627bc0323e9ab5710fcfe50a9b80894d0ddbf655d23aa8db36958322", "xdm.asset.relation.asset_type_id": "GITHUB_REPOSITORY", "xdm.asset.relation.metadata": {}, "xdm.asset.relation.type": "RELATES_TO"}], "xdm.asset.tags": {}, "xdm.code.git.branch": "main", "xdm.code.git.commit.author.name": "asi-cider", "xdm.code.git.commit.hash": "2a359acd288af5110e283d44a89d2f81053aeed2", "xdm.code.git.commit.time": "1756285515000", "xdm.code.iac.code_block": "                           "values":{\n                              "block_public_acls":true,\n                              "block_public_policy":true,\n                              "ignore_public_acls":true,\n                              "restrict_public_buckets":true\n", "xdm.code.iac.fram ...
-Xdm Asset Provider	GITHUB
-Xdm Asset Raw Fields	CAS: {"cloud_provider": "AWS", "generates_virtual_assets": false, "integration_id": "69b181a89c09e315c53ef10f", "repository_id": "a8cadd1c627bc0323e9ab5710fcfe50a9b80894d0ddbf655d23aa8db36958322", "scan_stage": "PERIODIC"}
-Xdm Asset Realm	GITHUB-third-party-open-source
-Xdm Asset Relations	{'xdm.asset.relation.asset_id': 'a8cadd1c627bc0323e9ab5710fcfe50a9b80894d0ddbf655d23aa8db36958322', 'xdm.asset.relation.asset_type_id': 'GITHUB_REPOSITORY', 'xdm.asset.relation.metadata': {}, 'xdm.asset.relation.type': 'RELATES_TO'}
-Xdm Asset Strong Id	PERIODIC:69b181e2e4f25db25541d2c7:main:/tests/terraform/runner/resources/plan_and_tf_combine_graph_with_missing_resources/tfplan.json:module.s3_module_2.module.inner_s3_module.aws_s3_bucket_public_access_block.var_bucket
-Xdm Asset Tags	
-Partial View: Showing 20 out of 40 rows. View full table in a new tab.
+Automation Rules (47)
+Name ↑
+Description
+Remove GCP Bucket AllUsers Access
+This CLI command requires 'storage.buckets.getIamPolicy' and 'storage.buckets.setIamPolicy' permissions. Successful execution will revoke 'allUsers' permission access in GCP Storage buckets.
+Remove GCP Bucket AllAuthenticatedUser Access
+This CLI command requires 'storage.buckets.getIamPolicy' and 'storage.buckets.setIamPolicy' permissions. Successful execution will revoke 'allAuthenticatedUsers' permission access in GCP Storage buckets.
+Remediation playbook for AWS S3 Bucket Publicly accessible
+This trigger is responsible for handling AWS S3 Bucket Publicly Accessible Issues
+Remediation playbook for AWS IAM Password Policy Misconfiguration
+This trigger is responsible for handling AWS IAM Password Policy Misconfiguration Issues
+Remediation playbook for AWS EC2 misconfigurations
+This trigger is responsible for handling AWS EC2 Instance Misconfiguration Issues
+Make GCP Bucket Private
+This CLI command requires 'storage.buckets.getIamPolicy' and 'storage.buckets.setIamPolicy' permissions. Successful execution will revoke 'allUsers' and 'allAuthenticatedUsers' permission access in GCP Storage buckets.
+Enable GCP Bucket Versioning
+This CLI command requires 'storage.buckets.update' permission. Successful execution will enable GCP Storage log buckets 'versioning'.
+Enable GKE Cluster Intra-node Visibility
+This CLI command requires 'container.clusters.update' permission. Successful execution will enable intra-node visibility for GCP Kubernetes Engine cluster which helps visualize flow logs for all traffic between Pods.
+Enable IAM Authentication on RDS
+This CLI command requires 'rds:ModifyDBInstance' permission. Successful execution will enable IAM Authentication for the reported AWS RDS instance.
+Enable IAM Authentication on RDS Cluster
+This CLI command requires 'rds:ModifyDBCluster' permission. Successful execution will enable IAM Authentication for the reported AWS RDS cluster.
+Enable Master Authorized Networks on GKE
+This CLI command requires 'container.clusters.update' permission. Successful execution will enable Master authorized network for GCP Kubernetes Engine cluster by blocking untrusted non-GCP source IPs from accessing the Kubernetes master through HTTPS.
+Enable RDS Auto Upgrade
+This CLI command requires 'rds:ModifyDBInstance' permission. Successful execution will enable the minor upgrades of RDS datsbase instance
+Enable RDS Cluster Deletion Protection
+This CLI command requires 'rds:ModifyDBCluster' permission. Successful execution will enable deletion protection for the reported AWS RDS cluster.
+Enable S3 Versioning
+This CLI command requires 's3:PutBucketVersioning' permission. Successful execution will enable Object Versioning for the respective S3 bucket.
+Enable Soft Delete on Blob
+This CLI command requires 'Microsoft.Storage/storageAccounts/blobServices/write' permission. Successful execution will enable soft delete for blobs on Azure Storage accounts. NOTE: As best practice we are setting delete retention days to 30 days; it can be changed based on customer requirement by cloning the policy.
+Playbooks (11)
+Name ↑
+Description
+AWS EC2 Instance Misconfiguration - Remediate and Notify
+This playbook helps you fix cloud security misconfigurations on your AWS EC2 Instances. It also makes it easy to involve your team by creating tickets and sending notifications through your chosen services.
+You have the flexibility to fully automate the fix or include an analyst review and approval step before any changes are made. Ticketing and notifications are handled by a sub-playbook, which you need to set up with your preferred integrations. You can choose to only create or update a ticket and skip the notification, skip creating or updating a ticket and send only a notification, or both create or update a ticket and notify relevant parties. If you want an analyst to approve the fix, you need to provide their email address. The playbook will send them the issue details and wait for their decision before applying any changes.
+
+This playbook can fix the following misconfigurations:
+
+- AWS EC2 instance not configured with Instance Metadata Service v2 (IMDSv2).
+AWS IAM Password Policies Misconfiguration - Remediate and Notify
+This playbook helps you fix cloud security misconfigurations related to your AWS IAM password policy. It also makes it easy to involve your team by creating tickets and sending notifications through your chosen services.
+You have the flexibility to fully automate the fix or include an analyst review and approval step before any changes are made. Ticketing and notifications are handled by a sub-playbook, which you need to set up with your preferred integrations. You can choose to only create or update a ticket and skip the notification, skip creating or updating a ticket and send only a notification, or both create or update a ticket and notify relevant parties. If you want an analyst to approve the fix, you need to provide their email address. The playbook will send them the issue details and wait for their decision before applying any changes.
+
+This playbook can fix the following misconfigurations:
+
+- AWS IAM password policy allows password reuse
+- AWS IAM password policy does not expire in 90 days
+- AWS IAM password policy does not have a lowercase character
+- AWS IAM password policy does not have a minimum of 14 characters
+- AWS IAM password policy does not have a number
+- AWS IAM password policy does not have a symbol
+- AWS IAM password policy does not have an uppercase character
+- AWS IAM password policy does not have password expiration period
+- AWS IAM Password policy is unsecure.
+AWS Network Exposure - Auto-remediate
+This playbook remediates AWS Network Exposure detections, specifically Amazon EC2 instances with management ports exposed to the public internet. It updates the AWS asset with a new security group that mirrors the original but excludes the security rule causing public exposure.
+AWS Public Access Misconfiguration - Auto-remediate
+Automatically remediates 9 AWS public access misconfigurations: 1 RDS database, 1 EBS snapshot, and 7 S3 bucket issues:
+1. AWS RDS database instance is publicly accessible
+2. AWS EBS snapshots are accessible to public
+3. AWS S3 buckets are accessible to public via ACL
+4. AWS S3 Buckets Block public access setting disabled
+5. AWS CloudTrail bucket is publicly accessible
+6. AWS Connect instance using publicly accessible S3 bucket
+7. AWS S3 bucket policy overly permissive to any principal
+8. AWS S3 bucket publicly readable
+9. AWS S3 bucket publicly writable
+
+The playbook disables public access by modifying RDS publicly_accessible settings, removing EBS snapshot createVolumePermission, and enabling S3 PublicAccessBlockConfiguration respectively.
+
+Optional stakeholder notification is available via the "Notify Stakeholders" sub-playbook by setting enableNotifications input to 'yes' (default: 'no'). When enabled, configure at least one recipient (email, Slack channel, or Teams channel) in the Notify Stakeholders playbook inputs. The playbook automatically updates the issue status to "Resolved - Fixed" upon successful remediation.
+AWS S3 Bucket Publicly Accessible - Remediate and Notify
+This playbook helps you fix cloud security misconfigurations related to your AWS S3 bucket. It also makes it easy to involve your team by creating tickets and sending notifications through your chosen services.
+You have the flexibility to fully automate the fix or include an analyst review and approval step before any changes are made. Ticketing and notifications are handled by a sub-playbook, which you need to set up with your preferred integrations. You can choose to only create or update a ticket and skip the notification, skip creating or updating a ticket and send only a notification, or both create or update a ticket and notify relevant parties. If you want an analyst to approve the fix, you need to provide their email address. The playbook will send them the issue details and wait for their decision before applying any changes.
+
+This playbook can fix the following misconfigurations.
+
+- AWS S3 bucket publicly readable
+- AWS S3 bucket publicly writable.
+Azure Network Exposure - Auto-remediate
+This playbook remediates Azure Network Exposure detections where virtual machines have management ports exposed to the public internet. It updates the Network Security Group (NSG) by adding a high-priority Deny rule to block public access and an Allow rule to permit internal traffic.
+Azure Public Access Misconfiguration - Auto-remediate
+Automatically remediates 3 Azure public access misconfigurations: 
+1. Azure storage account has a blob container with public access
+2. Azure VM disk configured with overly permissive network access
+3. Azure Storage Account default network access is set to 'Allow'
+
+The playbook disables public access by setting allowBlobPublicAccess to false, configuring VM disk publicNetworkAccess to Disabled with a DenyAll policy, and updating the storage account default network access action to Deny.
+
+Optional stakeholder notification is available via the "Notify Stakeholders" sub-playbook by setting enableNotifications input to 'yes' (default: 'no'). When enabled, configure at least one recipient (email, Slack channel, or Teams channel) in the Notify Stakeholders playbook inputs. The playbook automatically updates the issue status to "Resolved - Fixed" upon successful remediation.
+Create Ticket and Notify
+This playbook automates the handling of issues, sending them through ServiceNow v2 or Jira v3 and notifying stakeholders via Slack v3, Microsoft Teams, or email. You have the flexibility to create or update a ticket using Jira or ServiceNow, to notify other teams using Slack or Microsoft Teams, or to send an email. You can choose to only create or update a ticket and skip the notification, skip creating or updating a ticket and send only a notification, or both create or update a ticket and notify relevant parties. This playbook requires existing integrations with Jira, ServiceNow, Slack, or Microsoft Teams to perform these actions. If none of these integrations are found in your account, the playbook will post message to the Issue War Room notifying the missing integrations.
+GCP Network Exposure - Auto-remediate
+This playbook automatically remediates Google Compute Engine instances with management ports exposed to the internet. It adds GCP firewall rules to deny public access on specified ports while allowing internal IP traffic. It also uses network tags to apply rules to resources or adds the required tag to assets if the rule already exists.
+GCP Public Access Misconfiguration - Auto-remediate
+Automatically remediates 2 GCP public access misconfigurations:
+1. GCP Storage buckets are publicly accessible to all users
+2. GCP Storage buckets are publicly accessible to all authenticated users
+
+The playbook removes public IAM policy bindings by deleting 'allUsers' and 'allAuthenticatedUsers' entities from the bucket's Access Control List respectively.
+
+Optional stakeholder notification is available via the "Notify Stakeholders" sub-playbook by setting enableNotifications input to 'yes' (default: 'no'). When enabled, configure at least one recipient (email, Slack channel, or Teams channel) in the Notify Stakeholders playbook inputs. The playbook automatically updates the issue status to "Resolved - Fixed" upon successful remediation.
+Notify Stakeholders
+This playbook automates stakeholder notifications via Slack v3, Microsoft Teams, or email. It requires active Slack, Microsoft Teams, Mail Sender, or Gmail integrations. If no supported integration is configured, the playbook exits without taking action.
+Cart
+0
+
+Your cart is empty
+Go shopping
+Agentix
 
 
-DBot
-Sep 8th 2026 12:13:00
-#62: Is Asset Details Exists?
-Command:
- 
-Executing conditions: Label: yes, Condition: [module.s3_module_2.module.inner_s3_module.aws_s3_bucket_public_access_block.var_bucket Is not empty ] Label: No, Condition: [module.s3_module_2.module.inner_s3_module.aws_s3_bucket_public_access_block.var_bucket Is empty]
-Condition result: "yes"
 
-Sep 8th 2026 12:13:02
-#61: Check ServiceNow and Jira Integration
-Command:
- 
-Executing conditions: Label: Jira, Condition: [No Equals Yes AND {"brand":"Jira V3","category":"Case Management","commands":[{"arguments":[{"default":false,"deprecated":false,"description":"A CSV list
-Condition result: "No"
 
-Sep 8th 2026 12:13:04
-Task Result
-#64: Check Microsoft Teams and Slack Integration
-Command:
- 
-Executing conditions: Label: Microsoft Teams, Condition: [No Equals Yes AND null Is not empty] Label: Slack, Condition: [No Equals Yes AND null Is not empty] Label: No, Condition: [No Equals No] Label
-Condition result: "No"
+This content pack may require additional content packs:
+Required Content Packs
+Base
+By: Cortex
 
-Sep 8th 2026 12:13:05
-#59: Check Notification Email Recipients Inputs
-Command:
- 
-Executing conditions: Label: Yes, Condition: [No Equals Yes AND ${} Is not empty OR null Is not empty] Label: Input, Condition: [No Equals Yes AND Is empty AND null Is empty] Label: No, Condition: [No Equals No]
-Condition result: "No"
+Cloud Security Policy Management
+By: Cortex
 
-Sep 8th 2026 12:13:07
-#14: Is remediation available?
-Command:
- 
-Executing conditions: Label: Yes, Condition: [APPSEC_CUSTOM_13 Equals 70b5bb02-aafd-4c23-ac4b-4872b3aced30 OR APPSEC_CUSTOM_13 Equals 1c513ad3-7db5-4fbf-abdd-39969f222f13 OR null Equals 70b5bb02-aafd-4c23-ac4b-4872b3aced30 OR null Equals 1c513ad3-7db5-4fbf-abdd-39969f222f13] Label: No, Condition: [APPSEC_CUSTOM_13 Doesn't equal 70b5bb02-aafd-4c23-ac4b-4872b3aced30 OR APPSEC_CUSTOM_13 Doesn't equal 1c513ad3-7db5-4fbf-abdd-39969f222f13 OR null Doesn't equal 70b5bb02-aafd-4c23-ac4b-4872b3aced30 OR null Doesn't equal 1c513ad3-7db5-4fbf-abdd-39969f222f13]
-Condition result: "No"
+Common Scripts
+By: Cortex
 
+Core
+By: Cortex
+
+Filters And Transformers
+By: Cortex
+
+Optional Content Packs
+Atlassian Jira
+By: Cortex
+
+Microsoft Teams
+By: Cortex
+
+ServiceNow
+By: Cortex
+
+Slack
+By: Cortex
+
+Cart
+0
+
+Your cart is empty
+Go shopping
+Agentix
+
+
+
+2.1.1 - 11826762 (Aug 11th 2026 )
+
+Reinstall 2.1.1
+Installed
+Playbooks
+Azure Public Access Misconfiguration - Auto-remediate
+Updated the playbook to use the new  azure-compute-disk-update  command, replacing the deprecated  azure-disk-update  command.
+2.1.0 - 9981621 (Jun 9th 2026 )
+
+Revert to this version
+Triggers Recommendations
+New: Allow Access by Trusted Services
+Added support for the Allow Access by Trusted Services triggers recommendation. Requires the ‘Microsoft.Storage/storageAccounts/*’ permission. Running the command for this recommendation enables Azure accounts to bypass ‘Trusted Microsoft Services’.
+New: Assign Managed Identity to Function App
+Added support for the Assign Managed Identity triggers recommendation to Function App triggers recommendation. Requires the ‘Microsoft.Web/sites/Write’ permission. Running the command for this recommendation sets a managed service identity in the Azure Function App to eliminate secrets (such as credentials in connection strings) and increase security.
+New: Assign Managed Identity to Web App
+Added support for the Assign Managed Identity to Web App** triggers recommendation to Web App triggers recommendation. Requires the ‘Microsoft.Web/sites/{app_name}/config/*’ permission. Running the command for this recommendation sets a managed service identity in App Service to eliminate secrets (such as credentials in connection strings) and increase security.
+New: Disable Network Access to Storage Account
+Added support for the Disable Network Access to Storage Account** triggers recommendation. Requires the ‘Microsoft.Storage/storageAccounts/*’ permission. Running the command for this recommendation disables the default network access rule for Storage Accounts.
+New: Disable Public & Private Access to VM Disk
+Added support for the Disable Public & Private Access to VM Disk triggers recommendation. Requires the ‘Microsoft.Compute/disks/write’ permission. Running the command for this recommendation disables public network access and sets the network access policy to DenyAll for the specified disk, blocking external access. Options include disabling public access while enabling private access, or disabling both public and private access.
+New: Disable Public Access on RDS
+Added support for the Disable Public Access on RDS triggers recommendation. Requires the ‘rds:ModifyDBInstance’ permission. Running the command for this recommendation disables the publicly accessible configuration of AWS RDS database instances.
+New: Disable Remote Debugging on Azure App
+Added support for the Disable Remote Debugging on Azure App triggers recommendation. Requires the ‘Microsoft.Web/sites/config/Write’ permission. Running the command for this recommendation disables remote debugging on Azure App Service apps.
+New: Disable Storage Account Cross Tenant Replication
+Added support for the Disable Storage Account Cross Tenant Replication triggers recommendation. Requires the ‘Microsoft.Storage/storageAccounts/*’ permission. Running the command for this recommendation disables cross-tenant replication in Storage Accounts.
+New: Enable Automatic Backup for RDS dB
+Added support for the Enable Automatic Backup for RDS dB triggers recommendation. Requires the ‘rds:ModifyDBInstance’ permission. Running the command for this recommendation enables the automatic backup settings for RDS instances.
+New: Enable Azure App Service Auth
+Added support for the Enable Azure App Service Auth triggers recommendation. Requires the ‘Microsoft.Web/sites/{app_name}/config/authsettings/*’ permission. Running the command for this recommendation enables App Service authentication to prevent anonymous HTTP requests from reaching the API app, or authenticates requests containing tokens before they reach the API app.
+New: Enable CloudTrail Log Validation
+Added support for the Enable CloudTrail Log Validation triggers recommendation. Requires the ‘cloudtrail:UpdateTrail’ permission. Running the command for this recommendation enables log file validation for the specified CloudTrail.
+New: Enable CloudTrail Logging
+Added support for the Enable CloudTrail Logging triggers recommendation. Requires the ‘cloudtrail:StartLogging’ permission. Running the command for this recommendation enables logging for the respective CloudTrail.
+New: Enable Copy Tags on RDS Snapshot
+Added support for the Enable Copy Tags on RDS Snapshot triggers recommendation. Requires the ‘rds:ModifyDBInstance’ permission. Running the command for this recommendation enables ‘copy tags to snapshots’ for the respective RDS instance.
+New: Enable Deletion Protection on RDS
+Added support for the Enable Deletion Protection on RDS triggers recommendation. Requires the ‘rds:ModifyDBInstance’ permission. Running the command for this recommendation enables deletion protection for the reported AWS RDS instance.
+New: Enable GCP Bucket Versioning
+Added support for the Enable GCP Bucket Versioning triggers recommendation. Requires the ‘storage.buckets.update’ permission. Running the command for this recommendation enables GCP Storage log buckets versioning.
+New: Enable GKE Cluster Intra-node Visibility
+Added support for the Enable GKE Cluster Intra-node Visibility triggers recommendation. Requires the ‘container.clusters.update’ permission. Running the command for this recommendation enables intra-node visibility for the GCP Kubernetes Engine cluster to expose flow logs for traffic between Pods.
+New: Enable IAM Authentication on RDS
+Added support for the Enable IAM Authentication on RDS triggers recommendation. Requires the ‘rds:ModifyDBInstance’ permission. Running the command for this recommendation enables IAM Authentication for the reported AWS RDS instance.
+New: Enable IAM Authentication on RDS Cluster
+Added support for the Enable IAM Authentication on RDS Cluster triggers recommendation. Requires the ‘rds:ModifyDBCluster’ permission. Running the command for this recommendation enables IAM Authentication for the reported AWS RDS cluster.
+New: Enable Master Authorized Networks on GKE
+Added support for the Enable Master Authorized Networks on GKE triggers recommendation. Requires the ‘container.clusters.update’ permission. Running the command for this recommendation enables the Master authorized network for the GCP Kubernetes Engine cluster by blocking untrusted non-GCP source IPs from accessing the Kubernetes master through HTTPS.
+New: Enable RDS Auto Upgrade
+Added support for the Enable RDS Auto Upgrade triggers recommendation. Requires the ‘rds:ModifyDBInstance’ permission. Running the command for this recommendation enables minor upgrades for the RDS database instance.
+New: Enable RDS Cluster Deletion Protection
+Added support for the Enable RDS Cluster Deletion Protection triggers recommendation. Requires the ‘rds:ModifyDBCluster’ permission. Running the command for this recommendation enables deletion protection for the reported AWS RDS cluster.
+New: Enable S3 Versioning
+Added support for the Enable S3 Versioning triggers recommendation. Requires the ‘s3:PutBucketVersioning’ permission. Running the command for this recommendation enables Object Versioning for the respective S3 bucket.
+New: Enable Soft Delete on Blob
+Added support for the Enable Soft Delete on Blob triggers recommendation. Requires the ‘Microsoft.Storage/storageAccounts/blobServices/write’ permission. Running the command for this recommendation enables soft delete for blobs on Azure Storage accounts. By default, the delete retention period is configured to 30 days, which can be modified by cloning the policy.
+New: Make GCP Bucket Private
+Added support for the Make GCP Bucket Private triggers recommendation. Requires the ‘storage.buckets.getIamPolicy’ and ‘storage.buckets.setIamPolicy’ permissions. Running the command for this recommendation revokes ‘allUsers’ and ‘allAuthenticatedUsers’ permission access on GCP Storage buckets.
+New: Remove GCP Bucket AllAuthenticatedUser Access
+Added support for the Remove GCP Bucket AllAuthenticatedUser Access triggers recommendation. Requires the ‘storage.buckets.getIamPolicy’ and ‘storage.buckets.setIamPolicy’ permissions. Running the command for this recommendation revokes ‘allAuthenticatedUsers’ permission access on GCP Storage buckets.
+New: Remove GCP Bucket AllUsers Access
+Added support for the Remove GCP Bucket AllUsers Access triggers recommendation. Requires the ‘storage.buckets.getIamPolicy’ and ‘storage.buckets.setIamPolicy’ permissions. Running the command for this recommendation revokes ‘allUsers’ permission access on GCP Storage buckets.
+New: Set AMI to Private
+Added support for the Set AMI to Private triggers recommendation. Requires the ‘ec2:ModifyImageAttribute’ permission. Running the command for this recommendation configures the AMI access level to private to ensure only the owner retains full privileges.
+New: Set Function App HTTP Version to 2.0
+Added support for the Set Function App HTTP Version to 2.0 triggers recommendation. Requires the ‘Microsoft.Web/sites/config/Write’ permission. Running the command for this recommendation sets the HTTP version to 2.0 to resolve head-of-line blocking issues, introduce header compression, and enable request prioritization.
+New: Set Function App Min TLS Version
+Added support for the Set Function App Min TLS Version triggers recommendation. Requires the ‘Microsoft.Web/sites/config/Write’ permission. Running the command for this recommendation sets the Web App TLS encryption version to the latest standard (i.e., TLS 1.2).
+New: Set GCP Bucket Access to Uniform
+Added support for the Set GCP Bucket Access to Uniform triggers recommendation. Requires the ‘storage.buckets.update’ permission. Running the command for this recommendation sets uniform bucket-level access in GCP Storage buckets. Note that once uniform bucket-level access has been enabled on a bucket for 90 consecutive days, it can no longer be disabled.
+New: Set RDS Cluster Snapshot to Private
+Added support for the Set RDS Cluster Snapshot to Private triggers recommendation. Requires the ‘rds:ModifyDBClusterSnapshotAttribute’ permission. Running the command for this recommendation resets the RDS Cluster snapshot Access Control List (ACL) to private to ensure only the owner retains full privileges.
+New: Set RDS Snapshot to Private
+Added support for the Set RDS Snapshot to Private triggers recommendation. Requires the ‘rds:ModifyDBSnapshotAttribute’ permission. Running the command for this recommendation resets the RDS snapshot Access Control List (ACL) to private to ensure only the owner retains full privileges.
+New: Set Secure Transport for MySQL
+Added support for the Set Secure Transport for MySQL triggers recommendation. Requires the ‘Microsoft.DBforMySQL/flexibleServers/configurations/write’ permission. Running the command for this recommendation enables SSL connections on your Azure MySQL database flexible server.
+New: Set Snapshot to Private
+Added support for the Set Snapshot to Private triggers recommendation. Requires the ‘ec2:ModifySnapshotAttribute’ permission. Running the command for this recommendation configures the EBS snapshot access level to private to ensure only the owner retains full privileges.
+New: Set Storage Account to HTTPS only
+Added support for the Set Storage Account to HTTPS only triggers recommendation. Requires the ‘Microsoft.Storage/storageAccounts/*’ permission. Running the command for this recommendation enables secure transfer for the specified storage account.
+New: Set Web App Min TLS Version
+Added support for the Set Web App Min TLS Version triggers recommendation. Requires the ‘Microsoft.Web/sites/{app_name}/config/*’ permission. Running the command for this recommendation sets the Web App TLS encryption version to the latest standard (i.e., TLS 1.2).
+New: Set Webapp HTTP Version to 2.0
+Added support for the Set Webapp HTTP Version to 2.0 triggers recommendation. Requires the ‘Microsoft.Web/sites/{app_name}/config/*’ permission. Running the command for this recommendation sets the HTTP version to 2.0 to resolve head-of-line blocking issues, introduce header compression, and enable request prioritization.
+New: Update Azure Monitor Log Retention Period
+Added support for the Update Azure Monitor Log Retention Period triggers recommendation. Requires the ‘Microsoft.Insights/LogProfiles/[Read, Write, Delete]’ permission. Running the command for this recommendation updates the Azure Monitor log profile retention policy to 365 days.
+2.0.0 - 9069814 (May 17th 2026 )
+
+Revert to this version
+Playbooks
+New: AWS Network Exposure - Auto-remediate
+This playbook remediates AWS Network Exposure detections, specifically Amazon EC2 instances with management ports exposed to the public internet. It updates the AWS asset with a new security group that is a copy of the original but excludes the security rule causing public exposure.
+New: Azure Network Exposure - Auto-remediate
+This playbook remediates Azure Network Exposure detections where virtual machines have management ports exposed to the public internet. It updates the Network Security Group (NSG) by adding a high-priority Deny rule to block public access and an Allow rule to permit internal traffic.
+New: GCP Network Exposure - Auto-remediate
+This playbook automatically remediates Google Compute Engine instances with management ports exposed  to the internet. It adds GCP firewall rules to deny public access on specified ports while allowing internal IP traffic. It also uses network tags to apply rules to resources or adds the required tag to assets if the rule already exists.
+Notify Stakeholders
+Updated the Notify Stakeholders playbook to use adaptive cards for the Microsoft Teams notification.
+Triggers Recommendations
+New: Trigger - AWS Network Exposure
+Added the Trigger - AWS Network Exposure triggers recommendation that recommends the AWS Network Exposure - Auto-remediate playbook to automatically remediate the network exposure of AWS resources by updating the AWS asset with a new security group which is a copy of the original but without the offending security rule that causes public exposure.
+(Available from Cortex XSIAM V3.5).
+New: Trigger - Azure Network Exposure
+Added the Trigger - Azure Network Exposure triggers recommendation that recommends the Azure Network Exposure - Auto-remediate playbook. This playbook remediates Azure VM network exposure by updating the Network Security Group (NSG). It adds a high-priority Deny rule to block public access and an Allow rule to permit internal IP traffic.
+(Available from Cortex XSIAM V3.5).
+New: Trigger - GCP Network Exposure
+Added the Trigger - GCP Network Exposure triggers recommendation that recommends the GCP Network Exposure - Auto-remediate playbook. This playbook remediates the network exposure of GCP resources by adding firewall rules to deny public internet access on specified ports and allow access from internal IPs.
+(Available from Cortex XSIAM V3.5).
+1.5.1 - 7850318 (Mar 23rd 2026 )
+
+Revert to this version
+Documentation and metadata improvements.
+1.5.0 - R7448282 (Mar 5th 2026 )
+
+Revert to this version
+Playbooks
+New: Notify Stakeholders
+This playbook automates notifying stakeholders via Slack v3, Microsoft Teams, or email. You have the flexibility to notify other teams via Slack, Microsoft Teams or Email by configuring the necessary integration. This playbook requires existing integrations with Slack, Microsoft Teams, Mail Sender or Gmail to perform these actions. If none of these integrations are found in your account, the playbook will exit with no action.
+New: AWS Public Access Misconfiguration - Auto-remediate
+Automatically remediates 9 AWS public access misconfigurations: 1 RDS database, 1 EBS snapshot, and 7 S3 bucket issues:
+AWS RDS database instance is publicly accessible
+AWS EBS snapshots are accessible to public
+AWS S3 buckets are accessible to public via ACL
+AWS S3 Buckets Block public access setting disabled
+AWS CloudTrail bucket is publicly accessible
+AWS Connect instance using publicly accessible S3 bucket
+AWS S3 bucket policy overly permissive to any principal
+AWS S3 bucket publicly readable
+AWS S3 bucket publicly writable
+The playbook disables public access by modifying RDS publicly_accessible settings, removing EBS snapshot createVolumePermission, and enabling S3 PublicAccessBlockConfiguration respectively.
+Optional stakeholder notification is available via the “Notify Stakeholders” sub-playbook by setting enableNotifications input to ‘yes’ (default: ‘no’). When enabled, configure at least one recipient (email, Slack channel, or Teams channel) in the Notify Stakeholders playbook inputs. The playbook automatically updates the issue status to “Resolved - Fixed” upon successful remediation.
+New: Azure Public Access Misconfiguration - Auto-remediate
+Automatically remediates 3 Azure public access misconfigurations:
+Azure storage account has a blob container with public access
+Azure VM disk configured with overly permissive network access
+Azure Storage Account default network access is set to ‘Allow’
+The playbook disables public access by setting allowBlobPublicAccess to false, configuring VM disk publicNetworkAccess to Disabled with a DenyAll policy, and updating the storage account default network access action to Deny.
+Optional stakeholder notification is available via the “Notify Stakeholders” sub-playbook by setting enableNotifications input to ‘yes’ (default: ‘no’). When enabled, configure at least one recipient (email, Slack channel, or Teams channel) in the Notify Stakeholders playbook inputs. The playbook automatically updates the issue status to “Resolved - Fixed” upon successful remediation.
+New: GCP Public Access Misconfiguration - Auto-remediate
+Automatically remediates 2 GCP public access misconfigurations:
+GCP Storage buckets are publicly accessible to all users
+GCP Storage buckets are publicly accessible to all authenticated users
+The playbook removes public IAM policy bindings by deleting ‘allUsers’ and ‘allAuthenticatedUsers’ entities from the bucket’s Access Control List respectively.
+Optional stakeholder notification is available via the “Notify Stakeholders” sub-playbook by setting enableNotifications input to ‘yes’ (default: ‘no’). When enabled, configure at least one recipient (email, Slack channel, or Teams channel) in the Notify Stakeholders playbook inputs. The playbook automatically updates the issue status to “Resolved - Fixed” upon successful remediation.
+Triggers Recommendations
+New: Trigger - AWS Public Access Misconfiguration
+New: Added a new trigger recommendation - Trigger - AWS Public Access Misconfiguration. It suggests the AWS Public Access Misconfiguration - Auto-remediate playbook to automatically remediate 9 High Severity Cortex Issues caused by cloud asset misconfigurations that expose AWS RDS database instances, EBS snapshots, or S3 buckets to public access.
+New: Trigger - Azure Public Access Misconfiguration
+New: Added a new trigger recommendation - Trigger - Azure Public Access Misconfiguration that suggests the Azure Public Access Misconfiguration - Auto-remediate playbook to automatically remediate 3 High Severity Cortex Issues caused by cloud asset misconfigurations that lead to exposed Azure Blob containers, default “Allow” access on Storage Accounts, or overly permissive VM disks.
+New: Trigger - GCP Public Access Misconfiguration
+New: Added a new trigger recommendation - Trigger - GCP Public Access Misconfiguration that suggests the GCP Public Access Misconfiguration - Auto-remediate playbook to automatically remediate 2 High Severity Cortex misconfiguration Issues for GCP Storage buckets accessible to allUSers or allAuthenticatedUSers.
+1.0.1 - 5640163 (Oct 29th 2025 )
+
+Revert to this version
+Triggers Recommendations
+Remediation playbook for AWS S3 Bucket Publicly accessible
+Documentation and metadata improvements.
+Remediation playbook for AWS IAM Password Policy Misconfiguration
+Documentation and metadata improvements.
+Remediation playbook for AWS EC2 misconfigurations
+Documentation and metadata improvements.
+1.0.0 - 5103859 (Sep 26th 2025 )
+
+Revert to this version
+This pack provides the remediation playbooks for Cortex Cloud Issues and Cases.
+Cart
+0
+
+Your cart is empty
+Go shopping
