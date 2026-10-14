@@ -1,0 +1,95 @@
+assets	xdm.asset.type.class	xdm.asset.type.category	xdm.asset.type.id	xdm.asset.type.name
+1	Organization	Account	GOOGLE_CLOUD_PROJECT	GCP Project
+4	Management	Audit Logs	GOOGLE_CLOUD_LOGGING_BUCKET_LOG_VIEWS	Google Cloud Logging Bucket Log Views
+6	Data	Backup	GOOGLE_COMPUTE_ENGINE_DISK_SNAPSHOT	Google Compute Engine Disk Snapshot
+7	Compute	CaaS Resource	GOOGLE_CLOUD_RUN_SERVICE	Google Cloud Run Service
+13	Compute	CaaS Resource	GOOGLE_CLOUD_RUN_REVISION	Google Cloud Run Revision
+2	Security Services	Certificate	GOOGLE_COMPUTE_SSL_CERTIFICATE	Google Compute SSL Certificate
+1	External Surface	Certificate	TLS_CERTIFICATE	TLS Certificate
+38	Identity	Cloud Service Account	GOOGLE_CLOUD_IAM_SERVICE_ACCOUNT	Google Cloud IAM Service Account
+1	Security Services	Configuration Management	BINARY_AUTHORIZATION_ATTESTOR	Binary Authorization Attestor
+28	Management	Configuration Management	GCLOUD_CLOUD_TASKS_CMEK_CONFIG	Google Cloud Tasks CMEK Config
+1	Management	Configuration Management	GOOGLE_CLOUD_IAM_AUDIT_CONFIG	Google Cloud IAM Audit Config
+40	Management	Configuration Management	GCLOUD_DATAFORM_CONFIGURATION	Google Cloud Dataform Configuration
+1	Management	Configuration Management	GOOGLE_CLOUD_REMOTE_CONFIG_TEMPLATE	Google Cloud Remote Config Template
+1	Security Services	Configuration Management	GOOGLE_BINARY_AUTHORIZATION_POLICY	Google Binary Authorization Policy
+5	Security Services	Configuration Management	GOOGLE_COMPUTE_ENGINE_INSTANCE_TEMPLATE	Google Compute Engine Instance Template
+43	Management	Configuration Management	GOOGLE_CLOUD_DEPLOY_CONFIGURATION	Google Cloud Deploy Configuration
+167	Management	Configuration Management	CLOUD_COMPOSER_IMAGE_VERSIONS_LIST	Cloud Composer ImageVersions List
+1	Management	Configuration Management	GOOGLE_CLOUD_DEPLOYMENT_MANAGER_DEPLOYMENT_MANIFEST	Google Cloud Deployment Manager Deployment Manifest
+1	Management	Configuration Management	GOOGLE_CLOUD_DEPLOYMENT_MANAGER_DEPLOYMENT	Google Cloud Deployment Manager Deployment
+3	Compute	Container Image	REGISTRY_IMAGE	Registry Image
+40	Compute	Container Image	RUNTIME_IMAGE	Runtime Image
+3	Compute	Container Image Repository	CONTAINER_IMAGE_REPOSITORY	Container Image Repository
+17	Compute	Container Instance	CONTAINER_INSTANCE	Container Instance
+2	Compute	Container Registry	CONTAINER_REGISTRY	Container Registry
+1	Data	Database	MONGODB	MongoDB
+1	Data	Database	MARIADB	MariaDB
+2	Data	Database	MYSQL	MySQL
+25	Data	Disk	GOOGLE_COMPUTE_ENGINE_DISK	Google Compute Engine Disk
+5	External Surface	Domain	SUBDOMAIN	Subdomain
+2	Network	Domain	GOOGLE_CLOUD_DNS_MANAGED_ZONE	Google Cloud DNS Managed Zone
+31	Identity	IAM Policy	GOOGLE_CLOUD_IAM_ROLE	Google Cloud IAM Role
+1	Security Services	Key Management	GOOGLE_CLOUD_KMS_KEY_RING	Google Cloud KMS Key ring
+1	Security Services	Key Management	GOOGLE_CLOUD_KMS_CRYPTO_KEYS	Google Cloud KMS Crypto Keys
+6	Compute	Kubernetes Cluster	GOOGLE_KUBERNETES_ENGINE_CONTAINER_CLUSTER	Google Kubernetes Engine Container Cluster
+4	Network	Load Balancer	COMPUTE_NETWORK_ENDPOINT_GROUP	Compute Network Endpoint Group
+8	Network	Load Balancer	COMPUTE_INSTANCE_GROUP	Compute Instance Group
+3	Network	Load Balancer	GOOGLE_CLOUD_LOAD_BALANCER_REGIONAL_FORWARDING_RULE	Google Cloud Load Balancer Regional Forwarding Rule
+1	Network	Load Balancer	GOOGLE_CLOUD_LOAD_BALANCER_TARGET_POOL	Google Cloud Load Balancer Target Pool
+1	Network	Load Balancer	GOOGLE_CLOUD_LOAD_BALANCER_INTERNAL_BACKEND_SERVICE	Google Cloud Load Balancer Internal Backend Service
+6	Management	Logging And Monitoring	GOOGLE_STACKDRIVER_LOGGING_SINK	Google Stackdriver Logging Sink
+1	Management	Logging And Monitoring	LOGGING_PROJECT_SETTING	Logging Project Setting
+3	Management	Logging And Monitoring	GOOGLE_CLOUD_LOGGING_BUCKETS	Google Cloud Logging Buckets
+308	AI	Model	VERTEX_AI_AIPLATFORM_GARDEN_MODEL	GCP Vertex AI Garden Model
+16	Network	Network Interface	GOOGLE_COMPUTE_ENGINE_NETWORK_INTERFACE	Google Compute Engine Network Interface
+1	Security Services	Network Security	GOOGLE_APP_ENGINE_FIREWALL_RULE	Google App Engine Firewall Rule
+230	Organization	Organizational Policy	GOOGLE_CLOUD_PROJECT_CONSTRAINT	Google Cloud Project Constraint
+110	Other	Other	GOOGLE_COMPUTE_ROUTE	Google Compute Route
+39	Other	Other	GOOGLE_CLOUD_DNS_RESOURCE_RECORD_SET	Google Cloud DNS Resource Record Set
+1	Other	Other	GOOGLE_CLOUD_PROJECT_INFO	Google Cloud Project Info
+4	Other	Other	GOOGLE_CLOUD_NAMESPACE_DETAILS	Google Cloud Namespace Details
+1	Management	Other	GOOGLE_SERVICE_USAGE	Google Service Usage
+108	Identity	Other	GOOGLE_CLOUD_IAM_POLICY	Google Cloud IAM Policy
+1	Other	Other	GOOGLE_CLOUD_WORKLOAD_IDENTITY_POOL	Google Cloud Workload Identity Pool
+722	Other	Other	GCLOUD_DATAFLOW_JOB	GCLOUD Dataflow Job
+2	Other	Other	GOOGLE_PUBSUB_SUBSCRIPTION	Google Pubsub Subscription
+1	Identity	Other	GOOGLE_CLOUD_APP_ENGINE_APPLICATION	Google Cloud App Engine Application
+1	Other	Other	GCLOUD_IDENTITY_AWARE_PROXY_ALL_WEB_SERVICES_SETTINGS	GCLOUD Identity Aware Proxy All Web Services Settings
+1	Other	Other	GCLOUD_VM_MANAGER_FEATURE_SETTINGS	GCLOUD VM Manager Feature Settings
+9	Identity	Other	GOOGLE_PUBSUB_TOPIC	Google Pubsub Topic
+11	Other	Other	GOOGLE_CLOUD_DNS_RESPONSE_POLICY_RULE	Google Cloud DNS Response Policy Rule
+69	Other	Other	GOOGLE_CLOUD_SPANNER_INSTANCE_CONFIG	Google Cloud Spanner Instance Config
+1	Other	Other	GCLOUD_IDENTITY_AWARE_PROXY_COMPUTE_SETTINGS	GCLOUD Identity Aware Proxy Compute Settings
+3	Other	Other	GCLOUD_COMPUTE_HEALTHCHECKS	Google Cloud Compute Health Checks
+90	Other	Other	GOOGLE_IAM_POLICY_RECOMMENDATION	Google IAM Policy Recommendation
+8	Other	Other	GCLOUD_DATAPLEX_ENTRY_GROUP	Google Cloud Dataplex Entry Group
+92	Other	Other	GOOGLE_CLOUD_IAM_MEMBER	Google Cloud IAM Member
+4	Other	Other	GOOGLE_ANTHOS_GKE_FLEET_FEATURE	Google Anthos GKE Fleet Feature
+1	Other	Other	GCLOUD_IDENTITY_AWARE_PROXY_PROJECT_SETTINGS	GCLOUD Identity Aware Proxy Project Settings
+6	Other	Other	GOOGLE_CLOUD_NAMESPACE_SERVICE_DETAILS	Google Cloud Namespace Service Details
+4	Other	Other	GOOGLE_COMPUTE_ADDRESSES	Google Compute Addresses
+330	Other	Other	CLOUD_COMPOSER_IMAGEVERSIONS_LIST	Other
+30	Other	Other	GOOGLE_CLOUD_IAM_SERVICE_ACCOUNT_INSIGHT	Google Cloud IAM Service Account Insight
+2	Other	Other	STORAGE_TRANSFER_AGENT_POOL	Other
+1	Other	Other	GCLOUD_SERVICE_MANAGEMENT_MANAGED_SERVICE	GCLOUD Service Management Managed Service
+38	Identity	Other	SERVICE_ACCOUNT_LAST_AUTHENTICATION	Service Account Last Authentication
+1	Other	Other	GCLOUD_IDENTITY_AWARE_PROXY_FORWARDING_RULE_SETTINGS	GCLOUD Identity Aware Proxy Forwarding Rule Settings
+1	Other	Other	GOOGLE_CLOUD_DNS_PROJECT_INFO	Google Cloud DNS Project Info
+1	Other	Other	GOOGLE_FIRESTORE_NATIVE_DATABASE	Google Firestore Native Database
+1	Management	Other	PROJECT_BILLING_INFO	Project Billing Info
+8	Identity	Policy Scope	POLICY_SCOPE	Policy Scope
+2	Identity	Secret	GCP_SSH_KEY_PAIR	GCP SSH Key Pair
+1	Identity	Secret	GOOGLE_SECRETS_MANAGER_VERSION	Google Secrets Manager Version
+107	Identity	Secret	GOOGLE_CLOUD_IAM_SERVICE_ACCOUNT_KEY	Google Cloud IAM Service Account Key
+1	Security Services	Secret Management	GOOGLE_SECRETS_MANAGER	Google Secrets Manager
+60	Network	Security Group	GOOGLE_VPC_FIREWALL_RULE	Google VPC Firewall Rule
+1	Compute	Serverless Function	GOOGLE_CLOUD_FUNCTION	Google Cloud Function
+10	External Surface	Service	SERVICE	Service
+17	Data	Storage Bucket	GOOGLE_CLOUD_STORAGE_BUCKET	Google Cloud Storage Bucket
+94	Network	Subnet	GOOGLE_VPC_SUBNET	Google VPC Subnet
+15	Security Services	Threat Detection	GOOGLE_CLOUD_PROJECT_IAM_POLICY_LATERAL_MOVEMENT_INSIGHT	Google Cloud Project IAM Policy Lateral Movement Insight
+22	Compute	VM Instance	GOOGLE_COMPUTE_ENGINE_VM_INSTANCE	Google Compute Engine VM Instance
+5	Network	Virtual Network	GOOGLE_VPC_NETWORK	Google VPC Network
+1	Security Services	Vulnerability Management	GOOGLE_WEB_SECURITY_SCANNER_SCAN_CONFIG	Google Web Security Scanner Scan Config
+3	External Surface	Web	WEBSITE	Website
