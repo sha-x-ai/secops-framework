@@ -1,0 +1,12 @@
+src	xdm.asset.name
+0.0.0.0/0	infosec-remediation-block-default
+0.0.0.0/0	allow-flask
+0.0.0.0/0	port5000
+10.0.0.0/8	infosec-remediation-allow-default
+0.0.0.0/0	default-allow-ssh
+0.0.0.0/0	default-allow-rdp
+0.0.0.0/0	fw-secure-deny-all-tstb
+0.0.0.0/0	default-allow-http
+0.0.0.0/0	default-allow-icmp
+0.0.0.0/0	allow-ssh
+0.0.0.0/0	default-allow-https
