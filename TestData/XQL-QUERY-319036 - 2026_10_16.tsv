@@ -1,0 +1,5 @@
+cidr	xdm.asset.name	xdm.asset.type.id
+35.235.240.0/20	infosec-remediation-allow-vpc-cwp-f83f	GOOGLE_VPC_FIREWALL_RULE
+35.235.240.0/20	infosec-remediation-allow-vpc-motionmint-b6t2	GOOGLE_VPC_FIREWALL_RULE
+35.235.240.0/20	fw-secure-iap-ssh-tstb	GOOGLE_VPC_FIREWALL_RULE
+35.235.240.0/20	fw-secure-iap-ssh-b6t2	GOOGLE_VPC_FIREWALL_RULE
