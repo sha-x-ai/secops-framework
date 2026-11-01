@@ -1,0 +1,48 @@
+firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?gsessionid=TQch5oAUJR62FHbWqEnNkcGgIsg_qYQHOUVYCTPetGdjxp4xfyB-hw&VER=8&database=projects%2Fprod-3qvxnk%2Fdatabases%2F(default)&RID=rpc&SID=n32qTaE8idCDXKrEnvKmYQ&AID=159&CI=0&TYPE=xmlhttp&zx=8n7k5pa13siy&t=1:1  Failed to load resource: net::ERR_NETWORK_IO_SUSPENDED
+firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?gsessionid=TQch5oAUJR62FHbWqEnNkcGgIsg_qYQHOUVYCTPetGdjxp4xfyB-hw&VER=8&database=projects%2Fprod-3qvxnk%2Fdatabases%2F(default)&RID=rpc&SID=n32qTaE8idCDXKrEnvKmYQ&AID=161&CI=0&TYPE=xmlhttp&zx=67d0gpmr57na&t=1:1  Failed to load resource: net::ERR_NETWORK_CHANGED
+firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?gsessionid=TQch5oAUJR62FHbWqEnNkcGgIsg_qYQHOUVYCTPetGdjxp4xfyB-hw&VER=8&database=projects%2Fprod-3qvxnk%2Fdatabases%2F(default)&RID=rpc&SID=n32qTaE8idCDXKrEnvKmYQ&AID=161&CI=0&TYPE=xmlhttp&zx=jmgqqyjhuiqy&t=2:1  Failed to load resource: net::ERR_INTERNET_DISCONNECTED
+firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fprod-3qvxnk%2Fdatabases%2F(default)&gsessionid=TQch5oAUJR62FHbWqEnNkcGgIsg_qYQHOUVYCTPetGdjxp4xfyB-hw&SID=n32qTaE8idCDXKrEnvKmYQ&RID=50092&TYPE=terminate&zx=5e9g18sgnyr:1  Failed to load resource: net::ERR_INTERNET_DISCONNECTED
+firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fprod-3qvxnk%2Fdatabases%2F(default)&RID=11495&CVER=22&X-HTTP-Session-Id=gsessionid&zx=btrj1oo53j75&t=1:1  Failed to load resource: net::ERR_INTERNET_DISCONNECTED
+vendor-RV9HBdxz.js:265 [2026-11-01T15:47:03.437Z]  @firebase/firestore: Firestore (12.19.0): WebChannelConnection RPC 'Listen' stream 0x5fa6307f transport errored. Name: undefined Message: undefined
+xL @ vendor-RV9HBdxz.js:265
+Loading the image '<URL>' violates the following Content Security Policy directive: "img-src 'self' data:". The action has been blocked.
+Loading the image '<URL>' violates the following Content Security Policy directive: "img-src 'self' data:". The action has been blocked.
+Loading the image '<URL>' violates the following Content Security Policy directive: "img-src 'self' data:". The action has been blocked.
+Loading the image '<URL>' violates the following Content Security Policy directive: "img-src 'self' data:". The action has been blocked.
+Loading the image '<URL>' violates the following Content Security Policy directive: "img-src 'self' data:". The action has been blocked.
+Loading the image '<URL>' violates the following Content Security Policy directive: "img-src 'self' data:". The action has been blocked.
+Loading the image '<URL>' violates the following Content Security Policy directive: "img-src 'self' data:". The action has been blocked.
+Loading the image '<URL>' violates the following Content Security Policy directive: "img-src 'self' data:". The action has been blocked.
+Loading the image '<URL>' violates the following Content Security Policy directive: "img-src 'self' data:". The action has been blocked.
+Loading the image '<URL>' violates the following Content Security Policy directive: "img-src 'self' data:". The action has been blocked.
+firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fprod-3qvxnk%2Fdatabases%2F(default)&RID=34464&CVER=22&X-HTTP-Session-Id=gsessionid&zx=1kcl02fyhoxx&t=1:1  Failed to load resource: net::ERR_INTERNET_DISCONNECTED
+vendor-RV9HBdxz.js:265 [2026-11-01T15:47:03.445Z]  @firebase/firestore: Firestore (12.19.0): WebChannelConnection RPC 'Listen' stream 0x5fa63080 transport errored. Name: undefined Message: undefined
+xL @ vendor-RV9HBdxz.js:265
+firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fprod-3qvxnk%2Fdatabases%2F(default)&RID=92808&CVER=22&X-HTTP-Session-Id=gsessionid&zx=bgwl0vwem7rl&t=1:1  Failed to load resource: net::ERR_INTERNET_DISCONNECTED
+vendor-RV9HBdxz.js:265 [2026-11-01T15:47:05.038Z]  @firebase/firestore: Firestore (12.19.0): WebChannelConnection RPC 'Listen' stream 0x5fa63081 transport errored. Name: undefined Message: undefined
+xL @ vendor-RV9HBdxz.js:265
+firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fprod-3qvxnk%2Fdatabases%2F(default)&RID=29828&CVER=22&X-HTTP-Session-Id=gsessionid&zx=64ns9d1rq0qp&t=1:1  Failed to load resource: net::ERR_INTERNET_DISCONNECTED
+vendor-RV9HBdxz.js:265 [2026-11-01T15:47:08.035Z]  @firebase/firestore: Firestore (12.19.0): WebChannelConnection RPC 'Listen' stream 0x5fa63082 transport errored. Name: undefined Message: undefined
+xL @ vendor-RV9HBdxz.js:265
+firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fprod-3qvxnk%2Fdatabases%2F(default)&RID=76052&CVER=22&X-HTTP-Session-Id=gsessionid&zx=hbckl0gtj6aj&t=1:1  Failed to load resource: net::ERR_INTERNET_DISCONNECTED
+vendor-RV9HBdxz.js:265 [2026-11-01T15:47:10.034Z]  @firebase/firestore: Firestore (12.19.0): WebChannelConnection RPC 'Listen' stream 0x5fa63083 transport errored. Name: undefined Message: undefined
+xL @ vendor-RV9HBdxz.js:265
+firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fprod-3qvxnk%2Fdatabases%2F(default)&RID=63419&CVER=22&X-HTTP-Session-Id=gsessionid&zx=5jqtarhjgh1d&t=1:1  Failed to load resource: net::ERR_INTERNET_DISCONNECTED
+vendor-RV9HBdxz.js:265 [2026-11-01T15:47:13.031Z]  @firebase/firestore: Firestore (12.19.0): WebChannelConnection RPC 'Listen' stream 0x5fa63084 transport errored. Name: undefined Message: undefined
+xL @ vendor-RV9HBdxz.js:265
+firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fprod-3qvxnk%2Fdatabases%2F(default)&RID=35190&CVER=22&X-HTTP-Session-Id=gsessionid&zx=avbdb477y5lo&t=1:1  Failed to load resource: net::ERR_INTERNET_DISCONNECTED
+vendor-RV9HBdxz.js:265 [2026-11-01T15:47:18.033Z]  @firebase/firestore: Firestore (12.19.0): WebChannelConnection RPC 'Listen' stream 0x5fa63085 transport errored. Name: undefined Message: undefined
+xL @ vendor-RV9HBdxz.js:265
+firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fprod-3qvxnk%2Fdatabases%2F(default)&RID=75026&CVER=22&X-HTTP-Session-Id=gsessionid&zx=flszjul48hs8&t=1:1  Failed to load resource: net::ERR_INTERNET_DISCONNECTED
+vendor-RV9HBdxz.js:265 [2026-11-01T15:47:23.032Z]  @firebase/firestore: Firestore (12.19.0): WebChannelConnection RPC 'Listen' stream 0x5fa63086 transport errored. Name: undefined Message: undefined
+xL @ vendor-RV9HBdxz.js:265
+firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fprod-3qvxnk%2Fdatabases%2F(default)&RID=74303&CVER=22&X-HTTP-Session-Id=gsessionid&zx=z2vmejmfet6n&t=1:1  Failed to load resource: net::ERR_INTERNET_DISCONNECTED
+vendor-RV9HBdxz.js:265 [2026-11-01T15:47:34.033Z]  @firebase/firestore: Firestore (12.19.0): WebChannelConnection RPC 'Listen' stream 0x5fa63087 transport errored. Name: undefined Message: undefined
+xL @ vendor-RV9HBdxz.js:265
+firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fprod-3qvxnk%2Fdatabases%2F(default)&RID=5496&CVER=22&X-HTTP-Session-Id=gsessionid&zx=i5thlm6zdxun&t=1:1  Failed to load resource: net::ERR_INTERNET_DISCONNECTED
+vendor-RV9HBdxz.js:265 [2026-11-01T15:59:50.313Z]  @firebase/firestore: Firestore (12.19.0): WebChannelConnection RPC 'Listen' stream 0x5fa63088 transport errored. Name: undefined Message: undefined
+xL @ vendor-RV9HBdxz.js:265
+firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?gsessionid=UGLBgdnV_2qyh7Tl5hNUcTzSVOekKABZIFi3iN9iyIuwx0vejdyX1A&VER=8&database=projects%2Fprod-3qvxnk%2Fdatabases%2F(default)&RID=rpc&SID=-8iv8CwpGaCNGKFSMrFfIg&AID=0&CI=0&TYPE=xmlhttp&zx=s6tcmm90g7tq&t=1:1  Failed to load resource: net::ERR_NETWORK_CHANGED
+firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?gsessionid=UGLBgdnV_2qyh7Tl5hNUcTzSVOekKABZIFi3iN9iyIuwx0vejdyX1A&VER=8&database=projects%2Fprod-3qvxnk%2Fdatabases%2F(default)&RID=rpc&SID=-8iv8CwpGaCNGKFSMrFfIg&AID=89&CI=0&TYPE=xmlhttp&zx=g4i5k6ihc4ab&t=1:1  Failed to load resource: the server responded with a status of 400 ()
+vendor-RV9HBdxz.js:265 [2026-11-01T16:03:24.780Z]  @firebase/firestore: Firestore (12.19.0): WebChannelConnection RPC 'Listen' stream 0x5fa63089 transport errored. Name: undefined Message: undefined
+xL @ vendor-RV9HBdxz.js:265
