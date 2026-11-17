@@ -1,0 +1,48 @@
+Rank,Technology,Policy ID,Policy Name,ID,RQL,XQL Verified
+6,Azure Key Vault,keyvault_019,Key Vault Public Network Access is enabled (R_2.9),Manulife Policy - r - keyvault_019 - Key Vault Public Network Access is enabled (R_2.9),config from cloud.resource where cloud.type = 'azure' AND api.name = 'azure-key-vault-list' AND json.rule = (properties.publicNetworkAccess does not equal ignore case disabled and properties.networkAcls does not exist) or (properties.publicNetworkAccess does not equal ignore case disabled and properties.networkAcls.defaultAction equal ignore case allow ),"dataset = asset_inventory
+ | filter xdm.asset.provider = ""AZURE"" and xdm.asset.type.id = ""AZURE_KEY_VAULT""
+ | alter
+  public_access  = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.properties.publicNetworkAccess""),
+  network_acls = json_extract(xdm.asset.raw_fields, ""$.Platform Discovery.properties.networkAcls""),
+  default_action = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.properties.networkAcls.defaultAction"")
+ | filter lowercase(public_access) != ""disabled""
+  and (network_acls = null or lowercase(default_action) = ""allow"")
+ | fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id"
+7,Azure Key Vault,keyvault_021,Azure Key vault Private endpoint connection is not configured (R_2.10),Manulife Policy - r - keyvault_021 - Azure Key vault Private endpoint connection is not configured (R_2.10),config from cloud.resource where cloud.type = 'azure' AND api.name = 'azure-key-vault-list' AND json.rule = properties.provisioningState equals Succeeded and properties.privateEndpointConnections[*] does not exist,"dataset = asset_inventory
+| filter xdm.asset.type.id = ""AZURE_KEY_VAULT""
+| alter
+ properties_provisioningstate = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.properties.provisioningState""),
+ properties_privateendpointconne = json_extract_scalar_array(xdm.asset.raw_fields, ""$.Platform Discovery.properties.privateEndpointConnections"")
+| filter properties_provisioningstate = ""Succeeded"" and (properties_privateendpointconne = null or array_length(properties_privateendpointconne) = 0)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id"
+8,Azure Web App,appserv_031,Azure App Service Web App configured with public network access (R_1.5),Manulife Policy - r - appserv_031 - Azure App Service Web App configured with public network access (R_1.5),config from cloud.resource where cloud.type = 'azure' AND api.name = 'azure-app-service' AND json.rule = '(kind starts with app or kind equals api or kind equals mobileapp ) and properties.state equal ignore case running and properties.publicNetworkAccess does not equal ignore case Disabled',"dataset = asset_inventory
+ | filter xdm.asset.provider = ""AZURE"" and xdm.asset.type.id = ""AZURE_APP_SERVICE""
+ | alter
+  kind = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.kind""),
+  properties_state = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.properties.state""),
+  properties_publicNetworkAccess = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.properties.publicNetworkAccess"")
+ | filter (kind ~= ""^app"" or kind = ""api"" or kind = ""mobileapp"") and lowercase(properties_state) = ""running"" and lowercase(properties_publicNetworkAccess) != ""disabled""
+ | fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id"
+9,Azure Automation Accounts,autoacc_001,Azure Automation Accounts has Public Network Access Enabled (R_2.6),Manulife Policy - r - autoacc_001 - Azure Automation Accounts has Public Network Access Enabled (R_2.6),"config from cloud.resource where api.name = 'azure-automation-account' AND json.rule = properties.publicNetworkAccess does not equal ignore case ""false""","dataset = asset_inventory
+ | filter xdm.asset.provider = ""AZURE"" and xdm.asset.type.id = ""AZURE_AUTOMATION_ACCOUNT""
+ | alter properties_publicNetworkAccess = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.properties.publicNetworkAccess"")
+ | filter lowercase(properties_publicNetworkAccess) != ""false""
+ | fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id"
+10,Azure Event Hub,ehub_003,Public Network Access is Enabled for Azure Even Hub Namespace  (R_2.5),Manulife Policy - r - ehub_003 - Public Network Access is Enabled for Azure Even Hub Namespace (R_2.5),"config from cloud.resource where cloud.type = 'azure' AND api.name = 'azure-event-hub-namespace' AND json.rule = (properties.publicNetworkAccess equal ignore case ""enabled"" and networkRuleSet.properties.defaultAction equal ignore case ""allow"") or (properties.publicNetworkAccess equal ignore case ""enabled"" and networkRuleSet.properties.ipRules[*] size does not equal 0 and networkRuleSet.properties.defaultAction equal ignore case ""deny"")","dataset = asset_inventory
+ | filter xdm.asset.provider = ""AZURE"" and xdm.asset.type.id = ""AZURE_EVENT_HUB_NAMESPACE""
+ | alter
+  properties_publicNetworkAccess = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.properties.publicNetworkAccess""),
+  networkRul_properties_defaultAction = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.networkRuleSet.properties.defaultAction""),
+  networkRul_properties_ipRules = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.networkRuleSet.properties.ipRules"")
+ | filter ((lowercase(properties_publicNetworkAccess) = ""enabled"" and lowercase(networkRul_properties_defaultAction) = ""allow"") or (lowercase(properties_publicNetworkAccess) = ""enabled"" and array_length(networkRul_properties_ipRules) != 0 and lowercase(networkRul_properties_defaultAction) = ""deny""))
+ | fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id"
+11,Azure Event Hub,ehub_001,Private Endpoint is not configured for Azure Event Hub (R_2.5),Manulife Policy - r - ehub_001 - Private Endpoint is not configured for Azure Event Hub (R_2.5),config from cloud.resource where cloud.type = 'azure' AND api.name = 'azure-event-hub-namespace' as X; config from cloud.resource where api.name = 'azure-event-hub-namespace-private-endpoint-connections' as Y; filter 'not($.Y.id contains $.X.name)'; show X;,"dataset = asset_inventory
+| filter xdm.asset.type.id = ""AZURE_EVENT_HUB_NAMESPACE""
+| alter _pk_name_val = lowercase(json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.name""))
+| filter _pk_name_val not in (
+ dataset = asset_inventory
+ | filter xdm.asset.type.id = ""AZURE_EVENT_HUB_NAMESPACE_PRIVATE_ENDPOINT_CONNECTIONS""
+ | alter _sk_id = lowercase(xdm.asset.external_provider_id)
+ | fields _sk_id
+)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id"

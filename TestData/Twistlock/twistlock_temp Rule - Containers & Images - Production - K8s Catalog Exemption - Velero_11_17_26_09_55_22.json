@@ -1,0 +1,331 @@
+{
+  "modified": "2026-06-19T13:17:18.656Z",
+  "owner": "alaghme@mfcgd.com",
+  "name": "Manulife Rule - Containers & Images - Production - K8s Catalog Exemption - Velero",
+  "previousName": "",
+  "notes": "RITM08611331 - K8s Catalog toolset exemption - Velero",
+  "effect": "alert",
+  "collections": [
+    {
+      "hosts": [
+        "*"
+      ],
+      "images": [
+        "cdncloudsandbox.azurecr.io/velero/velero:v1.13.1"
+      ],
+      "labels": [
+        "*"
+      ],
+      "containers": [
+        "*"
+      ],
+      "functions": [
+        "*"
+      ],
+      "namespaces": [
+        "observability"
+      ],
+      "appIDs": [
+        "*"
+      ],
+      "accountIDs": [
+        "*"
+      ],
+      "clusters": [
+        "*"
+      ],
+      "name": "K8s Catalog THR exemption - Velero",
+      "owner": "alaghme@mfcgd.com",
+      "modified": "2025-10-16T17:16:46.59Z",
+      "color": "#ED8B68",
+      "description": "RITM08611331 - K8s Catalog toolset exemption - Velero",
+      "system": false,
+      "prisma": false
+    }
+  ],
+  "action": [
+    "*"
+  ],
+  "condition": {
+    "readonly": false,
+    "device": "",
+    "vulnerabilities": [
+      {
+        "id": 406,
+        "block": false
+      },
+      {
+        "id": 408,
+        "block": false
+      },
+      {
+        "id": 41,
+        "block": false
+      },
+      {
+        "id": 422,
+        "block": false
+      },
+      {
+        "id": 424,
+        "block": false
+      },
+      {
+        "id": 425,
+        "block": false
+      },
+      {
+        "id": 426,
+        "block": false
+      },
+      {
+        "id": 427,
+        "block": false
+      },
+      {
+        "id": 448,
+        "block": false
+      },
+      {
+        "id": 450,
+        "block": false
+      },
+      {
+        "id": 451,
+        "block": false
+      },
+      {
+        "id": 452,
+        "block": false
+      },
+      {
+        "id": 455,
+        "block": false
+      },
+      {
+        "id": 5041,
+        "block": false
+      },
+      {
+        "id": 5048,
+        "block": false
+      },
+      {
+        "id": 5051,
+        "block": false
+      },
+      {
+        "id": 5052,
+        "block": false
+      },
+      {
+        "id": 5054,
+        "block": false
+      },
+      {
+        "id": 5055,
+        "block": false
+      },
+      {
+        "id": 5056,
+        "block": false
+      },
+      {
+        "id": 5059,
+        "block": false
+      },
+      {
+        "id": 510,
+        "block": false
+      },
+      {
+        "id": 51,
+        "block": false
+      },
+      {
+        "id": 511,
+        "block": false
+      },
+      {
+        "id": 512,
+        "block": false
+      },
+      {
+        "id": 513,
+        "block": false
+      },
+      {
+        "id": 514,
+        "block": false
+      },
+      {
+        "id": 515,
+        "block": false
+      },
+      {
+        "id": 516,
+        "block": false
+      },
+      {
+        "id": 517,
+        "block": false
+      },
+      {
+        "id": 518,
+        "block": false
+      },
+      {
+        "id": 519,
+        "block": false
+      },
+      {
+        "id": 52,
+        "block": false
+      },
+      {
+        "id": 520,
+        "block": false
+      },
+      {
+        "id": 521,
+        "block": false
+      },
+      {
+        "id": 524,
+        "block": false
+      },
+      {
+        "id": 525,
+        "block": false
+      },
+      {
+        "id": 526,
+        "block": false
+      },
+      {
+        "id": 528,
+        "block": false
+      },
+      {
+        "id": 53,
+        "block": false
+      },
+      {
+        "id": 530,
+        "block": false
+      },
+      {
+        "id": 531,
+        "block": false
+      },
+      {
+        "id": 54,
+        "block": false
+      },
+      {
+        "id": 55,
+        "block": false
+      },
+      {
+        "id": 5510,
+        "block": false
+      },
+      {
+        "id": 5511,
+        "block": false
+      },
+      {
+        "id": 5512,
+        "block": false
+      },
+      {
+        "id": 5515,
+        "block": false
+      },
+      {
+        "id": 5516,
+        "block": false
+      },
+      {
+        "id": 5519,
+        "block": false
+      },
+      {
+        "id": 5520,
+        "block": false
+      },
+      {
+        "id": 5521,
+        "block": false
+      },
+      {
+        "id": 5524,
+        "block": false
+      },
+      {
+        "id": 5525,
+        "block": false
+      },
+      {
+        "id": 5531,
+        "block": false
+      },
+      {
+        "id": 56,
+        "block": false
+      },
+      {
+        "id": 57,
+        "block": false
+      },
+      {
+        "id": 58,
+        "block": false
+      },
+      {
+        "id": 59,
+        "block": false
+      },
+      {
+        "id": 596,
+        "block": false
+      },
+      {
+        "id": 597,
+        "block": false
+      },
+      {
+        "id": 598,
+        "block": false
+      }
+    ]
+  },
+  "group": [
+    "*"
+  ],
+  "verbose": true,
+  "allCompliance": true,
+  "alertThreshold": {
+    "disabled": false,
+    "value": 0
+  },
+  "blockThreshold": {
+    "enabled": false,
+    "value": 0
+  },
+  "graceDays": 0,
+  "graceDaysPolicy": {},
+  "license": {
+    "alertThreshold": {
+      "enabled": false,
+      "value": 0
+    },
+    "blockThreshold": {
+      "enabled": false,
+      "value": 0
+    }
+  },
+  "policyType": "containerCompliance",
+  "exportTime": "11_17_26_09_55_22",
+  "exportBy": "tanjoht@mfcgd.com"
+}
