@@ -1,0 +1,936 @@
+"Rule Name","Rule Id","Prisma Id","RQL","XQL","Final_Status","Prisma Asset Total","Cortex Asset Total","XQL count","RQL Count","Diff Percentage"
+"Amazon Aurora DB clusters must be protected by a backup plan","d9648eab-a683-4ace-866a-d52fa2cf2ffa","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-rds-db-cluster' AND json.rule = engine contains ""aurora"" and backupRetentionPeriod greater than 8","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""RDS_DATABASE_CLUSTER""
+| alter Engine = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.Engine"")
+| alter backupRetentionPeriod = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.BackupRetentionPeriod"")
+| filter Engine contains ""aurora"" and to_float(backupRetentionPeriod) > 8
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","82","61","","",""
+"Backup vaults must have an attached resource-based policy that prevents deletion of recovery points","a9df8018-30ed-4327-aa42-397d56fc5135","925489529090471936","config from cloud.resource where api.name = 'aws-backup-vault-access-policy' AND json.rule = ((backupVaultAccessPolicy.Statement exists) and (backupVaultAccessPolicy.Statement[?any((Effect equals Deny) and ((Principal equals ""*"") or (Principal.AWS equals ""*"")) and (Resource equals ""*"" or Resource ends with ""/*"") and (Action equals ""*"" or Action[*] equals ""backup:DeleteRecoveryPoint"") )] does not exist))","config case_sensitive = false
+| dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AWS_BACKUP_VAULT_ACCESS""
+| alter Statement_array = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.backupVaultAccessPolicy.Statement"")
+| alter Statement_obj = json_extract(xdm.asset.raw_fields, ""$.Platform Discovery.backupVaultAccessPolicy.Statement"")
+| alter Statement = if(Statement_array != null, Statement_array, if(Statement_obj != null, arraycreate(Statement_obj)))
+| alter backupVaultAccessPolicy_Statement_arr = Statement,
+  backupVaultAccessPolicy_Statement_obj = json_extract(xdm.asset.raw_fields, ""$.Platform Discovery.backupVaultAccessPolicy.Statement"")
+| alter backupVaultAccessPolicy_Statement = if(backupVaultAccessPolicy_Statement_arr != null, backupVaultAccessPolicy_Statement_arr, if(backupVaultAccessPolicy_Statement_obj != null, arraycreate(backupVaultAccessPolicy_Statement_obj)))
+| filter (backupVaultAccessPolicy_Statement != null) and (backupVaultAccessPolicy_Statement = null or not array_any(backupVaultAccessPolicy_Statement, to_string(json_extract_scalar(""@element"", ""$.Effect"")) = ""Deny"" and ((json_extract_scalar(""@element"", ""$.Principal"") ~= ""^[*]$"" or to_string(json_extract_array(""@element"", ""$.Principal"")) ~= ""\""[*]\"""") or (to_string(json_extract_scalar(""@element"", ""$.Principal.AWS"")) ~= ""^[*]$"" or to_string(json_extract_array(""@element"", ""$.Principal.AWS"")) ~= ""\""[*]\"""")) and ((to_string(json_extract_scalar(""@element"", ""$.Resource"")) ~= ""^[*]$"" or to_string(json_extract_array(""@element"", ""$.Resource"")) ~= ""\""[*]\"""") or to_string(json_extract_scalar(""@element"", ""$.Resource"")) ~= "".*/\*$"") and ((to_string(json_extract_scalar(""@element"", ""$.Action"")) ~= ""^[*]$"" or to_string(json_extract_array(""@element"", ""$.Action"")) ~= ""\""[*]\"""") or (to_string(json_extract_array(""@element"", ""$.Action"")) contains ""\""backup:DeleteRecoveryPoint\""""))))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","77","62","","",""
+"AWS access keys are not rotated for 180 days","c049ce8b-61f6-41a8-94db-1fc1568afb4e","925489529090471936","config from cloud.resource where cloud.type = 'aws' and api.name = 'aws-iam-get-credential-report' AND json.rule = (access_key_1_active is true and access_key_1_last_rotated does not equal N/A and _DateTime.ageInDays(access_key_1_last_rotated) > 180) or (access_key_2_active is true and access_key_2_last_rotated does not equal N/A and _DateTime.ageInDays(access_key_2_last_rotated) > 180)","config case_sensitive = false
+| dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AWS_IAM_CREDENTIAL_REPORT""
+| alter access_key_1_last_rotatedStr = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.access_key_1_last_rotated"")
+| alter access_key_1_last_rotatedTs = parse_timestamp(""%Y-%m-%dT%H:%M:%E*SZ"", access_key_1_last_rotatedStr)
+| alter access_key_2_last_rotatedStr = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.access_key_2_last_rotated"")
+| alter access_key_2_last_rotatedTs = parse_timestamp(""%Y-%m-%dT%H:%M:%E*SZ"", access_key_2_last_rotatedStr)
+| alter access_key_1_active = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.access_key_1_active"")
+| alter access_key_2_active = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.access_key_2_active"")
+| filter (access_key_1_active = ""true"" and (access_key_1_last_rotatedStr = null or access_key_1_last_rotatedStr != ""N/A"") and timestamp_diff(current_time(), access_key_1_last_rotatedTs, ""DAY"") > 180) or (access_key_2_active = ""true"" and (access_key_2_last_rotatedStr = null or access_key_2_last_rotatedStr != ""N/A"") and timestamp_diff(current_time(), access_key_2_last_rotatedTs, ""DAY"") > 180)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","500","375","","",""
+"AWS ECR image scan on push is not enabled","d517aafc-e70f-486b-adf6-0c90bb8a8ac0","925489529090471936","config from cloud.resource where cloud.type = 'aws' and api.name = 'aws-ecr-registry-scanning-configuration' AND json.rule = scanningConfiguration.scanType contains ""true""","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""ECR_REGISTRY_SCANNING_CONFIGURATION""
+| alter scanType = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.scanningConfiguration.scanType"")
+| filter scanType contains ""true""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","498","448","","",""
+"Amazon Aurora Cluster does not require secure transport","be9d416b-33e8-4c26-a2b7-5d77a97424a8","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-rds-db-cluster' as X; config from cloud.resource where api.name = 'aws-rds-db-cluster-parameter-group' AND json.rule = parameters.require_secure_transport.ParameterValue does not exist or parameters.require_secure_transport.ParameterValue equals OFF as Y; filter '$.X.dBclusterParameterGroupArn equals $.Y.DBClusterParameterGroupArn'; show X;","config case_sensitive = false
+| dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""RDS_DATABASE_CLUSTER""
+| alter dBclusterParameterGroupArn = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.DBClusterParameterGroupArn"")
+| filter dBclusterParameterGroupArn != null
+| join conflict_strategy = both type = inner (
+    dataset = asset_inventory
+    | filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""RDS_DB_CLUSTER_PARAMETER_GROUP""
+    | alter ParameterValue = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.Parameters.require_secure_transport.ParameterValue"")
+    | filter ParameterValue = null or ParameterValue = ""OFF""
+    | alter DBClusterParameterGroupArn = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.DBClusterParameterGroupArn"")
+    | filter DBClusterParameterGroupArn != null
+    | fields xdm.asset.realm, DBClusterParameterGroupArn
+  ) as Y xdm.asset.realm = Y.xdm.asset.realm and dBclusterParameterGroupArn = Y.DBClusterParameterGroupArn
+| dedup xdm.asset.id
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","320","239","","",""
+"Azure Network Security Groups must not allow traffic from all addresses over any protocol except ICMP, HTTPS","c9ecfcf6-e8d7-454f-a238-4506e46ce03f","925489529090471936","config from cloud.resource where cloud.type = 'azure' AND api.name= 'azure-network-nsg-list' AND json.rule = securityRules[?any((sourceAddressPrefix equals Internet or sourceAddressPrefix equals * or sourceAddressPrefix equals 0.0.0.0/0 or sourceAddressPrefix equals ::/0) and (protocol equals ICMP or (protocol equals TCP and destinationPortRange contains 443)) and access equals Allow and direction equals Inbound)] exists","config case_sensitive = false
+| dataset = asset_inventory
+| filter xdm.asset.provider = ""AZURE"" and xdm.asset.type.id = ""AZURE_SECURITY_GROUP""
+| alter properties_securityRules = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.properties.securityRules"")
+| filter array_any(properties_securityRules, (to_string(json_extract_scalar(""@element"", ""$.properties.sourceAddressPrefix"")) = ""Internet"" or to_string(json_extract_scalar(""@element"", ""$.properties.sourceAddressPrefix"")) ~= ""^[*]$"" or to_string(json_extract_scalar(""@element"", ""$.properties.sourceAddressPrefix"")) = ""0.0.0.0/0"" or to_string(json_extract_scalar(""@element"", ""$.properties.sourceAddressPrefix"")) = ""::/0"") and (to_string(json_extract_scalar(""@element"", ""$.properties.protocol"")) = ""ICMP"" or (to_string(json_extract_scalar(""@element"", ""$.properties.protocol"")) = ""TCP"" and (json_extract_scalar(""@element"", ""$.properties.destinationPortRange"") contains ""443"" or to_string(json_extract_array(""@element"", ""$.properties.destinationPortRange"")) contains ""443""))) and to_string(json_extract_scalar(""@element"", ""$.properties.access"")) = ""Allow"" and to_string(json_extract_scalar(""@element"", ""$.properties.direction"")) = ""Inbound"")
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Mismatched","6","6","6","0",""
+"OCI Users with active auth tokens older than 180 days","a757b756-cc3e-4899-93a4-955c16fe0a39","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-iam-user' AND json.rule = authTokens[?any(lifecycleState equals ACTIVE and (_DateTime.ageInDays(timeCreated) > 180))] exists","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_USER""
+| alter authTokens = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.authTokens"")
+| filter array_any(authTokens, to_string(json_extract_scalar(""@element"", ""$.lifecycleState"")) = ""ACTIVE"" and timestamp_diff(current_time(), parse_timestamp(""%Y-%m-%dT%H:%M:%E*SZ"", json_extract_scalar(""@element"", ""$.timeCreated"")), ""DAY"") > 180)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","870","445","","",""
+"OpenSearch domains must have the latest software update installed-Updated","b87e9262-c8f1-45e2-9cc1-52693b71b424","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-es-describe-elasticsearch-domain' AND json.rule = elasticsearchVersion starts with OpenSearch and serviceSoftwareOptions.updateAvailable exists and serviceSoftwareOptions.updateAvailable is true","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AMAZON_ELASTICSEARCH_DOMAIN""
+| alter UpdateAvailable = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.ServiceSoftwareOptions.UpdateAvailable"")
+| alter elasticsearchVersion = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.elasticsearchVersion"")
+| filter elasticsearchVersion ~= ""^OpenSearch.*"" and UpdateAvailable != null and UpdateAvailable = ""true""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","31","21","","",""
+"Connections to OpenSearch domains must be encrypted using the latest TLS security policy","4082bb3c-93e0-4bd6-897f-2c73a5c0b651","925489529090471936","config from cloud.resource where api.name = 'aws-es-describe-elasticsearch-domain' AND json.rule = elasticsearchVersion starts with OpenSearch and (domainEndpointOptions.enforceHTTPS is false OR domainEndpointOptions.tlssecurityPolicy does not contain ""1-2"")","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AMAZON_ELASTICSEARCH_DOMAIN""
+| alter EnforceHTTPS = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.DomainEndpointOptions.EnforceHTTPS"")
+| alter tlssecurityPolicy = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.DomainEndpointOptions.TLSSecurityPolicy"")
+| alter elasticsearchVersion = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.elasticsearchVersion"")
+| filter ( (tlssecurityPolicy = null or tlssecurityPolicy not contains ""1-2"") or (lowercase(EnforceHTTPS) = ""false"" or EnforceHTTPS = null) ) and elasticsearchVersion ~= ""^OpenSearch.*""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","31","21","","",""
+"AWS MSK cluster must have encryption-in-transit enabled","5563bc54-422f-4e1e-8666-c1b6692a8475","925489529090471936","config from cloud.resource where api.name = 'aws-msk-cluster' AND json.rule = encryptionInfo.encryptionInTransit.clientBroker equals ""TLS"" or encryptionInfo.encryptionInTransit.inCluster is false","config case_sensitive = false
+| dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AMAZON_MSK_CLUSTER""
+| alter inCluster = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.encryptionInfo.encryptionInTransit.inCluster"")
+| alter clientBroker = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.encryptionInfo.encryptionInTransit.clientBroker"")
+| filter clientBroker = ""TLS"" or (lowercase(inCluster) = ""false"" or inCluster = null)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Matched Adjusted","8","6","6","8","25.00"
+"Diagnostic Setting must be turned on for Subscription Activity Logs","4ed18337-30a1-4336-bb15-a0906df092e8","925489529090471936","config from cloud.resource where api.name = 'azure-monitor-log-profiles-list' and json.rule = properties.logs[?all( enabled equals ""true"" )] exists as X; config from cloud.resource where api.name = 'azure-subscription-list' as Y; filter '($.X.id does not contain $.Y.subscriptionId)'; show Y;","dataset = asset_inventory
+| filter xdm.asset.provider = ""AZURE"" and xdm.asset.type.id = ""AZURE_SUBSCRIPTIONS""
+| alter subscriptionId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.subscriptionId"")
+| join conflict_strategy = both type = inner (
+    dataset = asset_inventory
+    | filter xdm.asset.provider = ""AZURE"" and xdm.asset.type.id = ""AZURE_LOG_PROFILE""
+    | alter logs = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.properties.logs"")
+    | filter array_all(logs, to_string(json_extract_scalar(""@element"", ""$.enabled"")) = ""true"")
+    | alter id = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.id"")
+    | filter id != null
+    | fields xdm.asset.realm, id
+  ) as X xdm.asset.realm = X.xdm.asset.realm
+| filter id not contains subscriptionId
+| dedup xdm.asset.id
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","4","5","","",""
+"EC2 instances must not have a public IP address","7593246e-04b5-40cb-bd44-49c4737a1051","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-ec2-describe-instances' AND json.rule = networkInterfaces[*].association.publicIp exists","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""EC2_INSTANCE""
+| alter networkInterfaces = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.networkInterfaces"")
+| filter array_any(networkInterfaces, json_extract_scalar(""@element"", ""$.association.publicIp"") != null)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","613","532","","",""
+"OCI tenancy administrator users are associated with API keys_RL","1ae64348-4e3d-49c9-a008-ab21b74e29a1","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-iam-group' as X; config from cloud.resource where api.name = 'oci-iam-user' as Y; filter '($.X.name equals Administrators) and ($.X.groupMembers[*].userId contains $.Y.id) and ($.Y.apiKeys[*] size greater than 0)';show Y;","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_USER""
+| alter id = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.id"")
+| alter keys_apiKeys = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.keys.apiKeys"")
+| join conflict_strategy = both type = inner (
+    dataset = asset_inventory
+    | filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_GROUP""
+    | alter groupMembers_userId = arraymap(json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.groupMembers""), json_extract_scalar(""@element"", ""$.userId""))
+    | filter groupMembers_userId != null
+    | alter name = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.name"")
+    | filter name != null
+    | filter name = ""Administrators""
+    | arrayexpand groupMembers_userId
+    | fields xdm.asset.realm, groupMembers_userId, name
+  ) as X xdm.asset.realm = X.xdm.asset.realm
+| filter groupMembers_userId = id
+| dedup xdm.asset.id
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","1018","581","","",""
+"OpenSearch domains must have encryption at rest enabled","e0ee9f83-5f8b-4f2b-ae3a-86cb1748916d","925489529090471936","config from cloud.resource where api.name = 'aws-es-describe-elasticsearch-domain' AND json.rule = elasticsearchVersion starts with OpenSearch and encryptionAtRestOptions.enabled is false","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AMAZON_ELASTICSEARCH_DOMAIN""
+| alter EncryptionAtRestOptions_enabled = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.EncryptionAtRestOptions.Enabled"")
+| alter elasticsearchVersion = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.elasticsearchVersion"")
+| filter elasticsearchVersion ~= ""^OpenSearch.*"" and (lowercase(EncryptionAtRestOptions_enabled) = ""false"" or EncryptionAtRestOptions_enabled = null)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","31","21","","",""
+"Interactive users must not have the capability to create API Keys","e358c5f8-05e2-48fc-89f6-d80c6c9c60bc","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND cloud.account does not equal 'OCI-trinetoci' AND api.name = 'oci-iam-user' AND json.rule = capabilities.canUseApiKeys is true and name contains ""@""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_USER""
+| alter canUseApiKeys = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.capabilities.canUseApiKeys"")
+| alter name = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.name"")
+| filter canUseApiKeys = ""true"" and name contains ""@""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","870","445","","",""
+"Detect whether Amazon Redshift clusters are blocked from public access","8303cf7a-d16e-47f5-9850-47f9928ab756","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-redshift-describe-clusters' AND json.rule = publiclyAccessible is true","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""REDSHIFT_CLUSTER""
+| alter publiclyAccessible = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.publiclyAccessible"")
+| filter publiclyAccessible = ""true""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","9","3","0","0",""
+"AWS-17.3 - Ensure EBS volume snapshots are encrypted","645b3393-fec6-4bbd-a7d7-fa912cb1611f","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-ec2-describe-snapshots' AND json.rule = snapshot.encrypted is false","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""EBS_SNAPSHOT""
+| alter encrypted = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.snapshot.encrypted"")
+| filter (lowercase(encrypted) = ""false"" or encrypted = null)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","1401","1204","","",""
+"AWS-03.04 -Ensure Images (AMI) are not older than 90 days","77a30b2b-973b-4250-8f66-71d9376b1434","925489529090471936","config from cloud.resource where api.name = 'aws-ec2-describe-instances' AND json.rule = _DateTime.ageInDays(launchTime) > 90","config case_sensitive = false
+| dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""EC2_INSTANCE""
+| alter launchTimeStr = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.launchTime"")
+| alter launchTimeTs = parse_timestamp(""%Y-%m-%dT%H:%M:%E*SZ"", launchTimeStr)
+| filter timestamp_diff(current_time(), launchTimeTs, ""DAY"") > 90
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","613","532","","",""
+"EKS clusters must run on a supported Kubernetes version","4768997f-3e03-4062-8d89-6262e6a1991b","925489529090471936","config from cloud.resource where cloud.type = 'aws' and api.name = 'aws-eks-describe-cluster' AND json.rule = (version contains ""1.29"") or (version contains ""1.31"") or (version contains ""1.30"") addcolumn name version platformVersion createdAt status","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""EKS_CLUSTER""
+| alter version = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.version"")
+| alter name = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.name"")
+| alter platformVersion = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.platformVersion"")
+| alter createdAt = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.createdAt"")
+| alter status = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.status"")
+| filter (version contains ""1.29"") or (version contains ""1.31"") or (version contains ""1.30"")
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id, name as name, version as version, platformVersion as platformVersion, createdAt as createdAt, status as status","Zero Results Returned","18","14","0","0",""
+"AWS-17.4-Ensure Images (AMI) are not older than 90 days","30f7f95a-9361-4473-995e-1605e876237d","925489529090471936","config from cloud.resource where api.name = 'aws-ec2-describe-instances' AND json.rule = _DateTime.ageInDays(launchTime) > 90","config case_sensitive = false
+| dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""EC2_INSTANCE""
+| alter launchTimeStr = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.launchTime"")
+| alter launchTimeTs = parse_timestamp(""%Y-%m-%dT%H:%M:%E*SZ"", launchTimeStr)
+| filter timestamp_diff(current_time(), launchTimeTs, ""DAY"") > 90
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","613","532","","",""
+"OCI KMS key rotation must be enabled","0ed42c20-72f7-40d1-8582-2fa1019bd1fd","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-vault-key' AND json.rule = isAutoRotationEnabled is false or isAutoRotationEnabled does not exist","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_VAULT_KEY""
+| alter isAutoRotationEnabled = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.isAutoRotationEnabled"")
+| filter (lowercase(isAutoRotationEnabled) = ""false"" or isAutoRotationEnabled = null) or isAutoRotationEnabled = null
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","28","15","","",""
+"AWS Secrets Manager secret not used more than 90 days","e0baac49-755a-45ce-9538-6f577fdb065b","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-secretsmanager-describe-secret' AND json.rule = (lastAccessedDate does not exist and _DateTime.ageInDays(createdDate) > 90) or (lastAccessedDate exists and _DateTime.ageInDays(lastAccessedDate) > 90)","config case_sensitive = false
+| dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AWS_SECRETS_MANAGER_SECRET""
+| alter createdDateStr = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.CreatedDate"")
+| alter createdDateTs = parse_timestamp(""%Y-%m-%dT%H:%M:%E*SZ"", createdDateStr)
+| alter lastAccessedDateStr = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.LastAccessedDate"")
+| alter lastAccessedDateTs = parse_timestamp(""%Y-%m-%dT%H:%M:%E*SZ"", lastAccessedDateStr)
+| filter (lastAccessedDateStr = null and timestamp_diff(current_time(), createdDateTs, ""DAY"") > 90) or (lastAccessedDateStr != null and timestamp_diff(current_time(), lastAccessedDateTs, ""DAY"") > 90)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","2939","2382","","",""
+"Lambda functions must use supported runtimes  - Deprecated Runtime NodeJS","aeaeb51b-b812-4920-9e7b-3022e1ac888e","925489529090471936","config from cloud.resource where cloud.type = 'aws' and api.name = 'aws-lambda-versions-by-function' AND json.rule = Versions[*].Runtime contains ""nodejs8.1"" or Versions[*].Runtime contains ""nodejs10.x"" or Versions[*].Runtime contains ""nodejs12.x"" or Versions[*].Runtime contains ""nodejs14.x"" or Versions[*].Runtime contains ""nodejs16.x"" or Versions[*].Runtime contains ""nodejs18.x"" or Versions[*].Runtime contains ""nodejs6.1"" or Versions[*].Runtime contains ""nodejs4.3"" addcolumn Versions[*]","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AWS_LAMBDA_VERSIONS_BY_FUNCTION""
+| alter Versions = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.Versions"")
+| filter array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""nodejs8.1"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""nodejs8.1"")) or array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""nodejs10.x"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""nodejs10.x"")) or array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""nodejs12.x"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""nodejs12.x"")) or array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""nodejs14.x"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""nodejs14.x"")) or array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""nodejs16.x"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""nodejs16.x"")) or array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""nodejs18.x"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""nodejs18.x"")) or array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""nodejs6.1"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""nodejs6.1"")) or array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""nodejs4.3"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""nodejs4.3""))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id, Versions as Versions","Ingestion Gap","2374","1680","","",""
+"Detect Lambda functions using deprecated runtime python3.9","0cbdc19d-773c-4a90-bc69-cc6a5536a7cd","925489529090471936","config from cloud.resource where cloud.type = 'aws' and api.name = 'aws-lambda-versions-by-function' AND json.rule = Versions[*].Runtime contains ""python3.9"" addcolumn Versions[*]","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AWS_LAMBDA_VERSIONS_BY_FUNCTION""
+| alter Versions = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.Versions"")
+| filter array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""python3.9"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""python3.9""))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id, Versions as Versions","Ingestion Gap","2374","1680","","",""
+"Lambda functions must use supported runtimes - Deprecated Runtime Miscelleneous","a3203d30-97ab-476b-b4db-a1a33449e612","925489529090471936","config from cloud.resource where cloud.type = 'aws' and api.name = 'aws-lambda-versions-by-function' AND json.rule = Versions[*].Runtime contains ""go1.x"" or Versions[*].Runtime contains ""ruby2.7"" or Versions[*].Runtime contains ""dotnet6"" or Versions[*].Runtime contains ""dotnet7"" or Versions[*].Runtime contains ""ruby2.5"" addcolumn Versions[*]","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AWS_LAMBDA_VERSIONS_BY_FUNCTION""
+| alter Versions = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.Versions"")
+| filter array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""go1.x"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""go1.x"")) or array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""ruby2.7"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""ruby2.7"")) or array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""dotnet6"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""dotnet6"")) or array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""dotnet7"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""dotnet7"")) or array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""ruby2.5"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""ruby2.5""))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id, Versions as Versions","Ingestion Gap","2374","1680","","",""
+"Detect Lambda fucntions using deprecated runtime NodeJS14.x","3decbf48-6943-4aaa-9fe0-4c7d8bae9aa3","925489529090471936","config from cloud.resource where cloud.type = 'aws' and api.name = 'aws-lambda-versions-by-function' AND json.rule = Versions[*].Runtime contains ""nodejs14.x"" addcolumn Versions[*]","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AWS_LAMBDA_VERSIONS_BY_FUNCTION""
+| alter Versions = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.Versions"")
+| filter array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""nodejs14.x"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""nodejs14.x""))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id, Versions as Versions","Ingestion Gap","2374","1680","","",""
+"Lambda functions must use supported runtimes  - Deprecated Runtime Python","0f85c953-ddbe-41f0-96c8-c158541c82f3","925489529090471936","config from cloud.resource where cloud.type = 'aws' and api.name = 'aws-lambda-versions-by-function' AND json.rule = Versions[*].Runtime contains ""python3.9"" or Versions[*].Runtime contains ""python3.8"" or Versions[*].Runtime contains ""python3.7"" addcolumn Versions[*]","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AWS_LAMBDA_VERSIONS_BY_FUNCTION""
+| alter Versions = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.Versions"")
+| filter array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""python3.9"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""python3.9"")) or array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""python3.8"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""python3.8"")) or array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""python3.7"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""python3.7""))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id, Versions as Versions","Ingestion Gap","2374","1680","","",""
+"Lambda functions must use supported runtimes - Deprecated Runtime Java","29f777b8-7de2-4a10-95d0-f4dbff46ba51","925489529090471936","config from cloud.resource where cloud.type = 'aws' and api.name = 'aws-lambda-versions-by-function' AND json.rule = Versions[*].Runtime contains ""java8"" or Versions[*].Runtime contains ""java8.al2"" or Versions[*].Runtime contains ""java11"" addcolumn Versions[*]","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AWS_LAMBDA_VERSIONS_BY_FUNCTION""
+| alter Versions = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.Versions"")
+| filter array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""java8"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""java8"")) or array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""java8.al2"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""java8.al2"")) or array_any(Versions, (json_extract_scalar(""@element"", ""$.Runtime"") contains ""java11"" or to_string(json_extract_array(""@element"", ""$.Runtime"")) contains ""java11""))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id, Versions as Versions","Ingestion Gap","2374","1680","","",""
+"OCI database system version must be one version behind the latest release - Autonomous Database","6e9d80de-0ea3-45f5-ab37-2548e39b1814","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-database-autonomous-database' AND json.rule = dbVersion does not contain ""19c""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_DATABASE_AUTONOMOUS_DATABASE""
+| alter dbVersion = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.dbVersion"")
+| filter (dbVersion = null or dbVersion not contains ""19c"")
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","9","7","0","0",""
+"Lambda rotation job is not enabled for AWS secrets created purposely for Aurora databases.","498de3ca-19f3-4bb8-ba4d-d7cbc7fba9ce","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-secretsmanager-describe-secret' AND json.rule = name contains ""mysql"" or name contains ""aurora"" and rotationLambdaARN is empty","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AWS_SECRETS_MANAGER_SECRET""
+| alter rotationLambdaARN = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.RotationLambdaARN"")
+| alter name = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.Name"")
+| filter name contains ""mysql"" or (name contains ""aurora"" and (rotationLambdaARN = null or rotationLambdaARN = """"))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","2939","2382","","",""
+"OCI KMS keys must not be deleted unintentionally","6578cd5e-5641-4954-8201-cb6c47b021b1","925489529090471936","config from cloud.resource where api.name = 'oci-iam-user' as X; config from cloud.resource where api.name = 'oci-iam-group' as Y; config from cloud.resource where api.name = 'oci-iam-policy' AND json.rule = statements[*] contains ""manage key"" as Z; filter '(($.Y.groupMembers[*].userId contains $.X.id) and ($.Z.statements[*] contains $.Y.name))'; show X;","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_USER""
+| alter id = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.id"")
+| join conflict_strategy = both type = inner (
+    dataset = asset_inventory
+    | filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_GROUP""
+    | alter groupMembers_userId = arraymap(json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.groupMembers""), json_extract_scalar(""@element"", ""$.userId""))
+    | filter groupMembers_userId != null
+    | arrayexpand groupMembers_userId
+    | fields xdm.asset.realm, groupMembers_userId
+  ) as Y xdm.asset.realm = Y.xdm.asset.realm
+| filter groupMembers_userId = id
+| dedup xdm.asset.id
+| join conflict_strategy = both type = inner (
+    dataset = asset_inventory
+    | filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_POLICY""
+    | alter statements = json_extract_scalar_array(xdm.asset.raw_fields, ""$.Platform Discovery.statements"")
+    | filter array_any(statements, ""@element"" contains ""manage key"")
+    | fields xdm.asset.realm
+  ) as Z xdm.asset.realm = Z.xdm.asset.realm
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","1254","816","","",""
+"Security Groups must not allow traffic from all addresses over any protocol except ICMP, Firewalls and DMVPN Routers","6e4511f6-3a02-48f7-8eba-d130febe2325","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-nsg' AND json.rule = (securityRules[?any((((*.destinationPortRange.min exists or *.destinationPortRange.max exists)) or (protocol equals ""all"") or ((tcpOptions does not exist) and (udpOptions does not exist) and (protocol does not equal 1))) and (source equals 0.0.0.0/0 and direction equals INGRESS))] exists) and ((displayName does not contain ""dmvpn_public"") and (displayName does not contain ""DMVPN_public"") and (displayName does not contain ""DMVPN-Public"") and (displayName does not contain ""palo_alto_public"") and (displayName does not contain ""PaloAlto-Public""))","","Ingestion Gap","1139","863","","",""
+"Detect whether an Amazon OpenSearch Service domain is in Amazon VPC","96457b00-4809-4aa0-8209-5fc0f4c6c9bb","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-es-describe-elasticsearch-domain' AND json.rule = processing is false and (nodeToNodeEncryptionOptions.enabled is false or nodeToNodeEncryptionOptions.enabled does not exist)","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AMAZON_ELASTICSEARCH_DOMAIN""
+| alter NodeToNodeEncryptionOptions_Enabled = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.NodeToNodeEncryptionOptions.Enabled"")
+| alter Processing = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.Processing"")
+| filter (lowercase(Processing) = ""false"" or Processing = null) and ((lowercase(NodeToNodeEncryptionOptions_Enabled) = ""false"" or NodeToNodeEncryptionOptions_Enabled = null) or NodeToNodeEncryptionOptions_Enabled = null)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","31","21","","",""
+"AWS-04.01-Load balancers must not allow weak ciper suite","7731d855-6208-496d-8c1b-ed956d7c901b","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-elb-describe-load-balancers' and json.rule = (sslCipherSuites does not contain ""AES256-GCM-SHA384"" or sslCipherSuites does not contain ""DHE-RSA-AES256-GCM-SHA384"" or sslCipherSuites does not contain ""ECDHE-ECDSA-AES256-GCM"" or sslCipherSuites does not contain ""ECDHE-RSA-AES256-GCM-SHA384"") and sslConfiguration does not contain ""null""","config case_sensitive = false
+| dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AWS_CLASSIC_LOAD_BALANCER""
+| alter sslCipherSuites = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.SslCipherSuites"")
+| alter sslConfiguration = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.SslConfiguration"")
+| filter ((sslCipherSuites = null or sslCipherSuites not contains ""AES256-GCM-SHA384"") or (sslCipherSuites = null or sslCipherSuites not contains ""DHE-RSA-AES256-GCM-SHA384"") or (sslCipherSuites = null or sslCipherSuites not contains ""ECDHE-ECDSA-AES256-GCM"") or (sslCipherSuites = null or sslCipherSuites not contains ""ECDHE-RSA-AES256-GCM-SHA384"")) and (sslConfiguration = null or sslConfiguration not contains ""null"")
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","4","0","","",""
+"10.2 - Ensure SNS topics do not allow everyone to Publish","282ab464-0eba-48e9-9a75-c9b52212cd34","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-sns-get-topic-attributes' AND json.rule = Policy.Statement[*].Effect equals ""Allow"" and Policy.Statement[*].Principal.AWS contains ""*"" and Policy.Statement[*].Action equals ""SNS:Publish"" and Policy.Statement[*].Condition does not exist","config case_sensitive = false
+| dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""SNS_TOPIC_ATTRIBUTES""
+| alter Statement_arr = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.Policy.Statement""),
+  Statement_obj = json_extract(xdm.asset.raw_fields, ""$.Platform Discovery.Policy.Statement"")
+| alter Statement = if(Statement_arr != null, Statement_arr, if(Statement_obj != null, arraycreate(Statement_obj)))
+| filter array_any(Statement, to_string(json_extract_scalar(""@element"", ""$.Effect"")) = ""Allow"") and array_any(Statement, (json_extract_scalar(""@element"", ""$.Principal.AWS"") ~= ""[*]"" or to_string(json_extract_array(""@element"", ""$.Principal.AWS"")) ~= ""[*]"")) and array_any(Statement, to_string(json_extract_scalar(""@element"", ""$.Action"")) = ""SNS:Publish"") and array_all(Statement, to_string(json_extract_array(""@element"", ""$.Condition"")) = null)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","741","555","","",""
+"DocumentDB Cluster is not encrypted at rest","afbf6010-9c80-4ed8-aeb0-4b18e70cc2cc","925489529090471936","config from cloud.resource where api.name = 'aws-docdb-db-cluster' AND json.rule = StorageEncrypted does not contain ""true""","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AMAZON_DOCUMENT_DB_DATABASE_CLUSTER""
+| alter StorageEncrypted = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.StorageEncrypted"")
+| filter (StorageEncrypted = null or StorageEncrypted not contains ""true"")
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","6","7","0","0",""
+"Detect whether an Amazon SageMaker notebook instance allows direct internet access","6ea8752c-3980-4c45-b4cf-679acba4326d","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-sagemaker-notebook-instance' AND json.rule = notebookInstanceStatus equals InService and directInternetAccess equals Enabled","config case_sensitive = false
+| dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AMAZON_SAGEMAKER_NOTEBOOK_INSTANCE""
+| alter notebookInstanceStatus = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.NotebookInstanceStatus"")
+| alter directInternetAccess = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.DirectInternetAccess"")
+| filter notebookInstanceStatus = ""InService"" and directInternetAccess = ""Enabled""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","20","1","","",""
+"Redshift clusters version upgrade is not enabled_RL","8a4ff2f2-d7c1-4d8c-9591-a7d1203e2202","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-redshift-describe-clusters' AND json.rule = allowVersionUpgrade is true","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""REDSHIFT_CLUSTER""
+| alter allowVersionUpgrade = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.allowVersionUpgrade"")
+| filter allowVersionUpgrade = ""true""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Matched Adjusted","9","3","3","9","66.67"
+"AWS EC2 instance with network path from the internet (0.0.0.0/0) on ports with high risk","9562e510-eb62-42d2-9ffb-16ff338363ae","925489529090471936","config from cloud.resource where api.name = 'aws-ec2-describe-security-groups' AND json.rule = ipPermissions[*].ipv4Ranges[*].cidrIp contains ""0.0.0.0/0"" and ipPermissions[*] .ipProtocol contains tcp and ipPermissions[*].fromPort contains 22 and ipPermissions[*].toPort contains 22 or ipPermissions[*].fromPort contains 3389 and ipPermissions[*].toPort contains 3389 and ipPermissions[*].fromPort contains 1521 and ipPermissions[*].toPort contains 1521 and ipPermissions[*].fromPort contains 5432 and ipPermissions[*].toPort contains 5432 and ipPermissions[*].fromPort contains 9200 and ipPermissions[*].toPort contains 9200 and ipPermissions[*].fromPort contains 3306 and ipPermissions[*].toPort contains 3306 and ipPermissions[*].fromPort contains 9300 and ipPermissions[*].toPort contains 9300","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""EC2_SECURITY_GROUP""
+| alter ipPermissions_ipv4Ranges_cidrIp_outer = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.ipPermissions"")
+| alter ipPermissions = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.ipPermissions"")
+| filter (array_any(ipPermissions_ipv4Ranges_cidrIp_outer, (to_string(json_extract_array(""@element"", ""$.ipv4Ranges"")) ~= ""\""cidrIp\"":\""[^\""]*0\.0\.0\.0/0"")) and array_any(ipPermissions, (json_extract_scalar(""@element"", ""$.ipProtocol"") contains ""tcp"" or to_string(json_extract_array(""@element"", ""$.ipProtocol"")) contains ""tcp"")) and array_any(ipPermissions, (json_extract_scalar(""@element"", ""$.fromPort"") contains ""22"" or to_string(json_extract_array(""@element"", ""$.fromPort"")) contains ""22"")) and array_any(ipPermissions, (json_extract_scalar(""@element"", ""$.toPort"") contains ""22"" or to_string(json_extract_array(""@element"", ""$.toPort"")) contains ""22""))) or (array_any(ipPermissions, (json_extract_scalar(""@element"", ""$.fromPort"") contains ""3389"" or to_string(json_extract_array(""@element"", ""$.fromPort"")) contains ""3389"")) and array_any(ipPermissions, (json_extract_scalar(""@element"", ""$.toPort"") contains ""3389"" or to_string(json_extract_array(""@element"", ""$.toPort"")) contains ""3389"")) and array_any(ipPermissions, (json_extract_scalar(""@element"", ""$.fromPort"") contains ""1521"" or to_string(json_extract_array(""@element"", ""$.fromPort"")) contains ""1521"")) and array_any(ipPermissions, (json_extract_scalar(""@element"", ""$.toPort"") contains ""1521"" or to_string(json_extract_array(""@element"", ""$.toPort"")) contains ""1521"")) and array_any(ipPermissions, (json_extract_scalar(""@element"", ""$.fromPort"") contains ""5432"" or to_string(json_extract_array(""@element"", ""$.fromPort"")) contains ""5432"")) and array_any(ipPermissions, (json_extract_scalar(""@element"", ""$.toPort"") contains ""5432"" or to_string(json_extract_array(""@element"", ""$.toPort"")) contains ""5432"")) and array_any(ipPermissions, (json_extract_scalar(""@element"", ""$.fromPort"") contains ""9200"" or to_string(json_extract_array(""@element"", ""$.fromPort"")) contains ""9200"")) and array_any(ipPermissions, (json_extract_scalar(""@element"", ""$.toPort"") contains ""9200"" or to_string(json_extract_array(""@element"", ""$.toPort"")) contains ""9200"")) and array_any(ipPermissions, (json_extract_scalar(""@element"", ""$.fromPort"") contains ""3306"" or to_string(json_extract_array(""@element"", ""$.fromPort"")) contains ""3306"")) and array_any(ipPermissions, (json_extract_scalar(""@element"", ""$.toPort"") contains ""3306"" or to_string(json_extract_array(""@element"", ""$.toPort"")) contains ""3306"")) and array_any(ipPermissions, (json_extract_scalar(""@element"", ""$.fromPort"") contains ""9300"" or to_string(json_extract_array(""@element"", ""$.fromPort"")) contains ""9300"")) and array_any(ipPermissions, (json_extract_scalar(""@element"", ""$.toPort"") contains ""9300"" or to_string(json_extract_array(""@element"", ""$.toPort"")) contains ""9300"")))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","5158","4241","","",""
+"AWS  ACM Certificates must be using key algorithm RSA-2048","15e2d793-91bf-4f33-a3fd-fff0e673aaae","925489529090471936","config from cloud.resource where api.name = 'aws-acm-describe-certificate' AND json.rule = keyAlgorithm contains RSA-2048 and signatureAlgorithm contains SHA256WITHRSA","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""ACM_CERTIFICATE""
+| alter KeyAlgorithm = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.KeyAlgorithm"")
+| alter signatureAlgorithm = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.SignatureAlgorithm"")
+| filter KeyAlgorithm contains ""RSA-2048"" and signatureAlgorithm contains ""SHA256WITHRSA""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","103","54","","",""
+"OCI-SB-MSC-02 - Subnets must be tagged with a Security Trust Zone","e476e69a-0c15-4cbf-9bb5-b959fc28bad0","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = ""oci-networking-subnet"" AND json.rule = definedTags does not contain ""Security-TrustZone""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_SUBNET""
+| alter definedTags = to_json_string(json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.definedTags""))
+| filter definedTags not contains ""Security-TrustZone""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","180","137","","",""
+"ACM certificate validity period duration must not exceed 2 years","b2328cb7-d799-41e7-a3c7-a523d0a8997a","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-acm-describe-certificate' AND json.rule = status equals ISSUED and (_DateTime.ageInDays(notAfter) > -730)","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""ACM_CERTIFICATE""
+| alter notAfterStr = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.NotAfter"")
+| alter notAfterTs = parse_timestamp(""%Y-%m-%dT%H:%M:%E*SZ"", notAfterStr)
+| alter status = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.Status"")
+| filter status = ""ISSUED"" and (timestamp_diff(current_time(), notAfterTs, ""DAY"") > -730)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","103","54","","",""
+"RDS snapshots must be private","83a05ebd-8d02-496c-a1fa-be876a6ce4e3","925489529090471936","config from cloud.resource where api.name = 'aws-rds-describe-db-snapshots' AND json.rule = snapshot.snapshotType contains public","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""RDS_DATABASE_SNAPSHOT""
+| alter snapshotType = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.Snapshot.SnapshotType"")
+| filter snapshotType contains ""public""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","602","269","","",""
+"AWS-06.04-Ensure Automatic Backups are configured","e33f4af2-72f5-4e07-af4a-e907f3a81717","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-rds-describe-db-instances' AND json.rule = backupRetentionPeriod does not exist","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""RDS_DATABASE_INSTANCE""
+| alter BackupRetentionPeriod = json_extract(xdm.asset.raw_fields, ""$.Platform Discovery.BackupRetentionPeriod"")
+| filter BackupRetentionPeriod = null
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","140","91","","",""
+"Application Secrets in ECS task definition are getting pulled from AWS secrets manager.","12cae91d-8e71-40c8-a583-3c7f5badacb1","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-ecs-describe-task-definition' AND json.rule = containerDefinitions[*].secrets[*].valueFrom does not contain ""arn:aws:secretsmanager""","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""ECS_TASK_DEFINITION""
+| alter containerDefinitions_secrets_valueFrom_outer = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.containerDefinitions"")
+| filter ((containerDefinitions_secrets_valueFrom_outer = null or array_length(containerDefinitions_secrets_valueFrom_outer) = 0) or not array_any(containerDefinitions_secrets_valueFrom_outer, (to_string(json_extract_array(""@element"", ""$.secrets"")) ~= ""\""valueFrom\"":\""[^\""]*arn:aws:secretsmanager"")))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","212","230","","",""
+"OCI-SB-MSC-03.19 - No NAT Gateways are created in root compartment.","8b15a325-d40a-4d0c-8f1e-c76df92f4513","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-natgateway' AND json.rule = compartmentId equals ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_NATGATEWAY""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId = ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","4","3","0","0",""
+"AWS MSK cluster encryption at rest is not enabled","92fd4c01-bca9-4d82-a48e-8e2ad7cbfd62","925489529090471936","config from cloud.resource where cloud.type = 'aws' and api.name = 'aws-msk-cluster' AND json.rule = encryptionInfo.encryptionAtRest.dataVolumeKMSKeyId does not contain arn","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AMAZON_MSK_CLUSTER""
+| alter dataVolumeKMSKeyId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.encryptionInfo.encryptionAtRest.dataVolumeKMSKeyId"")
+| filter (dataVolumeKMSKeyId = null or dataVolumeKMSKeyId not contains ""arn"")
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","8","6","0","0",""
+"OCI-SB-IAM-10 Service accounts that allow console access","fce392bd-724f-48f2-8277-6cd5ca729c40","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-iam-user' AND json.rule = name does not contain ""@"" and lifecycleState equal ignore case ACTIVE and capabilities.canUseConsolePassword is true","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_USER""
+| alter canUseConsolePassword = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.capabilities.canUseConsolePassword"")
+| alter lifecycleState = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.lifecycleState"")
+| alter userName = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.userName"")
+| filter (userName = null or userName not contains ""@"") and lowercase(lifecycleState) = ""active"" and canUseConsolePassword = ""true""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","870","445","","",""
+"OCI-SB-IAM-11 Standard user accounts with API keys","c2852792-e8c9-431e-9edf-2e41aa6d90aa","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-iam-user' AND json.rule = name contains ""@"" and apiKeys[*].keyId exists","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_USER""
+| alter apiKeys = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.keys.apiKeys"")
+| alter userName = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.userName"")
+| filter userName contains ""@"" and array_any(apiKeys, json_extract_scalar(""@element"", ""$.keyId"") != null)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","870","445","","",""
+"Ensure Compute Instance Legacy Metadata service endpoint is disabled","ea4db57c-b759-4fd1-b6e3-3db42a9ad905","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-compute-instance' and json.rule = instanceOptions.areLegacyImdsEndpointsDisabled does not exist or instanceOptions.areLegacyImdsEndpointsDisabled is false","","Ingestion Gap","1267","1151","","",""
+"OCI-SB-IAM-03 Users with API keys older than 180 days","2b6948b2-b9a1-4979-8297-a89b771fb83a","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-iam-user' AND json.rule = apiKeys[*].timeCreated exists and _DateTime.ageInDays(apiKeys[*].timeCreated) > 180","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_USER""
+| alter timeCreatedStr = arraymap(json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.apiKeys""), json_extract_scalar(""@element"", ""$.timeCreated""))
+| arrayexpand timeCreatedStr
+| alter timeCreatedTs = parse_timestamp(""%Y-%m-%dT%H:%M:%E*SZ"", timeCreatedStr)
+| filter timeCreatedStr != null and timestamp_diff(current_time(), timeCreatedTs, ""DAY"") > 180
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","870","445","","",""
+"OCI-SB-IAM-25 Compartment-specific policies allowing rights over the entire tenancy","033753ff-b145-4253-b50e-14b0dfdb32b6","925489529090471936","config from cloud.resource where cloud.type = 'oci' and api.name = 'oci-iam-policy' and json.rule = name starts with ""oci"" and name does not contain ""global"" and statements[*] contains ""in tenancy""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_POLICY""
+| alter statements = json_extract_scalar_array(xdm.asset.raw_fields, ""$.Platform Discovery.statements"")
+| alter name = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.name"")
+| filter name ~= ""^oci.*"" and (name = null or name not contains ""global"") and array_any(statements, ""@element"" contains ""in tenancy"")
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Matched","236","235","82","79","3.80"
+"OCI-SB-IAM-20 Policies allowing manage rights over volume-backups in the tenancy or in any compartment","2660d57f-419d-4819-abd3-96861f07a50b","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-iam-policy' AND json.rule = statements[*] contains ""manage volume-backups"" and statements[*] does not contain ""request.permission does not equal "" and statements[*] does not contain ""BOOT_VOLUME_BACKUP_DELETE""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_POLICY""
+| alter statements = json_extract_scalar_array(xdm.asset.raw_fields, ""$.Platform Discovery.statements"")
+| alter permission = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.request.permission"")
+| filter array_any(statements, ""@element"" contains ""manage volume-backups"") and array_any(statements, ""@element"" not contains ""permission != "") and array_any(statements, ""@element"" not contains ""BOOT_VOLUME_BACKUP_DELETE"")
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Mismatched","236","235","22","3","633.33"
+"AWS MSK clusters must have encryption-in-transit enabled and plaintext communication must be strictly disabled.","d83e6cfe-de78-46c6-bcfc-7c45e40a568d","925489529090471936","config from cloud.resource where api.name = 'aws-msk-cluster' AND json.rule = encryptionInfo.encryptionInTransit.clientBroker contains ""TLS_PLAINTEXT"" or encryptionInfo.encryptionInTransit.inCluster is false","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AMAZON_MSK_CLUSTER""
+| alter inCluster = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.encryptionInfo.encryptionInTransit.inCluster"")
+| alter clientBroker = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.encryptionInfo.encryptionInTransit.clientBroker"")
+| filter clientBroker contains ""TLS_PLAINTEXT"" or (lowercase(inCluster) = ""false"" or inCluster = null)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","8","6","0","0",""
+"Unauthenticated access must be disabled for AWS MSK Clusters","a00b7315-e2f3-45be-84f0-d496874c7814","925489529090471936","config from cloud.resource where api.name = 'aws-msk-cluster' AND json.rule = clientAuthentication.unauthenticated.enabled exists","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AMAZON_MSK_CLUSTER""
+| alter clientAuthentication_unauthenticated_enabled = json_extract(xdm.asset.raw_fields, ""$.Platform Discovery.clientAuthentication.unauthenticated.enabled"")
+| filter clientAuthentication_unauthenticated_enabled != null
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Matched Adjusted","8","6","6","8","25.00"
+"Ensure Secure Boot is enabled on Compute Instance","62da8c4f-4ca8-4842-80f2-8f9b61188d5e","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-compute-instance' AND json.rule = platformConfig.isSecureBootEnabled does not exist or platformConfig.isSecureBootEnabled is false","","Ingestion Gap","1267","1151","","",""
+"OCI-SB-IAM-21 Policies allowing manage rights over boot-volume-backups in the tenancy or in any compartment","e9061f07-baa1-426a-bc3f-a8cfa687cfca","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-iam-policy' AND json.rule = statements[*] contains ""manage boot-volume-backups""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_POLICY""
+| alter statements = json_extract_scalar_array(xdm.asset.raw_fields, ""$.Platform Discovery.statements"")
+| filter array_any(statements, ""@element"" contains ""manage boot-volume-backups"")
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Matched","236","235","22","22","0.00"
+"OCI-SB-STR-03 Object Storage buckets are publicly accessible","d3bea979-7f8a-488b-90bd-28dff8ef4851","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-object-storage-bucket' AND json.rule = publicAccessType does not equal NoPublicAccess","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_OBJECT_STORAGE_BUCKET""
+| alter publicAccessType = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.publicAccessType"")
+| filter (publicAccessType = null or publicAccessType != ""NoPublicAccess"")
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","56","41","","",""
+"Block volume snapshots must be encrypted at rest","972b0237-eb12-49ff-8c49-ab9d53f07615","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-block-storage-volume-backup' AND json.rule = kmsKeyId is not member of (""null"")","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_BLOCK_STORAGE_VOLUME_BACKUP""
+| alter kmsKeyId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.kmsKeyId"")
+| filter (kmsKeyId = null or kmsKeyId not in (""null""))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Mismatched","9800","9339","9339","0",""
+"OCI-SB-DEV-01 Kubernetes Cluster Node Pools without in-transit encryption enabled","d5f3c5eb-cd1f-42c9-aab0-9f603a703f0b","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-containers-artifacts-kubernetes-cluster-nodepool' AND json.rule = nodeConfigDetails.isPvEncryptionInTransitEnabled does not exist or nodeConfigDetails.isPvEncryptionInTransitEnabled is false","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_CONTAINERS_ARTIFACTS_KUBERNETES_CLUSTER_NODEPOOL""
+| alter isPvEncryptionInTransitEnabled = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.nodeConfigDetails.isPvEncryptionInTransitEnabled"")
+| filter isPvEncryptionInTransitEnabled = null or (lowercase(isPvEncryptionInTransitEnabled) = ""false"" or isPvEncryptionInTransitEnabled = null)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","20","14","0","0",""
+"OCI-SB-DEV-02 Kubernetes Engine Cluster endpoints not configured with Network Security Groups","f32bf830-6383-41d2-8c12-bda9230a5043","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-containers-artifacts-kubernetes-cluster' AND json.rule = endpointConfig.nsgIds is empty or endpointConfig.nsgIds does not exist","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_CONTAINERS_ARTIFACTS_KUBERNETES_CLUSTER""
+| alter nsgIds = json_extract_scalar_array(xdm.asset.raw_fields, ""$.Platform Discovery.endpointConfig.nsgIds"")
+| filter (nsgIds = null or array_length(nsgIds) = 0 or array_length(nsgIds) = null) or (nsgIds = null or array_length(nsgIds) = 0 or array_length(nsgIds) = null)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Matched Adjusted","10","7","7","10","30.00"
+"Cloned: OCI users Auth Tokens aged more than 180 days","793178a6-4c6a-440f-8685-2c7848847aa5","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-iam-user' AND json.rule = authTokens[?any(lifecycleState equals ACTIVE and (_DateTime.ageInDays(timeCreated) > 180))] exists","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_USER""
+| alter authTokens = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.authTokens"")
+| filter array_any(authTokens, to_string(json_extract_scalar(""@element"", ""$.lifecycleState"")) = ""ACTIVE"" and timestamp_diff(current_time(), parse_timestamp(""%Y-%m-%dT%H:%M:%E*SZ"", json_extract_scalar(""@element"", ""$.timeCreated"")), ""DAY"") > 180)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","870","445","","",""
+"OCI-SB-NET-08 - Ensure Oracle Autonomous Shared Databases (ADB) access is restricted to allowed sources or deployed within a Virtual Cloud Network","b3e18453-0b7f-4462-9373-921e72df4068","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-database-autonomous-database' AND json.rule = whitelistedIps is empty","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_DATABASE_AUTONOMOUS_DATABASE""
+| alter whitelistedIps = json_extract_scalar_array(xdm.asset.raw_fields, ""$.Platform Discovery.whitelistedIps"")
+| filter (whitelistedIps = null or array_length(whitelistedIps) = 0 or array_length(whitelistedIps) = null)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","9","7","0","0",""
+"OCI-SB-STR-09 Ensure Versioning is Enabled for Object Storage Buckets in high trust compartments","ec223720-20b8-42e4-b3d0-19b0d1c57e09","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-object-storage-bucket' AND json.rule = compartmentId is member of (""ocid1.compartment.oc1..aaaaaaaaj5a5v52vq2cgrlvpuwfobej3iw37i6av6ejigr25pxdjl3smn3vq"",""ocid1.compartment.oc1..aaaaaaaaghbep5ylz4niv7p5dj7tv6bi4anscqnkgiwjs2r33zcrycsmsm2q"",""ocid1.compartment.oc1..aaaaaaaaqsjdqscuanvvkzsnjaemsgv3msakt2joey3wtqr6ayvwlabdnxna"") and versioning equals ""Disabled""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_OBJECT_STORAGE_BUCKET""
+| alter versioning = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.versioning"")
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId in (""ocid1.compartment.oc1..aaaaaaaaj5a5v52vq2cgrlvpuwfobej3iw37i6av6ejigr25pxdjl3smn3vq"", ""ocid1.compartment.oc1..aaaaaaaaghbep5ylz4niv7p5dj7tv6bi4anscqnkgiwjs2r33zcrycsmsm2q"", ""ocid1.compartment.oc1..aaaaaaaaqsjdqscuanvvkzsnjaemsgv3msakt2joey3wtqr6ayvwlabdnxna"") and versioning = ""Disabled""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","56","41","","",""
+"OCI-SB-IAM-17 Break-glass account must have MFA enabled","154492fa-ac24-4255-9773-2242f8b7b38e","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-iam-user' AND json.rule = name contains ""cloud-oci-master-prod-01@trinet.com"" and isMfaActivated is false","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_USER""
+| alter isMfaActivated = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.isMfaActivated"")
+| alter userName = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.userName"")
+| filter userName contains ""cloud-oci-master-prod-01@trinet.com"" and (lowercase(isMfaActivated) = ""false"" or isMfaActivated = null)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","870","445","","",""
+"OCI-SB-NET-07 Ensure Oracle Analytics Cloud (OAC) access is restricted to allowed sources or deployed within a Virtual Cloud Network.","7c538044-34f1-4ead-b817-876f6325bf0b","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-analytics-instance' AND json.rule = networkEndpointDetails.whitelistedServices exists or networkEndpointDetails contains ""Virtual Cloud Network""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_ANALYTICS_INSTANCE""
+| alter whitelistedServices = json_extract(xdm.asset.raw_fields, ""$.Platform Discovery.networkEndpointDetails.whitelistedServices"")
+| alter networkEndpointDetails = to_json_string(json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.networkEndpointDetails""))
+| filter whitelistedServices != null or networkEndpointDetails contains ""Virtual Cloud Network""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","0","0","0","0",""
+"OCI-SB-NET-18 Local Peering Gateways are not allowed","116cad0b-c473-4c9b-8067-4cbcd868f049","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-events-rule' AND json.rule = (isEnabled equals true) and (actions.actions[?any( actionType equals ONS and isEnabled equals true and lifecycleState equals ACTIVE)] exists) and (condition.eventType[*] contains com.oraclecloud.virtualnetwork.changelocalpeeringgatewaycompartment and condition.eventType[*] contains com.oraclecloud.virtualnetwork.createlocalpeeringgateway and condition.eventType[*] contains com.oraclecloud.virtualnetwork.deletelocalpeeringgateway and condition.eventType[*] contains com.oraclecloud.virtualnetwork.updatelocalpeeringgateway and condition.eventType[*] contains com.oraclecloud.servicegateway.updateservicegateway ) and actions.actions[*].topicId exists as X; count(X) less than 1","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_EVENTS_RULE""
+| alter isEnabled = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.isEnabled"")
+| alter actions_actions = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.actions.actions"")
+| alter actions = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.actions.actions"")
+| alter eventType = json_extract_scalar_array(xdm.asset.raw_fields, ""$.Platform Discovery.condition.eventType"")
+| filter (isEnabled = ""true"") and array_any(actions_actions, to_string(json_extract_scalar(""@element"", ""$.actionType"")) = ""ONS"" and to_string(json_extract_scalar(""@element"", ""$.isEnabled"")) = ""true"" and to_string(json_extract_scalar(""@element"", ""$.lifecycleState"")) = ""ACTIVE"") and (array_any(eventType, ""@element"" contains ""com.oraclecloud.virtualnetwork.changelocalpeeringgatewaycompartment"") and array_any(eventType, ""@element"" contains ""com.oraclecloud.virtualnetwork.createlocalpeeringgateway"") and array_any(eventType, ""@element"" contains ""com.oraclecloud.virtualnetwork.deletelocalpeeringgateway"") and array_any(eventType, ""@element"" contains ""com.oraclecloud.virtualnetwork.updatelocalpeeringgateway"") and array_any(eventType, ""@element"" contains ""com.oraclecloud.servicegateway.updateservicegateway"") ) and array_any(actions, json_extract_scalar(""@element"", ""$.topicId"") != null)
+| dedup xdm.asset.id
+| fields xdm.asset.realm as account_X, xdm.asset.id as X_assetID
+| join type = right (
+    dataset = asset_inventory
+    | filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_TENANCY""
+    | alter sub_id = xdm.asset.realm
+    | alter sub_asset_id = xdm.asset.id
+    | alter asset_name = xdm.asset.name
+    | alter asset_type = xdm.asset.type.name
+  ) as Acc Acc.sub_id = account_X
+| comp count(X_assetID) as datacount by sub_id, sub_asset_id, asset_name, asset_type
+| filter datacount < 1
+| fields sub_asset_id as asset_id, asset_name, asset_type","Mismatched","9","9","0","39","100.00"
+"AWS-17.1-Ensure Images (AMI's) are encrypted","2f31406d-fd9a-4299-8351-3b50cf368464","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-ec2-describe-images' AND json.rule = image.blockDeviceMappings[*].ebs.encrypted all true","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""EC2_IMAGE""
+| alter ebs_encrypted = arraymap(json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.image.blockDeviceMappings""), json_extract_scalar(""@element"", ""$.ebs.encrypted""))
+| filter array_all(ebs_encrypted, to_string(""@element"") = ""true"")
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","698","2085","","",""
+"AWS-03.01-Ensure Images (AMI's) are encrypted","387d6ac8-3b7d-4019-bfd6-20e052cd6333","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-ec2-describe-images' AND json.rule = image.blockDeviceMappings[*].ebs.encrypted all true","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""EC2_IMAGE""
+| alter ebs_encrypted = arraymap(json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.image.blockDeviceMappings""), json_extract_scalar(""@element"", ""$.ebs.encrypted""))
+| filter array_all(ebs_encrypted, to_string(""@element"") = ""true"")
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","698","2085","","",""
+"AWS-17.2-Ensure EBS volume encryption is enabled","ec045cca-ecd8-4247-b2ec-03a07df51e6f","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-ec2-ebs-encryption' AND json.rule = ebsEncryptionByDefault is false","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""EBS_ENCRYPTION""
+| alter ebsEncryptionByDefault = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.ebsEncryptionByDefault"")
+| filter (lowercase(ebsEncryptionByDefault) = ""false"" or ebsEncryptionByDefault = null)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","481","448","","",""
+"Amazon Aurora Cluster Parameter Group does not require secure transport","acc3ce55-34a1-48eb-8806-980dc31c2f4c","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-rds-db-cluster-parameter-group' AND json.rule = parameters.require_secure_transport.ParameterValue does not exist or parameters.require_secure_transport.ParameterValue equals OFF","config case_sensitive = false
+| dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""RDS_DB_CLUSTER_PARAMETER_GROUP""
+| alter ParameterValue = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.Parameters.require_secure_transport.ParameterValue"")
+| filter ParameterValue = null or ParameterValue = ""OFF""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","238","178","","",""
+"AWS-03.02-Ensure EBS volume encryption is enabled","5bb45e2b-5921-4ef8-a854-a928ef9d72bf","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-ec2-ebs-encryption' AND json.rule = ebsEncryptionByDefault is false","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""EBS_ENCRYPTION""
+| alter ebsEncryptionByDefault = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.ebsEncryptionByDefault"")
+| filter (lowercase(ebsEncryptionByDefault) = ""false"" or ebsEncryptionByDefault = null)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","481","448","","",""
+"AWS-03.03-Ensure EBS volume snapshots are encrypted","fd6821f6-5a91-49b4-8cd0-e62a7f8fe158","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-ec2-describe-snapshots' AND json.rule = snapshot.encrypted is false","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""EBS_SNAPSHOT""
+| alter encrypted = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.snapshot.encrypted"")
+| filter (lowercase(encrypted) = ""false"" or encrypted = null)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","1401","1204","","",""
+"OCI-SB-MSC-01 - Compartments must be tagged with a Security Trust Zone","bb3c1968-60f1-4667-986e-51b07d5aeb46","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-iam-compartment' AND json.rule = definedTags.Security.TrustZone does not exist","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_COMPARTMENT""
+| alter TrustZone = json_extract(xdm.asset.raw_fields, ""$.Platform Discovery.definedTags.Security.TrustZone"")
+| filter TrustZone = null
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Matched","40","39","17","17","0.00"
+"AWS-03.05-Ensure detailed monitoring is enable for production EC2 Instances","c0832b67-48d4-4195-9f4d-6a31c119ffa1","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-ec2-describe-instances' AND json.rule = monitoring.state contains ""disabled""","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""EC2_INSTANCE""
+| alter monitoring_state = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.monitoring.state"")
+| filter monitoring_state contains ""disabled""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","613","532","","",""
+"10.1 - Ensure SNS topics aren't exposed to everyone.","6307bb5b-0f5c-4573-b622-a7c37487fcf1","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-sns-get-topic-attributes' AND json.rule = Policy.Statement[*].Effect equals ""Allow"" and Policy.Statement[*].Principal.AWS contains ""*"" and Policy.Statement[*].Condition does not exist","config case_sensitive = false
+| dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""SNS_TOPIC_ATTRIBUTES""
+| alter Statement_arr = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.Policy.Statement""),
+  Statement_obj = json_extract(xdm.asset.raw_fields, ""$.Platform Discovery.Policy.Statement"")
+| alter Statement = if(Statement_arr != null, Statement_arr, if(Statement_obj != null, arraycreate(Statement_obj)))
+| filter array_any(Statement, to_string(json_extract_scalar(""@element"", ""$.Effect"")) = ""Allow"") and array_any(Statement, (json_extract_scalar(""@element"", ""$.Principal.AWS"") ~= ""[*]"" or to_string(json_extract_array(""@element"", ""$.Principal.AWS"")) ~= ""[*]"")) and array_all(Statement, to_string(json_extract_array(""@element"", ""$.Condition"")) = null)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","741","555","","",""
+"OCI-SB-NET-24 OCI Compute Instance boot volume has in-transit data encryption is disabled (Unencrypted network traffic in OCI)","cc434dc0-211d-4c82-9461-b8c46c93be67","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-compute-instance' AND json.rule = launchOptions.isPvEncryptionInTransitEnabled is false","","Ingestion Gap","1267","1151","","",""
+"OCI-SB-MON-17 Load balancers without access logs enabled","753ff0c0-2a11-400b-951c-3e9bbcc472f6","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-loadbalancer' as X; config from cloud.resource where api.name = 'oci-logging-logs' AND json.rule = configuration.source.service equals ""loadbalancer"" and configuration.source.category equals ""access"" as Y; filter 'not $.X.id equals $.Y.configuration.source.resource'; show X;","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_LOAD_BALANCER""
+| alter id = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.id"")
+| join conflict_strategy = both type = left (
+    dataset = asset_inventory
+    | filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_LOGGING_LOGS""
+    | alter service = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.configuration.source.service"")
+    | alter configuration_source_category = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.configuration.source.category"")
+    | filter service = ""loadbalancer"" and configuration_source_category = ""access""
+    | alter configuration_source_resource = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.configuration.source.resource"")
+    | filter configuration_source_resource != null
+    | fields xdm.asset.realm, configuration_source_resource
+  ) as Y xdm.asset.realm = Y.xdm.asset.realm and id = Y.configuration_source_resource
+| filter configuration_source_resource = null
+| dedup xdm.asset.id
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","957","670","","",""
+"AWS-17.5-Ensure detailed monitoring is enable for production EC2 Instances","9fc68e25-5023-40f7-abc2-e8bd8f761cec","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-ec2-describe-instances' AND json.rule = monitoring.state contains ""disabled""","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""EC2_INSTANCE""
+| alter monitoring_state = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.monitoring.state"")
+| filter monitoring_state contains ""disabled""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","613","532","","",""
+"OCI-SB-MON-16 Subnets without flow logs enabled","307ceefc-ecee-46a8-835a-bd1e86b26c63","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-subnet' as X; config from cloud.resource where api.name = 'oci-logging-logs' AND json.rule = configuration.source.service equals ""flowlogs"" as Y; filter 'not $.X.id equals $.Y.configuration.source.resource'; show X;","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_SUBNET""
+| alter id = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.id"")
+| join conflict_strategy = both type = left (
+    dataset = asset_inventory
+    | filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_LOGGING_LOGS""
+    | alter service = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.configuration.source.service"")
+    | filter service = ""flowlogs""
+    | alter configuration_source_resource = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.configuration.source.resource"")
+    | filter configuration_source_resource != null
+    | fields xdm.asset.realm, configuration_source_resource
+  ) as Y xdm.asset.realm = Y.xdm.asset.realm and id = Y.configuration_source_resource
+| filter configuration_source_resource = null
+| dedup xdm.asset.id
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","892","646","","",""
+"OCI-SB-MSC-03.04 - No Autonomous Database are created in root compartment","36ddcbf7-0dd3-4b27-b7b3-9494e168971e","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-database-autonomous-database' AND json.rule = compartmentId equals ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_DATABASE_AUTONOMOUS_DATABASE""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId = ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","9","7","0","0",""
+"OCI-SB-NET-04 Ensure no network security groups allow ingress from 0.0.0.0/0 to port 3389","3fb83dd4-066a-4092-8c16-84cbbf9d6616","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-nsg' AND json.rule = (securityRules[?any((((*.destinationPortRange.min equals 3389 or *.destinationPortRange.max equals 3389) or (*.destinationPortRange.min < 3389 and *.destinationPortRange.max > 3389)) or (protocol equals ""all"") or ((tcpOptions does not exist) and (udpOptions does not exist) and (protocol does not equal 1))) and (source equals 0.0.0.0/0 and direction equals INGRESS))] exists) and ((displayName does not contain ""dmvpn_public"") and (displayName does not contain ""DMVPN_public"") and (displayName does not contain ""DMVPN-Public"") and (displayName does not contain ""palo_alto_public"") and (displayName does not contain ""PaloAlto-Public""))","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_NSG""
+| alter securityRules = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.securityRules"")
+| alter displayName = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.displayName"")
+| filter array_any(securityRules, ((((to_integer(json_extract_scalar(""@element"", ""$.tcpOptions.destinationPortRange.min"")) = 3389 or to_integer(json_extract_scalar(""@element"", ""$.udpOptions.destinationPortRange.min"")) = 3389) or (to_integer(json_extract_scalar(""@element"", ""$.tcpOptions.destinationPortRange.max"")) = 3389 or to_integer(json_extract_scalar(""@element"", ""$.udpOptions.destinationPortRange.max"")) = 3389)) or ((to_integer(json_extract_scalar(""@element"", ""$.tcpOptions.destinationPortRange.min"")) < 3389 or to_integer(json_extract_scalar(""@element"", ""$.udpOptions.destinationPortRange.min"")) < 3389) and (to_integer(json_extract_scalar(""@element"", ""$.tcpOptions.destinationPortRange.max"")) > 3389 or to_integer(json_extract_scalar(""@element"", ""$.udpOptions.destinationPortRange.max"")) > 3389))) or to_string(json_extract_scalar(""@element"", ""$.protocol"")) = ""all"" or (json_extract_scalar(""@element"", ""$.tcpOptions"") = null and json_extract_scalar(""@element"", ""$.udpOptions"") = null and (to_string(json_extract_scalar(""@element"", ""$.protocol"")) = null or to_string(json_extract_scalar(""@element"", ""$.protocol"")) != ""1""))) and (to_string(json_extract_scalar(""@element"", ""$.source"")) = ""0.0.0.0/0"" and to_string(json_extract_scalar(""@element"", ""$.direction"")) = ""INGRESS"")) and (((displayName = null or displayName not contains ""dmvpn_public"")) and ((displayName = null or displayName not contains ""DMVPN_public"")) and ((displayName = null or displayName not contains ""DMVPN-Public"")) and ((displayName = null or displayName not contains ""palo_alto_public"")) and ((displayName = null or displayName not contains ""PaloAlto-Public"")))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","1139","863","","",""
+"Detect whether public access to Amazon RDS database instances is enabled","f5e2192d-8525-4781-afbb-10449bf4236d","925489529090471936","config from cloud.resource where cloud.type = 'aws' and api.name = 'aws-rds-describe-db-instances' AND json.rule = publiclyAccessible is true","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""RDS_DATABASE_INSTANCE""
+| alter PubliclyAccessible = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.PubliclyAccessible"")
+| filter PubliclyAccessible = ""true""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","140","91","","",""
+"Ensure Aurora engine version is not below standard version","2fd9f47c-98a5-47fd-a620-81cca253932c","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-rds-db-cluster' AND json.rule = engine contains ""aurora-mysql"" and engineVersion does not equal ""8.0.mysql_aurora.3.05.2 8.0.mysql_aurora.3.06.1, 8.0.mysql_aurora.3.06.1, 8.0.mysql_aurora.3.06.1""","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""RDS_DATABASE_CLUSTER""
+| alter EngineVersion = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.EngineVersion"")
+| alter Engine = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.Engine"")
+| filter Engine contains ""aurora-mysql"" and (EngineVersion = null or EngineVersion != ""8.0.mysql_aurora.3.05.2 8.0.mysql_aurora.3.06.1, 8.0.mysql_aurora.3.06.1, 8.0.mysql_aurora.3.06.1"")
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","82","61","","",""
+"AWS-04.02-SSL listeners on load balancers must not allow protocols older than TLS 1.2","b1a260c9-7505-4fc6-a240-ed2b8dd077c2","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-elb-describe-load-balancers' AND json.rule = policies.policyAttributeDescriptions[*].attributeName contains ""Protocol-TLSv1.1"" or policies.policyAttributeDescriptions[*].attributeName contains ""Protocol-TLSv1.0""","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AWS_CLASSIC_LOAD_BALANCER""
+| alter PolicyAttributeDescriptions = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.Policies.PolicyAttributeDescriptions"")
+| filter array_any(PolicyAttributeDescriptions, (json_extract_scalar(""@element"", ""$.AttributeName"") contains ""Protocol-TLSv1.1"" or to_string(json_extract_array(""@element"", ""$.AttributeName"")) contains ""Protocol-TLSv1.1"")) or array_any(PolicyAttributeDescriptions, (json_extract_scalar(""@element"", ""$.AttributeName"") contains ""Protocol-TLSv1.0"" or to_string(json_extract_array(""@element"", ""$.AttributeName"")) contains ""Protocol-TLSv1.0""))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","4","0","","",""
+"OCI-SB-MON-25 Object storage buckets without Write Access Events enabled","d9347f94-f007-4592-a713-266cf61265b6","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-object-storage-bucket' as X; config from cloud.resource where api.name = 'oci-logging-logs' AND json.rule = configuration.source.service equals ""objectstorage"" and configuration.source.category equals ""write"" as Y; filter '$.X.name does not equal $.Y.configuration.source.resource'; show X;","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_OBJECT_STORAGE_BUCKET""
+| alter name = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.name"")
+| join conflict_strategy = both type = left (
+    dataset = asset_inventory
+    | filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_LOGGING_LOGS""
+    | alter service = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.configuration.source.service"")
+    | alter configuration_source_category = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.configuration.source.category"")
+    | filter service = ""objectstorage"" and configuration_source_category = ""write""
+    | alter configuration_source_resource = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.configuration.source.resource"")
+    | filter configuration_source_resource != null
+    | fields xdm.asset.realm, configuration_source_resource
+  ) as Y xdm.asset.realm = Y.xdm.asset.realm and name = Y.configuration_source_resource
+| filter configuration_source_resource = null
+| dedup xdm.asset.id
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","768","550","","",""
+"OCI-SB-IAM-18 Policies giving manage rights over all resources in the tenancy","350bcdb7-17be-4e05-9002-592f29659cde","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-iam-policy' AND json.rule = statements[*] contains ""manage all-resources in tenancy""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_POLICY""
+| alter statements = json_extract_scalar_array(xdm.asset.raw_fields, ""$.Platform Discovery.statements"")
+| filter array_any(statements, ""@element"" contains ""manage all-resources in tenancy"")
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Matched Adjusted","236","235","7","4","75.00"
+"AWS - 06.03 - Ensure Database Audit Logging is Enabled","7ef706b3-545e-4ca5-9a6b-756d3100cf5e","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-rds-describe-db-instances' AND json.rule = enabledCloudwatchLogsExports[*] does not exist","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""RDS_DATABASE_INSTANCE""
+| alter enabledCloudwatchLogsExports = coalesce(json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.EnabledCloudwatchLogsExports""), json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.EnabledCloudwatchLogsExports.member""))
+| filter (enabledCloudwatchLogsExports = null or array_length(enabledCloudwatchLogsExports) = 0)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","140","91","","",""
+"OCI-SB-MSC-03.13 - No Security Lists are created in root compartment.","ec810922-7385-46fd-a3da-6f72a7b8ab59","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-security-list' AND json.rule = compartmentId equals ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_SECURITY_LIST""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId = ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","147","111","","",""
+"10.3 - Ensure SNS topics do not allow everyone to Subscribe","f0652885-4aef-4c51-bbed-17eb1c7ac5f0","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-sns-get-topic-attributes' AND json.rule = Policy.Statement[*].Effect equals ""Allow"" and Policy.Statement[*].Principal.AWS contains ""*"" and Policy.Statement[*].Action equals ""SNS:Subscribe"" and Policy.Statement[*].Condition does not exist","config case_sensitive = false
+| dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""SNS_TOPIC_ATTRIBUTES""
+| alter Statement_arr = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.Policy.Statement""),
+  Statement_obj = json_extract(xdm.asset.raw_fields, ""$.Platform Discovery.Policy.Statement"")
+| alter Statement = if(Statement_arr != null, Statement_arr, if(Statement_obj != null, arraycreate(Statement_obj)))
+| filter array_any(Statement, to_string(json_extract_scalar(""@element"", ""$.Effect"")) = ""Allow"") and array_any(Statement, (json_extract_scalar(""@element"", ""$.Principal.AWS"") ~= ""[*]"" or to_string(json_extract_array(""@element"", ""$.Principal.AWS"")) ~= ""[*]"")) and array_any(Statement, to_string(json_extract_scalar(""@element"", ""$.Action"")) = ""SNS:Subscribe"") and array_all(Statement, to_string(json_extract_array(""@element"", ""$.Condition"")) = null)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","741","555","","",""
+"OCI-SB-MSC-03.10 - No Object Storage Buckets are created in root compartment.","1fbe617c-146b-4b18-aa01-0b7ba29e507a","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-object-storage-bucket' AND json.rule = compartmentId equals ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_OBJECT_STORAGE_BUCKET""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId = ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","56","41","","",""
+"OCI-SB-MSC-03.11 - No VCN’s are created in root compartment","84897a63-18f2-4ef7-981a-bbc82314c016","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-vcn' AND json.rule = compartmentId equals ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_VCN""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId = ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","44","33","","",""
+"OCI-SB-MSC-03.09 - No IAM groups are created in root compartment.","fdc822b8-7ab9-4a53-8394-7fdf3d47a889","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-iam-group' AND json.rule = compartmentId equals ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_GROUP""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId = ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","148","136","","",""
+"AWS-01.02-DEPRECATED Users should not exist with no permissions or groups","b5e56759-4729-4de2-9e1f-ae7dbf3e15b3","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-iam-list-users' as X; config from cloud.resource where api.name = 'aws-iam-list-groups' as Y; filter 'X does not contain Y'; show X;","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AWS_IAM_USER""
+| join conflict_strategy = both type = inner (
+    dataset = asset_inventory
+    | filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AWS_IAM_GROUP""
+    | fields xdm.asset.realm
+  ) as Y xdm.asset.realm = Y.xdm.asset.realm
+| dedup xdm.asset.id
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","556","426","","",""
+"OCI-SB-NET-03 Ensure no network security groups allow ingress from 0.0.0.0/0 to port 22","6d82e6d7-1fa1-4eb5-936d-9a13b6e17aa0","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-nsg' AND json.rule = (securityRules[?any((((*.destinationPortRange.min equals 22 or *.destinationPortRange.max equals 22) or (*.destinationPortRange.min < 22 and *.destinationPortRange.max > 22)) or (protocol equals ""all"") or ((tcpOptions does not exist) and (udpOptions does not exist) and (protocol does not equal 1))) and (source equals 0.0.0.0/0 and direction equals INGRESS))] exists) and ((displayName does not contain ""dmvpn_public"") and (displayName does not contain ""DMVPN_public"") and (displayName does not contain ""DMVPN-Public"") and (displayName does not contain ""palo_alto_public"") and (displayName does not contain ""PaloAlto-Public""))","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_NSG""
+| alter securityRules = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.securityRules"")
+| alter displayName = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.displayName"")
+| filter array_any(securityRules, ((((to_integer(json_extract_scalar(""@element"", ""$.tcpOptions.destinationPortRange.min"")) = 22 or to_integer(json_extract_scalar(""@element"", ""$.udpOptions.destinationPortRange.min"")) = 22) or (to_integer(json_extract_scalar(""@element"", ""$.tcpOptions.destinationPortRange.max"")) = 22 or to_integer(json_extract_scalar(""@element"", ""$.udpOptions.destinationPortRange.max"")) = 22)) or ((to_integer(json_extract_scalar(""@element"", ""$.tcpOptions.destinationPortRange.min"")) < 22 or to_integer(json_extract_scalar(""@element"", ""$.udpOptions.destinationPortRange.min"")) < 22) and (to_integer(json_extract_scalar(""@element"", ""$.tcpOptions.destinationPortRange.max"")) > 22 or to_integer(json_extract_scalar(""@element"", ""$.udpOptions.destinationPortRange.max"")) > 22))) or to_string(json_extract_scalar(""@element"", ""$.protocol"")) = ""all"" or (json_extract_scalar(""@element"", ""$.tcpOptions"") = null and json_extract_scalar(""@element"", ""$.udpOptions"") = null and (to_string(json_extract_scalar(""@element"", ""$.protocol"")) = null or to_string(json_extract_scalar(""@element"", ""$.protocol"")) != ""1""))) and (to_string(json_extract_scalar(""@element"", ""$.source"")) = ""0.0.0.0/0"" and to_string(json_extract_scalar(""@element"", ""$.direction"")) = ""INGRESS"")) and (((displayName = null or displayName not contains ""dmvpn_public"")) and ((displayName = null or displayName not contains ""DMVPN_public"")) and ((displayName = null or displayName not contains ""DMVPN-Public"")) and ((displayName = null or displayName not contains ""palo_alto_public"")) and ((displayName = null or displayName not contains ""PaloAlto-Public"")))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","1139","863","","",""
+"OCI-SB-CMP-01 VNICs with public IP addresses that are not attached to DMVPNs or firewalls","5d922e1a-2c25-43e4-8011-ff04c29d6e8d","925489529090471936","config from cloud.resource where cloud.type = 'oci' and api.name = 'oci-compute-vnics' and json.rule = displayName is not member of (""uspxrdmvpn2"", ""dmvpn1-sharedservices"", ""instance-20230227-0946"" , ""usabrdmvpn2"" , ""usabrdmvpn1"",""uspxrdmvpn-hub"",""usabrdmvpn-hub"") and publicIp exists","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_COMPUTE_VNIC""
+| alter publicIp = json_extract(xdm.asset.raw_fields, ""$.Platform Discovery.publicIp"")
+| alter displayName = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.displayName"")
+| filter (displayName = null or displayName not in (""uspxrdmvpn2"", ""dmvpn1-sharedservices"", ""instance-20230227-0946"", ""usabrdmvpn2"", ""usabrdmvpn1"", ""uspxrdmvpn-hub"", ""usabrdmvpn-hub"")) and publicIp != null
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","1681","1125","","",""
+"S3 buckets should not be publicly readable","8100a1d3-47fb-4b27-a3bd-a92989353de1","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-s3api-get-bucket-acl' AND json.rule = ((((publicAccessBlockConfiguration.ignorePublicAcls is false and accountLevelPublicAccessBlockConfiguration does not exist) or (publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration.ignorePublicAcls is false) or (publicAccessBlockConfiguration.ignorePublicAcls is false and accountLevelPublicAccessBlockConfiguration.ignorePublicAcls is false)) and (acl.grantsAsList[?any(grantee equals AllUsers and permission is member of (ReadAcp,Read,FullControl))] exists or acl.grantsAsList[?any(grantee equals AuthenticatedUsers and permission is member of (ReadAcp,Read,FullControl))] exists)) or ((policyStatus.isPublic is true and ((publicAccessBlockConfiguration.restrictPublicBuckets is false and accountLevelPublicAccessBlockConfiguration does not exist) or (publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration.restrictPublicBuckets is false) or (publicAccessBlockConfiguration.restrictPublicBuckets is false and accountLevelPublicAccessBlockConfiguration.restrictPublicBuckets is false))) and (policy.Statement[?any(Effect equals Allow and (Principal equals * or Principal.AWS equals *) and (Action contains s3:* or Action contains s3:Get or Action contains s3:List) and (Condition does not exist))] exists)))","config case_sensitive = false
+| dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""S3_BUCKET""
+| alter AccountLevelPublicAccessBlockConfiguration = json_extract(xdm.asset.raw_fields, ""$.Platform Discovery.AccountLevelPublicAccessBlockConfiguration"")
+| alter PublicAccessBlockConfiguration = json_extract(xdm.asset.raw_fields, ""$.Platform Discovery.Properties.PublicAccessBlockConfiguration"")
+| alter IgnorePublicAcls = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.Properties.PublicAccessBlockConfiguration.IgnorePublicAcls"")
+| alter ignorePublicAcls = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.AccountLevelPublicAccessBlockConfiguration.IgnorePublicAcls"")
+| alter acl_grantsAsList = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.Acl.GrantsAsList"")
+| alter isPublic = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.PolicyStatus.IsPublic"")
+| alter RestrictPublicBuckets = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.Properties.PublicAccessBlockConfiguration.RestrictPublicBuckets"")
+| alter restrictPublicBuckets = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.AccountLevelPublicAccessBlockConfiguration.RestrictPublicBuckets"")
+| alter Statement_array = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.Policy.Statement"")
+| alter Statement_obj = json_extract(xdm.asset.raw_fields, ""$.Platform Discovery.Policy.Statement"")
+| alter Statement = if(Statement_array != null, Statement_array, if(Statement_obj != null, arraycreate(Statement_obj)))
+| alter Policy_Statement_arr = Statement,
+  Policy_Statement_obj = json_extract(xdm.asset.raw_fields, ""$.Platform Discovery.Policy.Statement"")
+| alter Policy_Statement = if(Policy_Statement_arr != null, Policy_Statement_arr, if(Policy_Statement_obj != null, arraycreate(Policy_Statement_obj)))
+| filter ((((lowercase(IgnorePublicAcls) = ""false"" or IgnorePublicAcls = null) and AccountLevelPublicAccessBlockConfiguration = null) or (PublicAccessBlockConfiguration = null and (lowercase(ignorePublicAcls) = ""false"" or ignorePublicAcls = null)) or ((lowercase(IgnorePublicAcls) = ""false"" or IgnorePublicAcls = null) and (lowercase(ignorePublicAcls) = ""false"" or ignorePublicAcls = null))) and (array_any(acl_grantsAsList, to_string(json_extract_scalar(""@element"", ""$.Grantee"")) = ""AllUsers"" and json_extract_scalar(""@element"", ""$.Permission"") in (""ReadAcp"", ""Read"", ""FullControl"")) or array_any(acl_grantsAsList, to_string(json_extract_scalar(""@element"", ""$.Grantee"")) = ""AuthenticatedUsers"" and json_extract_scalar(""@element"", ""$.Permission"") in (""ReadAcp"", ""Read"", ""FullControl"")))) or ((isPublic = ""true"" and (((lowercase(RestrictPublicBuckets) = ""false"" or RestrictPublicBuckets = null) and AccountLevelPublicAccessBlockConfiguration = null) or (PublicAccessBlockConfiguration = null and (lowercase(restrictPublicBuckets) = ""false"" or restrictPublicBuckets = null)) or ((lowercase(RestrictPublicBuckets) = ""false"" or RestrictPublicBuckets = null) and (lowercase(restrictPublicBuckets) = ""false"" or restrictPublicBuckets = null)))) and array_any(Policy_Statement, to_string(json_extract_scalar(""@element"", ""$.Effect"")) = ""Allow"" and ((json_extract_scalar(""@element"", ""$.Principal"") ~= ""^[*]$"" or to_string(json_extract_array(""@element"", ""$.Principal"")) ~= ""\""[*]\"""") or (to_string(json_extract_scalar(""@element"", ""$.Principal.AWS"")) ~= ""^[*]$"" or to_string(json_extract_array(""@element"", ""$.Principal.AWS"")) ~= ""\""[*]\"""")) and ((json_extract_scalar(""@element"", ""$.Action"") ~= ""(?-i).*s3:[*]"" or to_string(json_extract_array(""@element"", ""$.Action"")) ~= ""(?-i).*s3:[*]"") or (json_extract_scalar(""@element"", ""$.Action"") contains ""s3:Get"" or to_string(json_extract_array(""@element"", ""$.Action"")) contains ""s3:Get"") or (json_extract_scalar(""@element"", ""$.Action"") contains ""s3:List"" or to_string(json_extract_array(""@element"", ""$.Action"")) contains ""s3:List"")) and json_extract_scalar(""@element"", ""$.Condition"") = null))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","2170","961","","",""
+"Detect whether an Amazon EKS endpoint is blocked from public access","9991c8fe-8b28-4d9c-837b-6d0ad863916b","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-eks-describe-cluster' AND json.rule = resourcesVpcConfig.endpointPublicAccess is true or resourcesVpcConfig.endpointPrivateAccess is false","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""EKS_CLUSTER""
+| alter endpointPublicAccess = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.resourcesVpcConfig.endpointPublicAccess"")
+| alter endpointPrivateAccess = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.resourcesVpcConfig.endpointPrivateAccess"")
+| filter endpointPublicAccess = ""true"" or (lowercase(endpointPrivateAccess) = ""false"" or endpointPrivateAccess = null)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Mismatched","18","14","1","0",""
+"OCI IAM Authentication Policy allows passwords with a length of less than 15 characters","f5fa76e2-e485-4aec-b0d4-6a73e969508d","925489529090471936","config from cloud.resource where cloud.type = 'oci' and api.name = 'oci-iam-authentication-policy' AND json.rule = passwordPolicy.minimumPasswordLength less than 15","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_AUTHENTICATION_POLICY""
+| alter minimumPasswordLength = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.passwordPolicy.minimumPasswordLength"")
+| filter to_float(minimumPasswordLength) < 15
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Matched","3","3","2","2","0.00"
+"OCI-SB-IAM-12 User accounts without a valid TriNet email address","65af346c-693a-4a18-9078-38b832447542","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-iam-user' AND json.rule = (name does not exist or (name exists and not (name ends with ""@trinet.com"" or name ends with ""@Trinet.com"" or name ends with ""@TriNet.com""))) and (email does not exist or (email exists and not (email ends with ""@trinet.com"" or email ends with ""@Trinet.com"" or name ends with ""@TriNet.com""))) and (definedTags.Operations.Owner does not exist or (definedTags.Operations.Owner exists and not (definedTags.Operations.Owner ends with ""@trinet.com"" or email ends with ""@Trinet.com"" or name ends with ""@TriNet.com"")) or emailVerified is false)","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_USER""
+| alter emails = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.emails"")
+| alter userName = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.userName"")
+| alter definedTags_Operations_Owner = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.definedTags.operations.owner"")
+| alter emailVerified = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.emailVerified"")
+| filter (userName = null or (userName != null and not (userName ~= "".*@trinet\.com$"" or userName ~= "".*@Trinet\.com$"" or userName ~= "".*@TriNet\.com$""))) and (array_all(emails, json_extract_scalar(""@element"", ""$.value"") = null) or (array_any(emails, json_extract_scalar(""@element"", ""$.value"") != null) and not (array_any(emails, to_string(json_extract_scalar(""@element"", ""$.value"")) ~= "".*@trinet\.com$"") or array_any(emails, to_string(json_extract_scalar(""@element"", ""$.value"")) ~= "".*@Trinet\.com$"") or userName ~= "".*@TriNet\.com$""))) and (definedTags_Operations_Owner = null or (definedTags_Operations_Owner != null and not (definedTags_Operations_Owner ~= "".*@trinet\.com$"" or array_any(emails, to_string(json_extract_scalar(""@element"", ""$.value"")) ~= "".*@Trinet\.com$"") or userName ~= "".*@TriNet\.com$"")) or (lowercase(emailVerified) = ""false"" or emailVerified = null))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","870","445","","",""
+"OCI-SB-CMP-06 Instances in production compartments not running a sanctioned image","4b47ec0b-3abf-427c-a38e-f670433f1525","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-compute-instance' and json.rule = imageId is not member of ('ocid1.image.oc1.phx.aaaaaaaarvf6opp3fysw4p4kp5ekzcyhrwgbmffbqtqlx2az7syeeju2luwq')","","Ingestion Gap","1267","1151","","",""
+"AWS-01.01-Expired IAM certificates are removed","61ff45de-259a-43ef-bbb9-197682a540cf","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-iam-list-server-certificates' AND json.rule = (_DateTime.ageInDays(expiration) > -1)","config case_sensitive = false
+| dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AWS_IAM_SERVER_CERTIFICATE""
+| alter expirationStr = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.Expiration"")
+| alter expirationTs = parse_timestamp(""%Y-%m-%dT%H:%M:%E*SZ"", expirationStr)
+| filter (timestamp_diff(current_time(), expirationTs, ""DAY"") > -1)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","41","23","","",""
+"OCI-SB-STR-16 Volumes in production compartments not backed up via the Gold backup policy","1d2b8409-281e-4faa-8ebf-1f53048fae6b","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-block-storage-volume' AND json.rule = compartmentId is member of (""ocid1.compartment.oc1..aaaaaaaasi3ffzuj7mglmfzmaggdikwp6ib2c2jq655przm3dkaire3voxbq"", ""ocid1.compartment.oc1..aaaaaaaahz6dnyx2jeay2bhhdxlyv6jhzde5b6etqfxtdzoqgcje4z3vvg3a"", ""ocid1.compartment.oc1..aaaaaaaaj5a5v52vq2cgrlvpuwfobej3iw37i6av6ejigr25pxdjl3smn3vq"", ""ocid1.compartment.oc1..aaaaaaaap2fdgzgfm7vne4ryfzod7vtnyn4g4ylysg5zcdjhw3eslhmg7ljq"", ""ocid1.compartment.oc1..aaaaaaaaqsjdqscuanvvkzsnjaemsgv3msakt2joey3wtqr6ayvwlabdnxna"") AND compartmentId is not member of (""ocid1.compartment.oc1..aaaaaaaaovh5ugfwp6r64og6lkob235qtmsauw635xr5ginmmkzj5g3ue3ma"", ""ocid1.compartment.oc1..aaaaaaaaj66tyzzi4tuclyag5pvcxye7x6ur4of2h7ye2dxpmtrckqmk7hxq"",""ocid1.compartment.oc1..aaaaaaaa3dgdvqf4tj6bdan2ytdifiyim3eal5rl2skq2o7uqnqw23r5p6pq"") and volumeBackupPolicyAssignment[*].policyId does not equal ""ocid1.volumebackuppolicy.oc1..aaaaaaaagcremuefit7dpcnjpdrtphjk4bwm3emm55t6cghctt2m6iyyjdva""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_BLOCK_STORAGE_VOLUME""
+| alter volumeBackupPolicyAssignment = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.volumeBackupPolicyAssignment"")
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter ((volumeBackupPolicyAssignment = null or array_length(volumeBackupPolicyAssignment) = 0) or not array_any(volumeBackupPolicyAssignment, to_string(json_extract_scalar(""@element"", ""$.policyId"")) = ""ocid1.volumebackuppolicy.oc1..aaaaaaaagcremuefit7dpcnjpdrtphjk4bwm3emm55t6cghctt2m6iyyjdva"")) and (compartmentId = null or compartmentId not in (""ocid1.compartment.oc1..aaaaaaaaovh5ugfwp6r64og6lkob235qtmsauw635xr5ginmmkzj5g3ue3ma"", ""ocid1.compartment.oc1..aaaaaaaaj66tyzzi4tuclyag5pvcxye7x6ur4of2h7ye2dxpmtrckqmk7hxq"", ""ocid1.compartment.oc1..aaaaaaaa3dgdvqf4tj6bdan2ytdifiyim3eal5rl2skq2o7uqnqw23r5p6pq"")) and compartmentId in (""ocid1.compartment.oc1..aaaaaaaasi3ffzuj7mglmfzmaggdikwp6ib2c2jq655przm3dkaire3voxbq"", ""ocid1.compartment.oc1..aaaaaaaahz6dnyx2jeay2bhhdxlyv6jhzde5b6etqfxtdzoqgcje4z3vvg3a"", ""ocid1.compartment.oc1..aaaaaaaaj5a5v52vq2cgrlvpuwfobej3iw37i6av6ejigr25pxdjl3smn3vq"", ""ocid1.compartment.oc1..aaaaaaaap2fdgzgfm7vne4ryfzod7vtnyn4g4ylysg5zcdjhw3eslhmg7ljq"", ""ocid1.compartment.oc1..aaaaaaaaqsjdqscuanvvkzsnjaemsgv3msakt2joey3wtqr6ayvwlabdnxna"")
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Matched","12912","12773","11952","11952","0.00"
+"OCI-SB-NET-19 VCN has no inbound Security List","e82d4c7b-2cbd-4e96-b677-78293b3f2c7c","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-security-list' AND json.rule = ingressSecurityRules[*] size equals 0","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_SECURITY_LIST""
+| alter ingressSecurityRules = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.ingressSecurityRules"")
+| filter (array_length(ingressSecurityRules) = 0 or array_length(ingressSecurityRules) = null)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","147","111","","",""
+"OCI-SB-MON-24 Object storage buckets without Read Access Events enabled","e5eac12c-101d-4136-b4cd-010f1e7c9575","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-object-storage-bucket' as X; config from cloud.resource where api.name = 'oci-logging-logs' AND json.rule = configuration.source.service equals ""objectstorage"" and configuration.source.category equals ""read"" as Y; filter '$.X.name does not equal $.Y.configuration.source.resource'; show X;","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_OBJECT_STORAGE_BUCKET""
+| alter name = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.name"")
+| join conflict_strategy = both type = left (
+    dataset = asset_inventory
+    | filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_LOGGING_LOGS""
+    | alter service = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.configuration.source.service"")
+    | alter configuration_source_category = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.configuration.source.category"")
+    | filter service = ""objectstorage"" and configuration_source_category = ""read""
+    | alter configuration_source_resource = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.configuration.source.resource"")
+    | filter configuration_source_resource != null
+    | fields xdm.asset.realm, configuration_source_resource
+  ) as Y xdm.asset.realm = Y.xdm.asset.realm and name = Y.configuration_source_resource
+| filter configuration_source_resource = null
+| dedup xdm.asset.id
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","768","550","","",""
+"OCI-SB-MSC-07.01 - Instances must be attached to a subnet with the same Security Trust Zone as their compartments","b57e2c98-b8c3-4990-adf8-82e1f7770e2e","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND cloud.accountgroup = 'TriNet OCI Migration' AND api.name = 'oci-compute-instance' as X; config from cloud.resource where api.name = 'oci-networking-subnet' AND json.rule = definedTags.Security.TrustZone equals high as Y; config from cloud.resource where api.name = 'oci-iam-compartment' as Z; filter '$.X.vnicIds[*].subnetId equals $.Y.id and $.X.compartmentId equals $.Z.id and $.Y.definedTags.Security.TrustZone does not equal $.Z.definedTags.Security.TrustZone'; show X;","","Ingestion Gap","1487","1327","","",""
+"OCI-SB-NET-23 Subnets without a Security Trust Zone tag","4b742def-0b3a-4927-bef7-35a8e1a2b6ab","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-subnet' AND json.rule = definedTags.Security.TrustZone does not exist","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_SUBNET""
+| alter TrustZone = json_extract(xdm.asset.raw_fields, ""$.Platform Discovery.definedTags.Security.TrustZone"")
+| filter TrustZone = null
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","180","137","","",""
+"OCI-SB-IAM-04 Users with customer secret keys older than 180 days","a1d48e95-36cf-442b-89bd-fd9800fb7963","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-iam-user' AND json.rule = customerSecretKeys[?any(lifecycleState equals ACTIVE and (_DateTime.ageInDays(timeCreated) > 180))] exists","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_USER""
+| alter customerSecretKeys = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.customerSecretKeys"")
+| filter array_any(customerSecretKeys, to_string(json_extract_scalar(""@element"", ""$.lifecycleState"")) = ""ACTIVE"" and timestamp_diff(current_time(), parse_timestamp(""%Y-%m-%dT%H:%M:%E*SZ"", json_extract_scalar(""@element"", ""$.timeCreated"")), ""DAY"") > 180)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","870","445","","",""
+"OCI-SB-MSC-04 - Bastions are not permitted","ceb12fe7-834c-4a13-86b5-09a1872d1ecb","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-bastion' AND json.rule = bastionType equals ""null""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_BASTION""
+| alter bastionType = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.bastionType"")
+| filter bastionType = ""null""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","0","0","0","0",""
+"OCI-SB-STR-02 Block Volumes must be attached to an instance","03cfe2f3-b535-4f03-9759-e3aa4db5e790","925489529090471936","config from cloud.resource where api.name = 'oci-block-storage-volume' AND json.rule = compartmentId exists as X; config from cloud.resource where api.name = 'oci-compute-instance' as Y; filter '$.X.compartmentId equals $.Y.compartmentId'; show X;","","Ingestion Gap","14179","13924","","",""
+"OCI-SB-STR-01 Block Volumes not encrypted with Oracle-managed key","ed3713d3-aebc-4cdc-a545-ab17d52e2753","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-block-storage-volume' AND json.rule = kmsKeyId is not member of (""null"")","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_BLOCK_STORAGE_VOLUME""
+| alter kmsKeyId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.kmsKeyId"")
+| filter (kmsKeyId = null or kmsKeyId not in (""null""))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Mismatched","12912","12773","12773","0",""
+"Detect whether any Amazon EMR cluster master nodes have public IP addresses","b9988264-8e1a-467f-86fa-c6c82053d8bd","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-emr-public-access-block' AND json.rule = blockPublicAccessConfiguration.blockPublicSecurityGroupRules is false","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""EMR_BLOCK_PUBLIC_ACCESS""
+| alter BlockPublicSecurityGroupRules = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.BlockPublicAccessConfiguration.BlockPublicSecurityGroupRules"")
+| filter (lowercase(BlockPublicSecurityGroupRules) = ""false"" or BlockPublicSecurityGroupRules = null)
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","498","448","","",""
+"Detect whether replication instances for AWS Database Migration Service are public","3735714e-875f-4708-bc1f-54d730e450a9","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-dms-replication-instance' AND json.rule = replicationInstanceStatus is not member of ('creating','deleted','deleting') and publiclyAccessible is true","dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""AWS_DMS_REPLICATION_INSTANCE""
+| alter PubliclyAccessible = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.PubliclyAccessible"")
+| alter ReplicationInstanceStatus = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.ReplicationInstanceStatus"")
+| filter (ReplicationInstanceStatus = null or ReplicationInstanceStatus not in (""creating"", ""deleted"", ""deleting"")) and PubliclyAccessible = ""true""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","18","12","0","0",""
+"OCI-SB-MSC-03.15 - No Load Balancers are created in root compartment.","d6eeab4a-da76-4d96-b66b-b6d62d214de1","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-loadbalancer' AND json.rule = compartmentId equals ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_LOAD_BALANCER""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId = ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","245","161","","",""
+"OCI-SB-IAM-19 Policies allowing manage rights over the volume-family resource type in the tenancy or in any compartment","686da737-baf3-416a-ae54-80b93b935933","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-iam-policy' AND json.rule = statements[*] contains ""manage volume-family""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_POLICY""
+| alter statements = json_extract_scalar_array(xdm.asset.raw_fields, ""$.Platform Discovery.statements"")
+| filter array_any(statements, ""@element"" contains ""manage volume-family"")
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","236","235","0","0",""
+"OCI-SB-MSC-03.01 - No Block Storage Volumes are created in root compartment","cb694884-c3a8-4626-8e19-8629c490c7c1","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-block-storage-volume' AND json.rule = compartmentId equals ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_BLOCK_STORAGE_VOLUME""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId = ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Matched","12912","12773","2","2","0.00"
+"OCI-SB-CMP-02 Compute instances without in-transit encryption enabled","f79d6be5-0010-403b-93a0-50e82b524b26","925489529090471936","config from cloud.resource where cloud.type = 'oci' and api.name = 'oci-compute-instance' AND json.rule = lifecycleState does not equal ""TERMINATED"" and launchOptions.isPvEncryptionInTransitEnabled is false","","Ingestion Gap","1267","1151","","",""
+"OCI-SB-NET-16 NSG ingress rule contains disallowed IP/port","60a11289-e7db-441c-82e9-2b69675c9c8c","925489529090471936","config from cloud.resource where api.name = 'oci-networking-nsg' AND json.rule = securityRules[?any(direction equals INGRESS and protocol is member of (6,9,17))] exists","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_NSG""
+| alter securityRules = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.securityRules"")
+| filter array_any(securityRules, to_string(json_extract_scalar(""@element"", ""$.direction"")) = ""INGRESS"" and json_extract_scalar(""@element"", ""$.protocol"") in (""6"", ""9"", ""17""))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","1139","863","","",""
+"OCI-SB-NET-17 VCN has Internet Gateway attached","1a007c67-4c71-413e-b37b-a569b460ecf7","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-vcn' AND json.rule = compartmentId exists as X; config from cloud.resource where api.name = 'oci-networking-internetgateway' as Y; filter '$.X.compartmentId equals $.Y.compartmentId'; show X;","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_VCN""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId != null
+| join conflict_strategy = both type = inner (
+    dataset = asset_inventory
+    | filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_INTERNETGATEWAY""
+    | alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+    | filter compartmentId != null
+    | fields xdm.asset.realm, compartmentId
+  ) as Y xdm.asset.realm = Y.xdm.asset.realm and compartmentId = Y.compartmentId
+| dedup xdm.asset.id
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","56","42","","",""
+"OCI-SB-IAM-22 Expired IAM certificates are removed","2e91d9c9-b1e3-45c7-bd64-43a2119d26f7","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-certificate-certificates' AND json.rule = _DateTime.ageInDays(currentVersion.validity.timeOfValidityNotAfter) > -1","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_CERTIFICATE_CERTIFICATE""
+| alter timeOfValidityNotAfterStr = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.currentVersion.validity.timeOfValidityNotAfter"")
+| alter timeOfValidityNotAfterTs = parse_timestamp(""%Y-%m-%dT%H:%M:%E*SZ"", timeOfValidityNotAfterStr)
+| filter timestamp_diff(current_time(), timeOfValidityNotAfterTs, ""DAY"") > -1
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","13","10","0","0",""
+"OCI-SB-IAM-24 Users should not exist with no permissions or groups","0af2bc82-4894-407e-886d-930f6fb8dc51","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-iam-user' as X; config from cloud.resource where api.name = 'oci-iam-group' as Y; filter 'not($.Y.groupMembers[*].userId contains $.X.id)'; show X;","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_USER""
+| alter _pk_id = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.id"")
+| alter _pk_id_q = concat(""\"""", _pk_id, ""\"""")
+| join conflict_strategy = both type = left (
+    dataset = asset_inventory
+    | filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_GROUP""
+    | alter joined_y_groupMembers_str = to_string(json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.groupMembers""))
+    | filter joined_y_groupMembers_str != null
+    | fields xdm.asset.realm, joined_y_groupMembers_str
+  ) as Y xdm.asset.realm = Y.xdm.asset.realm and Y.joined_y_groupMembers_str contains _pk_id_q
+| filter joined_y_groupMembers_str = null
+| dedup xdm.asset.id
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","1018","581","","",""
+"OCI-SB-NET-14 Load balancer SSL certificate expiring soon","c37a603c-b324-4c35-9cec-6f847d885fb1","925489529090471936","config from cloud.resource where api.name = 'oci-certificate-certificates' as X;config from cloud.resource where api.name = 'oci-networking-loadbalancer' as Y;filter '_DateTime.ageInDays($.X.notAfter) > -15 and $.Y.certificateIds contains $.X.certificateId' ; show Y;","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_LOAD_BALANCER""
+| alter certificateIds = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.certificateIds"")
+| filter certificateIds != null
+| join conflict_strategy = both type = inner (
+    dataset = asset_inventory
+    | filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_CERTIFICATE_CERTIFICATE""
+    | alter notAfterStr = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.notAfter"")
+    | alter notAfterTs = parse_timestamp(""%Y-%m-%dT%H:%M:%E*SZ"", notAfterStr)
+    | filter timestamp_diff(current_time(), notAfterTs, ""DAY"") > -15
+    | alter certificateId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.certificateId"")
+    | filter certificateId != null
+    | fields xdm.asset.realm, certificateId
+  ) as X xdm.asset.realm = X.xdm.asset.realm and certificateIds contains X.certificateId
+| dedup xdm.asset.id
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","258","171","","",""
+"OCI-SB-MSC-03.02 - No Compute Instances are created in root compartment","c91e7024-a070-42f1-8d7c-01f182ea40d9","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-compute-instance' AND json.rule = compartmentId equals ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","","Ingestion Gap","1267","1151","","",""
+"OCI-SB-MSC-03.18 - No Subnets are created in root compartment.","9fa87d16-1a3e-4a62-a41e-c21199c25cba","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-subnet' AND json.rule = compartmentId equals ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_SUBNET""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId = ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","180","137","","",""
+"OCI-SB-MSC-03.03 - No Compute VNICS are created in root compartment.","d9c204d0-1d0a-4f34-ac82-85e4c3a28775","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-compute-vnics' AND json.rule = compartmentId equals ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_COMPUTE_VNIC""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId = ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","1681","1125","","",""
+"OCI-SB-MSC-03.08 - No User Accounts are created in root compartment.","a9818e6a-32f0-4e07-a223-5c9626172155","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-iam-user' AND json.rule = compartmentId equals ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_IAM_USER""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId = ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","870","445","","",""
+"OCI-SB-MON-14 Ensure Cloud Guard is enabled in the root compartment of the tenancy","8bed5988-fd98-45ff-8cc1-9378e0066584","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-cloudguard-security-recipe' AND json.rule = compartmentId contains ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_CLOUDGUARD_SECURITY_RECIPE""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId contains ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","73","7","","",""
+"OCI-SB-DBS-05 Database System has public IP address","5b99d7a5-d994-4549-81f5-7ae7e64b4b9a","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-database-autonomous-database' AND json.rule = privateEndpointIp exists and privateEndpointIp does not equal ignore case ""null""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_DATABASE_AUTONOMOUS_DATABASE""
+| alter privateEndpointIp = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.privateEndpointIp"")
+| filter privateEndpointIp != null and lowercase(privateEndpointIp) != ""null""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","9","7","0","0",""
+"OCI-SB-MSC-03.20 - No DNS Zones are created in root compartment.","838fcb27-a4e3-4edc-97d2-b9b3e553f078","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-dns-zone' AND json.rule = compartmentId equals ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_DNS_ZONE""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId = ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","0","0","0","0",""
+"OCI-SB-STR-04 Object storage buckets not encrypted with Oracle-managed keys","4a746fe2-7db0-4b82-9a83-b9469ccda3d9","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-block-storage-volume' AND json.rule = kmsKeyId is not member of (""null"")","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_BLOCK_STORAGE_VOLUME""
+| alter kmsKeyId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.kmsKeyId"")
+| filter (kmsKeyId = null or kmsKeyId not in (""null""))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Mismatched","12912","12773","12773","0",""
+"OCI-SB-MSC-03.14 - No Network Load Balancers are created in root compartment.","cb811c77-87ae-4b9d-8585-4cef592159a9","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-loadbalancer' AND json.rule = compartmentId equals ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_LOAD_BALANCER""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId = ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","245","161","","",""
+"OCI-SB-MSC-03.05 - No Safe Target Database are created in root compartment","4dcb6228-4e19-45df-bffe-1ce685b729cf","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-data-safe-target-database' AND json.rule = compartmentId equals ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_DATA_SAFE_TARGET_DATABASE""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId = ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","12","8","0","0",""
+"OCI-SB-MSC-03.12 - No NSGs are created in root compartment.","c35be769-4e52-4c24-b3d7-8adac0ad52a9","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-nsg' AND json.rule = compartmentId equals ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_NSG""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId = ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","1139","863","","",""
+"OCI-SB-MSC-03.06 - No File Storage are created in root compartment","5b8fe460-bf72-4cbc-a983-549a17ed755d","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-file-storage-file-system' AND json.rule = compartmentId equals ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_FILE_STORAGE_FILE_SYSTEM""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId = ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","7","7","0","0",""
+"OCI-SB-MSC-03.07 - No Functions are created in root compartment","3128872b-2f2a-4023-a4ca-b41129583f2a","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-functions' AND json.rule = compartmentId equals ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_FUNCTIONS""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId = ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","9","8","0","0",""
+"OCI-SB-NET-09 SSL listeners on load balancers allowing weak cipher suites","9712c48b-4e46-4d73-a8b0-da1c11522135","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-loadbalancer' AND json.rule = (sslCipherSuites does not contain ""AES256-GCM-SHA384"" or sslCipherSuites does not contain ""DHE-RSA-AES256-GCM-SHA384"" or sslCipherSuites does not contain ""ECDHE-ECDSA-AES256-GCM"" or sslCipherSuites does not contain ""ECDHE-RSA-AES256-GCM-SHA384"") and sslConfiguration does not contain ""null""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_LOAD_BALANCER""
+| alter sslCipherSuites = to_json_string(json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.sslCipherSuites""))
+| alter sslConfiguration = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.sslConfiguration"")
+| filter (sslCipherSuites not contains ""AES256-GCM-SHA384"" or sslCipherSuites not contains ""DHE-RSA-AES256-GCM-SHA384"" or sslCipherSuites not contains ""ECDHE-ECDSA-AES256-GCM"" or sslCipherSuites not contains ""ECDHE-RSA-AES256-GCM-SHA384"") and (sslConfiguration = null or sslConfiguration not contains ""null"")
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","245","161","","",""
+"OCI-SB-NET-10 Load balancers with SSL listeners allowing protocols older than TLS 1.3","aec90908-8dc0-485a-96e7-fa55f6e5369b","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-loadbalancer' AND json.rule = listeners[*].sslConfiguration.protocols contains ""TLSv1.0"" OR listeners[*].sslConfiguration.protocols contains ""TLSv1.1"" OR listeners[*].sslConfiguration.protocols contains ""TLSv1.2""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_LOAD_BALANCER""
+| alter listeners = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.listeners"")
+| filter array_any(listeners, (json_extract_scalar(""@element"", ""$.sslConfiguration.protocols"") contains ""TLSv1.2"" or to_string(json_extract_array(""@element"", ""$.sslConfiguration.protocols"")) contains ""TLSv1.2"")) or array_any(listeners, (json_extract_scalar(""@element"", ""$.sslConfiguration.protocols"") contains ""TLSv1.1"" or to_string(json_extract_array(""@element"", ""$.sslConfiguration.protocols"")) contains ""TLSv1.1"")) or array_any(listeners, (json_extract_scalar(""@element"", ""$.sslConfiguration.protocols"") contains ""TLSv1.0"" or to_string(json_extract_array(""@element"", ""$.sslConfiguration.protocols"")) contains ""TLSv1.0""))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","245","161","","",""
+"OCI  Network Security Group allows all traffic on SSH port (22)","8d699b1a-d4be-4602-adb6-42acea7b876e","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-security-list' AND json.rule = (ingressSecurityRules[?any((source equals 0.0.0.0/0) and (((*.destinationPortRange.min equals 22 or *.destinationPortRange.max equals 22) or (*.destinationPortRange.min < 22 and *.destinationPortRange.max > 22)) or (protocol equals ""all"") or ((tcpOptions does not exist) and (udpOptions does not exist) and (protocol does not equal 1))))] exists)","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_SECURITY_LIST""
+| alter ingressSecurityRules = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.ingressSecurityRules"")
+| filter array_any(ingressSecurityRules, to_string(json_extract_scalar(""@element"", ""$.source"")) = ""0.0.0.0/0"" and ((((to_integer(json_extract_scalar(""@element"", ""$.tcpOptions.destinationPortRange.min"")) = 22 or to_integer(json_extract_scalar(""@element"", ""$.udpOptions.destinationPortRange.min"")) = 22) or (to_integer(json_extract_scalar(""@element"", ""$.tcpOptions.destinationPortRange.max"")) = 22 or to_integer(json_extract_scalar(""@element"", ""$.udpOptions.destinationPortRange.max"")) = 22)) or ((to_integer(json_extract_scalar(""@element"", ""$.tcpOptions.destinationPortRange.min"")) < 22 or to_integer(json_extract_scalar(""@element"", ""$.udpOptions.destinationPortRange.min"")) < 22) and (to_integer(json_extract_scalar(""@element"", ""$.tcpOptions.destinationPortRange.max"")) > 22 or to_integer(json_extract_scalar(""@element"", ""$.udpOptions.destinationPortRange.max"")) > 22))) or to_string(json_extract_scalar(""@element"", ""$.protocol"")) = ""all"" or (json_extract_scalar(""@element"", ""$.tcpOptions"") = null and json_extract_scalar(""@element"", ""$.udpOptions"") = null and (to_string(json_extract_scalar(""@element"", ""$.protocol"")) = null or to_string(json_extract_scalar(""@element"", ""$.protocol"")) != ""1""))))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","147","111","","",""
+"OCI-SB-STR-15 File Storage Systems with Mount Target Exports that allow access from any address","fd79ab03-8200-4dd9-9bb2-314c9204ced1","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-file-storage-file-system' as X; config from cloud.resource where api.name = 'oci-file-storage-export' AND json.rule = (exportOptions[?any(source equals 0.0.0.0/0 and requirePrivilegedSourcePort is false and access equals READ_WRITE and identitySquash equals NONE)] exists) as Y; filter '($.X.id equals $.Y.fileSystemId)';show X;","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_FILE_STORAGE_FILE_SYSTEM""
+| alter id = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.id"")
+| filter id != null
+| join conflict_strategy = both type = inner (
+    dataset = asset_inventory
+    | filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_FILE_STORAGE_EXPORT""
+    | alter exportOptions = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.exportOptions"")
+    | filter array_any(exportOptions, to_string(json_extract_scalar(""@element"", ""$.source"")) = ""0.0.0.0/0"" and (lowercase(to_string(json_extract_scalar(""@element"", ""$.requirePrivilegedSourcePort""))) = ""false"" or json_extract_scalar(""@element"", ""$.requirePrivilegedSourcePort"") = null) and to_string(json_extract_scalar(""@element"", ""$.access"")) = ""READ_WRITE"" and to_string(json_extract_scalar(""@element"", ""$.identitySquash"")) = ""NONE"")
+    | alter fileSystemId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.fileSystemId"")
+    | filter fileSystemId != null
+    | fields xdm.asset.realm, fileSystemId
+  ) as Y xdm.asset.realm = Y.xdm.asset.realm and id = Y.fileSystemId
+| dedup xdm.asset.id
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","14","14","0","0",""
+"OCI-SB-STR-17 File Storage File Systems allowing unrestricted access to root user","56823686-a480-424d-8a87-f55561609e0e","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-file-storage-export' AND json.rule = exportOptions[?any( identitySquash equals ROOT and (anonymousGid does not equal 65534 or anonymousUid does not equal 65534))] exists","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_FILE_STORAGE_EXPORT""
+| alter exportOptions = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.exportOptions"")
+| filter array_any(exportOptions, to_string(json_extract_scalar(""@element"", ""$.identitySquash"")) = ""ROOT"" and (to_string(json_extract_scalar(""@element"", ""$.anonymousGid"")) != ""65534"" or (to_string(json_extract_scalar(""@element"", ""$.anonymousUid"")) = null or to_string(json_extract_scalar(""@element"", ""$.anonymousUid"")) != ""65534"")))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Matched","7","7","7","7","0.00"
+"OCI-SB-MSC-03.16 - No Route Tables are created in root compartment.","66340aaa-22bc-492d-94f4-c4b10e07350e","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-routetable' AND json.rule = compartmentId equals ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_ROUTETABLE""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId = ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","159","0","","",""
+"OCI-SB-MSC-03.17 - No Internet Gateways are created in root compartment.","62e5458f-c9fb-4a45-9caf-6ec1bbaee974","925489529090471936","config from cloud.resource where cloud.type = 'oci' AND api.name = 'oci-networking-internetgateway' AND json.rule = compartmentId equals ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""","dataset = asset_inventory
+| filter xdm.asset.provider = ""OCI"" and xdm.asset.type.id = ""OCI_NETWORKING_INTERNETGATEWAY""
+| alter compartmentId = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.compartmentId"")
+| filter compartmentId = ""ocid1.tenancy.oc1..aaaaaaaaseewovc74g62jykbb6whkt6zal72y2dghx4ngmfaknpm4wj3ccxa""
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Zero Results Returned","12","9","0","0",""
+"S3 buckets should not be publicly writeable","3e3a1104-117b-4a8b-994b-1b5f82262779","925489529090471936","config from cloud.resource where cloud.type = 'aws' AND api.name = 'aws-s3api-get-bucket-acl' AND json.rule = ((((publicAccessBlockConfiguration.ignorePublicAcls is false and accountLevelPublicAccessBlockConfiguration does not exist) or (publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration.ignorePublicAcls is false) or (publicAccessBlockConfiguration.ignorePublicAcls is false and accountLevelPublicAccessBlockConfiguration.ignorePublicAcls is false)) and (acl.grantsAsList[?any(grantee equals AllUsers and permission is member of (WriteAcp,Write,FullControl))] exists or acl.grantsAsList[?any(grantee equals AuthenticatedUsers and permission is member of (WriteAcp,Write,FullControl))] exists)) or ((policyStatus.isPublic is true and ((publicAccessBlockConfiguration.restrictPublicBuckets is false and accountLevelPublicAccessBlockConfiguration does not exist) or (publicAccessBlockConfiguration does not exist and accountLevelPublicAccessBlockConfiguration.restrictPublicBuckets is false) or (publicAccessBlockConfiguration.restrictPublicBuckets is false and accountLevelPublicAccessBlockConfiguration.restrictPublicBuckets is false))) and (policy.Statement[?any(Effect equals Allow and (Principal equals * or Principal.AWS equals *) and (Action contains s3:* or Action contains s3:Put or Action contains s3:Create or Action contains s3:Replicate or Action contains s3:Update or Action contains s3:Delete) and (Condition does not exist))] exists)))","config case_sensitive = false
+| dataset = asset_inventory
+| filter xdm.asset.provider = ""AWS"" and xdm.asset.type.id = ""S3_BUCKET""
+| alter AccountLevelPublicAccessBlockConfiguration = json_extract(xdm.asset.raw_fields, ""$.Platform Discovery.AccountLevelPublicAccessBlockConfiguration"")
+| alter PublicAccessBlockConfiguration = json_extract(xdm.asset.raw_fields, ""$.Platform Discovery.Properties.PublicAccessBlockConfiguration"")
+| alter IgnorePublicAcls = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.Properties.PublicAccessBlockConfiguration.IgnorePublicAcls"")
+| alter ignorePublicAcls = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.AccountLevelPublicAccessBlockConfiguration.IgnorePublicAcls"")
+| alter acl_grantsAsList = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.Acl.GrantsAsList"")
+| alter isPublic = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.PolicyStatus.IsPublic"")
+| alter RestrictPublicBuckets = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.Properties.PublicAccessBlockConfiguration.RestrictPublicBuckets"")
+| alter restrictPublicBuckets = json_extract_scalar(xdm.asset.raw_fields, ""$.Platform Discovery.AccountLevelPublicAccessBlockConfiguration.RestrictPublicBuckets"")
+| alter Statement_array = json_extract_array(xdm.asset.raw_fields, ""$.Platform Discovery.Policy.Statement"")
+| alter Statement_obj = json_extract(xdm.asset.raw_fields, ""$.Platform Discovery.Policy.Statement"")
+| alter Statement = if(Statement_array != null, Statement_array, if(Statement_obj != null, arraycreate(Statement_obj)))
+| alter Policy_Statement_arr = Statement,
+  Policy_Statement_obj = json_extract(xdm.asset.raw_fields, ""$.Platform Discovery.Policy.Statement"")
+| alter Policy_Statement = if(Policy_Statement_arr != null, Policy_Statement_arr, if(Policy_Statement_obj != null, arraycreate(Policy_Statement_obj)))
+| filter ((((lowercase(IgnorePublicAcls) = ""false"" or IgnorePublicAcls = null) and AccountLevelPublicAccessBlockConfiguration = null) or (PublicAccessBlockConfiguration = null and (lowercase(ignorePublicAcls) = ""false"" or ignorePublicAcls = null)) or ((lowercase(IgnorePublicAcls) = ""false"" or IgnorePublicAcls = null) and (lowercase(ignorePublicAcls) = ""false"" or ignorePublicAcls = null))) and (array_any(acl_grantsAsList, to_string(json_extract_scalar(""@element"", ""$.Grantee"")) = ""AllUsers"" and json_extract_scalar(""@element"", ""$.Permission"") in (""WriteAcp"", ""Write"", ""FullControl"")) or array_any(acl_grantsAsList, to_string(json_extract_scalar(""@element"", ""$.Grantee"")) = ""AuthenticatedUsers"" and json_extract_scalar(""@element"", ""$.Permission"") in (""WriteAcp"", ""Write"", ""FullControl"")))) or ((isPublic = ""true"" and (((lowercase(RestrictPublicBuckets) = ""false"" or RestrictPublicBuckets = null) and AccountLevelPublicAccessBlockConfiguration = null) or (PublicAccessBlockConfiguration = null and (lowercase(restrictPublicBuckets) = ""false"" or restrictPublicBuckets = null)) or ((lowercase(RestrictPublicBuckets) = ""false"" or RestrictPublicBuckets = null) and (lowercase(restrictPublicBuckets) = ""false"" or restrictPublicBuckets = null)))) and array_any(Policy_Statement, to_string(json_extract_scalar(""@element"", ""$.Effect"")) = ""Allow"" and ((json_extract_scalar(""@element"", ""$.Principal"") ~= ""^[*]$"" or to_string(json_extract_array(""@element"", ""$.Principal"")) ~= ""\""[*]\"""") or (to_string(json_extract_scalar(""@element"", ""$.Principal.AWS"")) ~= ""^[*]$"" or to_string(json_extract_array(""@element"", ""$.Principal.AWS"")) ~= ""\""[*]\"""")) and ((json_extract_scalar(""@element"", ""$.Action"") ~= ""(?-i).*s3:[*]"" or to_string(json_extract_array(""@element"", ""$.Action"")) ~= ""(?-i).*s3:[*]"") or (json_extract_scalar(""@element"", ""$.Action"") contains ""s3:Put"" or to_string(json_extract_array(""@element"", ""$.Action"")) contains ""s3:Put"") or (json_extract_scalar(""@element"", ""$.Action"") contains ""s3:Create"" or to_string(json_extract_array(""@element"", ""$.Action"")) contains ""s3:Create"") or (json_extract_scalar(""@element"", ""$.Action"") contains ""s3:Replicate"" or to_string(json_extract_array(""@element"", ""$.Action"")) contains ""s3:Replicate"") or (json_extract_scalar(""@element"", ""$.Action"") contains ""s3:Update"" or to_string(json_extract_array(""@element"", ""$.Action"")) contains ""s3:Update"") or (json_extract_scalar(""@element"", ""$.Action"") contains ""s3:Delete"" or to_string(json_extract_array(""@element"", ""$.Action"")) contains ""s3:Delete"")) and json_extract_scalar(""@element"", ""$.Condition"") = null))
+| fields xdm.asset.id as asset_id, xdm.asset.type.id as asset_type_id","Ingestion Gap","2170","961","","",""
